@@ -1,0 +1,115 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "配方查询"
+const path = "../../../dist"
+const mainPage = "ai"
+const page = "ai-formulas"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">配方查询</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">AI配方 / 配方查询</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card mb-4">
+              <div class="card-header"><h3 class="card-title">查询</h3></div>
+              <div class="card-body">
+                <form class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">关键词</label>
+                    <input type="text" class="form-control" placeholder="配方名/标签/香调" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">标签</label>
+                    <input type="text" class="form-control" placeholder="如：花香、果香" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">版本</label>
+                    <select class="form-select">
+                      <option value="">全部</option>
+                      <option>v1</option>
+                      <option>v2</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 align-self-end">
+                    <button type="button" class="btn btn-primary me-2">查询</button>
+                    <button type="button" class="btn btn-outline-secondary">重置</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h3 class="card-title">配方列表</h3>
+                <div>
+                  <button class="btn btn-outline-secondary btn-sm">导出</button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th style="width: 100px">配方ID</th>
+                      <th>名称</th>
+                      <th>版本</th>
+                      <th>成本</th>
+                      <th>标签</th>
+                      <th style="width: 160px">更新时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="align-middle">
+                      <td>F-0001</td>
+                      <td>示例配方</td>
+                      <td>v1</td>
+                      <td>¥12.35</td>
+                      <td><span class="badge text-bg-secondary">花香</span></td>
+                      <td>2025-01-01 12:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-footer">
+                <ul class="pagination pagination-sm m-0 float-end">
+                  <li class="page-item"><a class="page-link" href="#">«</a></li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">»</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+  </body>
+</html>

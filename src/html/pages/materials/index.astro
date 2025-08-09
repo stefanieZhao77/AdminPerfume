@@ -1,0 +1,220 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+import QueryTable from "@components/QueryTable.astro"
+
+const title = "原料"
+const path = "../../../dist"
+const mainPage = "materials"
+const page = "materials-list"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+    <style is:inline>
+      .table-sticky thead th { position: sticky; top: 0; z-index: 2; background: var(--bs-body-bg); }
+      .table-sticky thead th:first-child,
+      .table-sticky tbody td:first-child { position: sticky; left: 0; z-index: 3; background: var(--bs-body-bg); box-shadow: 2px 0 0 rgba(0,0,0,.05); }
+      .table thead th { white-space: nowrap; }
+      .qt-col-btn { white-space: nowrap; }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">原料</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">原料</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card mb-4">
+              <div class="card-header"><h3 class="card-title">查询</h3></div>
+              <div class="card-body">
+                <form id="materials-form" class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">关键词</label>
+                    <input id="kw" type="text" class="form-control" placeholder="名称/CAS/标签" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">分类</label>
+                    <select id="category" class="form-select">
+                      <option value="">全部</option>
+                      <option>精油</option>
+                      <option>合成香料</option>
+                      <option>树脂</option>
+                      <option>溶剂</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">状态</label>
+                    <select id="status" class="form-select">
+                      <option value="">全部</option>
+                      <option>在库</option>
+                      <option>低库存</option>
+                      <option>缺货</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 align-self-end">
+                    <button id="searchBtn" type="button" class="btn btn-primary me-2">查询</button>
+                    <button id="resetBtn" type="button" class="btn btn-outline-secondary">重置</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h3 class="card-title">原料列表</h3>
+                <div class="qt-col-menu">
+                  <button class="btn btn-outline-secondary btn-sm me-2" id="exportBtn">导出可见列</button>
+                  <button class="btn btn-outline-secondary btn-sm qt-col-btn" id="colMenuBtn">列显示/隐藏</button>
+                  <div class="qt-dropdown" id="colMenu"></div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 520px;">
+                  <table class="table table-hover mb-0 table-sticky" id="materials-table">
+                    <thead class="table-light border-bottom">
+                      <tr>
+                        <th data-qt-key="id" style="width: 140px">编号</th>
+                        <th data-qt-key="name">名称</th>
+                        <th data-qt-key="cas">CAS</th>
+                        <th data-qt-key="category">分类</th>
+                        <th data-qt-key="stock">库存</th>
+                        <th data-qt-key="status">状态</th>
+                        <th data-qt-key="updatedAt" style="width: 200px">更新时间</th>
+                      </tr>
+                    </thead>
+                    <tbody id="materials-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="text-body-secondary small" id="materials-stats">共 0 条</div>
+                <ul class="pagination pagination-sm m-0" id="materials-pagination"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+    <QueryTable />
+
+    <script is:inline>
+      const categories = ['精油','合成香料','树脂','溶剂']
+      const statuses = ['在库','低库存','缺货']
+      function randomCAS() {
+        const a = Math.floor(10 + Math.random()*89)
+        const b = Math.floor(10 + Math.random()*89)
+        const c = Math.floor(1 + Math.random()*9)
+        return `${a}${b}-${Math.floor(10+Math.random()*89)}-${c}`
+      }
+      const mockMaterials = Array.from({length: 120}, (_,i)=>{
+        const cat = categories[i % categories.length]
+        const st = statuses[(i*7) % statuses.length]
+        const stock = st==='缺货'?0: (st==='低库存'? Math.floor(1+Math.random()*20): Math.floor(50+Math.random()*400))
+        return {
+          id: `MAT-${String(i+1).padStart(4,'0')}`,
+          name: `${cat}示例原料${i+1}`,
+          cas: randomCAS(),
+          category: cat,
+          stock,
+          status: st,
+          updatedAt: new Date(Date.now()-Math.random()*60*24*3600*1000).toISOString().slice(0,16).replace('T',' ')
+        }
+      })
+
+      const state = { page: 1, pageSize: 10, kw: '', category: '', status: '' }
+
+      function filterData() {
+        return mockMaterials.filter(m => {
+          const hitKw = state.kw === '' || [m.id,m.name,m.cas].some(v => v.toLowerCase().includes(state.kw.toLowerCase()))
+          const hitCat = state.category === '' || m.category === state.category
+          const hitSt = state.status === '' || m.status === state.status
+          return hitKw && hitCat && hitSt
+        })
+      }
+
+      const qt = window.QueryTable.create({
+        storageKey: 'materials',
+        pageSize: state.pageSize,
+        tableSelector: '#materials-table',
+        tbodySelector: '#materials-tbody',
+        statsSelector: '#materials-stats',
+        paginationSelector: '#materials-pagination',
+        colMenuButtonSelector: '#colMenuBtn',
+        colMenuDropdownSelector: '#colMenu',
+        exportButtonSelector: '#exportBtn',
+        columns: [
+          { key: 'id', label: '编号', visible: true, width: '140px' },
+          { key: 'name', label: '名称', visible: true },
+          { key: 'cas', label: 'CAS', visible: true },
+          { key: 'category', label: '分类', visible: true },
+          { key: 'stock', label: '库存', visible: true },
+          { key: 'status', label: '状态', visible: true },
+          { key: 'updatedAt', label: '更新时间', visible: true, width: '200px' },
+        ],
+        getFilteredData: ()=> filterData(),
+        renderRow: (m)=> `
+          <tr class="align-middle">
+            <td><span class="fw-medium">${m.id}</span></td>
+            <td>${m.name}</td>
+            <td>${m.cas}</td>
+            <td>${m.category}</td>
+            <td>${m.stock}</td>
+            <td>${badge(m.status)}</td>
+            <td>${m.updatedAt}</td>
+          </tr>`,
+        getCellValue: (m, key)=> m[key] ?? ''
+      })
+
+      function badge(st){
+        const map = { '在库':'success', '低库存':'warning', '缺货':'danger' }
+        return `<span class="badge text-bg-${map[st]||'secondary'}">${st}</span>`
+      }
+
+      function bindEvents(){
+        document.getElementById('materials-pagination').addEventListener('click', e=>{
+          const a = e.target.closest('a.page-link'); if(!a) return; e.preventDefault()
+          const p = Number(a.dataset.page); if(Number.isNaN(p)) return
+          qt.state.page = Math.max(1, p)
+          qt.render()
+        })
+        document.getElementById('searchBtn').addEventListener('click', ()=>{
+          state.kw = document.getElementById('kw').value.trim()
+          state.category = document.getElementById('category').value
+          state.status = document.getElementById('status').value
+          qt.state.page = 1
+          qt.render()
+        })
+        document.getElementById('resetBtn').addEventListener('click', ()=>{
+          document.getElementById('materials-form').reset()
+          state.kw=''; state.category=''; state.status=''; qt.state.page=1
+          qt.render()
+        })
+        document.getElementById('kw').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('searchBtn').click() }})
+      }
+
+      bindEvents(); qt.render();
+    </script>
+  </body>
+</html>

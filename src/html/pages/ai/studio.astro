@@ -1,0 +1,155 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "AI创香"
+const path = "../../../dist"
+const mainPage = "ai"
+const page = "ai-studio"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+    <style is:inline>
+      .chat { height: 460px; overflow: auto; }
+      .chat .msg { max-width: 85%; }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">AI创香</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">AI配方 / AI创香</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">对话</h3></div>
+                  <div class="card-body chat" id="chat">
+                    <div class="d-flex mb-3">
+                      <div class="me-2"><span class="badge text-bg-secondary">系统</span></div>
+                      <div class="p-2 bg-light flex-fill rounded msg">请输入需求开始创香，例如：清新柑橘前调，花香中调，木质后调。</div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="input-group">
+                      <input id="prompt" type="text" class="form-control" placeholder="输入你的需求..." />
+                      <button id="sendBtn" class="btn btn-primary" type="button">发送</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">配方预览</h3></div>
+                  <div class="card-body" id="formulaPreview">
+                    <div class="text-body-secondary">这里显示AI建议的配方结构（占位）。</div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header"><h3 class="card-title">参数</h3></div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label class="form-label">温度</label>
+                      <input id="temperature" type="range" class="form-range" min="0" max="1" step="0.01" />
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">输出长度</label>
+                      <input id="maxTokens" type="range" class="form-range" min="64" max="1024" step="32" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+
+    <script is:inline>
+      const chat = document.getElementById('chat')
+      const input = document.getElementById('prompt')
+      const sendBtn = document.getElementById('sendBtn')
+      const temp = document.getElementById('temperature')
+      const maxTokens = document.getElementById('maxTokens')
+      const formulaPreview = document.getElementById('formulaPreview')
+
+      function appendUser(msg){
+        const wrap = document.createElement('div'); wrap.className='d-flex mb-3 justify-content-end'
+        wrap.innerHTML = `<div class="p-2 bg-primary text-white rounded msg">${escapeHtml(msg)}</div>`
+        chat.appendChild(wrap); chat.scrollTop = chat.scrollHeight
+      }
+
+      function appendAIStreaming(text){
+        const wrap = document.createElement('div'); wrap.className='d-flex mb-3'
+        wrap.innerHTML = `<div class="me-2"><span class="badge text-bg-success">AI</span></div><div class="p-2 bg-success bg-opacity-10 border border-success rounded msg"><span class="typing"></span></div>`
+        chat.appendChild(wrap); chat.scrollTop = chat.scrollHeight
+        const el = wrap.querySelector('.typing')
+        let i=0
+        const timer = setInterval(()=>{
+          el.textContent = text.slice(0, ++i)
+          chat.scrollTop = chat.scrollHeight
+          if(i>=text.length){ clearInterval(timer) }
+        }, 20)
+      }
+
+      function escapeHtml(s){
+        return s.replace(/[&<>"]'/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
+      }
+
+      function generateMockFormula(userMsg){
+        // 简单根据关键词生成不同配方结构（占位逻辑）
+        const top = userMsg.includes('柑橘')? '佛手柑/葡萄柚/橙花' : '佛手柑/柠檬/薰衣草'
+        const heart = userMsg.includes('花')? '玫瑰/茉莉/依兰' : '茶香/绿叶/铃兰'
+        const base = userMsg.includes('木')? '檀香/雪松/广藿香' : '麝香/琥珀/香草'
+        return { top, heart, base }
+      }
+
+      function renderFormulaPreview(f){
+        formulaPreview.innerHTML = `
+          <ul class="list-group">
+            <li class="list-group-item"><strong>前调</strong>：${f.top}</li>
+            <li class="list-group-item"><strong>中调</strong>：${f.heart}</li>
+            <li class="list-group-item"><strong>后调</strong>：${f.base}</li>
+          </ul>`
+      }
+
+      function handleSend(){
+        const text = input.value.trim(); if(!text) return
+        appendUser(text)
+        input.value=''; input.focus()
+        // 模拟AI延时与打字流式输出
+        const f = generateMockFormula(text)
+        const reply = `已收到需求。建议配方：\n- 前调：${f.top}\n- 中调：${f.heart}\n- 后调：${f.base}\n（温度=${temp.value}，长度=${maxTokens.value}）`
+        setTimeout(()=>{
+          appendAIStreaming(reply)
+          renderFormulaPreview(f)
+        }, 400)
+      }
+
+      sendBtn.addEventListener('click', handleSend)
+      input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); handleSend() }})
+    </script>
+  </body>
+</html>

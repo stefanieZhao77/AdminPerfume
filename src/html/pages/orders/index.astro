@@ -1,0 +1,189 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+import QueryTable from "@components/QueryTable.astro"
+
+const title = "订单管理"
+const path = "../../../dist"
+const mainPage = "orders"
+const page = "orders-list"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+    <style is:inline>
+      .table-sticky thead th { position: sticky; top: 0; z-index: 2; background: var(--bs-body-bg); }
+      .table thead th { white-space: nowrap; }
+      .qt-col-btn { white-space: nowrap; }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">订单管理</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">订单管理</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card mb-4">
+              <div class="card-header"><h3 class="card-title">查询</h3></div>
+              <div class="card-body">
+                <form id="orders-form" class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">订单号/客户</label>
+                    <input id="kw" type="text" class="form-control" placeholder="搜索..." />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">状态</label>
+                    <select id="status" class="form-select">
+                      <option value="">全部</option>
+                      <option>待支付</option>
+                      <option>已支付</option>
+                      <option>已发货</option>
+                      <option>已完成</option>
+                      <option>已取消</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">下单日期</label>
+                    <input id="date" type="date" class="form-control" />
+                  </div>
+                  <div class="col-md-2 align-self-end">
+                    <button id="searchBtn" type="button" class="btn btn-primary me-2">查询</button>
+                    <button id="resetBtn" type="button" class="btn btn-outline-secondary">重置</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h3 class="card-title">订单列表</h3>
+                <div class="qt-col-menu">
+                  <button class="btn btn-outline-secondary btn-sm me-2" id="exportBtn">导出可见列</button>
+                  <button class="btn btn-outline-secondary btn-sm qt-col-btn" id="colMenuBtn">列显示/隐藏</button>
+                  <div class="qt-dropdown" id="colMenu"></div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 520px;">
+                  <table class="table table-hover mb-0 table-sticky" id="orders-table">
+                    <thead class="table-light border-bottom">
+                      <tr>
+                        <th data-qt-key="id" style="width: 160px">订单号</th>
+                        <th data-qt-key="customer">客户</th>
+                        <th data-qt-key="status">状态</th>
+                        <th data-qt-key="amount">金额</th>
+                        <th data-qt-key="date">下单日期</th>
+                      </tr>
+                    </thead>
+                    <tbody id="orders-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="text-body-secondary small" id="orders-stats">共 0 条</div>
+                <ul class="pagination pagination-sm m-0" id="orders-pagination"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+    <QueryTable />
+
+    <script is:inline>
+      const statuses = ['待支付','已支付','已发货','已完成','已取消']
+      function randomDate(){ const t = Date.now() - Math.random()*180*24*3600*1000; return new Date(t).toISOString().slice(0,10) }
+      const mockOrders = Array.from({length: 143}, (_,i)=>({
+        id: `SO-${String(i+1).padStart(4,'0')}`,
+        customer: `客户${(i%60)+1}`,
+        status: statuses[(i*5)%statuses.length],
+        amount: (Math.random()*2500 + 50).toFixed(2),
+        date: randomDate()
+      }))
+
+      const state = { page: 1, pageSize: 10, kw: '', status: '', date: '' }
+      function filterData(){
+        return mockOrders.filter(o=>{
+          const hitKw = state.kw==='' || [o.id,o.customer].some(v=>v.toLowerCase().includes(state.kw.toLowerCase()))
+          const hitSt = state.status==='' || o.status===state.status
+          const hitDate = state.date==='' || o.date===state.date
+          return hitKw && hitSt && hitDate
+        })
+      }
+
+      function badge(st){ const map = { '待支付':'secondary','已支付':'warning','已发货':'info','已完成':'success','已取消':'dark' }; return `<span class=\"badge text-bg-${map[st]||'secondary'}\">${st}</span>` }
+
+      const qt = window.QueryTable.create({
+        storageKey: 'orders',
+        pageSize: state.pageSize,
+        tableSelector: '#orders-table',
+        tbodySelector: '#orders-tbody',
+        statsSelector: '#orders-stats',
+        paginationSelector: '#orders-pagination',
+        colMenuButtonSelector: '#colMenuBtn',
+        colMenuDropdownSelector: '#colMenu',
+        exportButtonSelector: '#exportBtn',
+        columns: [
+          { key: 'id', label: '订单号', visible: true, width: '160px' },
+          { key: 'customer', label: '客户', visible: true },
+          { key: 'status', label: '状态', visible: true },
+          { key: 'amount', label: '金额', visible: true },
+          { key: 'date', label: '下单日期', visible: true },
+        ],
+        getFilteredData: ()=> filterData(),
+        renderRow: (o)=> `
+          <tr class="align-middle">
+            <td><span class="fw-medium">${o.id}</span></td>
+            <td>${o.customer}</td>
+            <td>${badge(o.status)}</td>
+            <td>¥${Number(o.amount).toLocaleString()}</td>
+            <td>${o.date}</td>
+          </tr>`,
+        getCellValue: (o, key)=> key==='amount'? ('¥'+o.amount) : (o[key]??'')
+      })
+
+      function bindEvents(){
+        document.getElementById('orders-pagination').addEventListener('click', e=>{
+          const a = e.target.closest('a.page-link'); if(!a) return; e.preventDefault()
+          const p = Number(a.dataset.page); if(Number.isNaN(p)) return
+          qt.state.page = Math.max(1, p)
+          qt.render()
+        })
+        document.getElementById('searchBtn').addEventListener('click', ()=>{
+          state.kw = document.getElementById('kw').value.trim()
+          state.status = document.getElementById('status').value
+          state.date = document.getElementById('date').value
+          qt.state.page = 1; qt.render()
+        })
+        document.getElementById('resetBtn').addEventListener('click', ()=>{
+          document.getElementById('orders-form').reset()
+          state.kw=''; state.status=''; state.date=''; qt.state.page=1; qt.render()
+        })
+        document.getElementById('kw').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('searchBtn').click() }})
+      }
+
+      bindEvents(); qt.render();
+    </script>
+  </body>
+</html>

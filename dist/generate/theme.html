@@ -64,7 +64,7 @@
   </head>
   <!--end::Head-->
   <!--begin::Body-->
-  <body class="sidebar-expand-lg sidebar-open bg-body-tertiary">
+  <body class="sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
       <!--begin::Header-->
@@ -79,10 +79,10 @@
               </a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link">Home</a>
+              <a href="#" class="nav-link" data-i18n="home">首页</a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link">Contact</a>
+              <a href="#" class="nav-link" data-i18n="contact">联系</a>
             </li>
           </ul>
           <!--end::Start Navbar Links-->
@@ -182,7 +182,9 @@
                   <!--end::Message-->
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllMessages"
+                  >查看所有消息</a
+                >
               </div>
             </li>
             <!--end::Messages Dropdown Menu-->
@@ -194,27 +196,57 @@
                 <span class="navbar-badge badge text-bg-warning">15</span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <span class="dropdown-item dropdown-header" data-i18n="notifications">15 通知</span>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-envelope me-2"></i> 4 new messages
-                  <span class="float-end text-secondary fs-7">3 mins</span>
+                  <i class="bi bi-envelope me-2"></i>
+                  <span data-i18n="newMessagesCount">4 条新消息</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="mins">3 分钟</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-people-fill me-2"></i> 8 friend requests
-                  <span class="float-end text-secondary fs-7">12 hours</span>
+                  <i class="bi bi-people-fill me-2"></i>
+                  <span data-i18n="friendRequestsCount">8 个好友请求</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="hoursCount">12 小时</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
-                  <span class="float-end text-secondary fs-7">2 days</span>
+                  <i class="bi bi-file-earmark-fill me-2"></i>
+                  <span data-i18n="newReportsCount">3 个新报告</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="daysCount">2 天</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllNotifications">
+                  查看所有通知
+                </a>
               </div>
             </li>
             <!--end::Notifications Dropdown Menu-->
+
+            <!--begin::Language Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+              >
+                <i class="bi bi-translate"></i>
+                <span id="current-language-flag" class="ms-1">🇨🇳</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <h6 class="dropdown-header">选择语言 / Select Language</h6>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item language-option" data-lang="zh">
+                  <span class="me-2">🇨🇳</span> 中文
+                </a>
+                <a href="#" class="dropdown-item language-option" data-lang="en">
+                  <span class="me-2">🇺🇸</span> English
+                </a>
+              </div>
+            </li>
+            <!--end::Language Dropdown Menu-->
 
             <!--begin::Fullscreen Toggle-->
             <li class="nav-item">
@@ -254,13 +286,13 @@
                   <!--begin::Row-->
                   <div class="row">
                     <div class="col-4 text-center">
-                      <a href="#">Followers</a>
+                      <a href="#" data-i18n="followers">关注者</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#">Sales</a>
+                      <a href="#" data-i18n="sales">销售</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#">Friends</a>
+                      <a href="#" data-i18n="friends">朋友</a>
                     </div>
                   </div>
                   <!--end::Row-->
@@ -268,8 +300,10 @@
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                  <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
+                  <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut"
+                    >退出登录</a
+                  >
                 </li>
                 <!--end::Menu Footer-->
               </ul>

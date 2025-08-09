@@ -1,0 +1,80 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "系统设置"
+const path = "../../../dist"
+const mainPage = "settings"
+const page = "settings"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">系统设置</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">系统设置</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="card mb-4 h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">用户与角色</h5>
+                    <p class="text-body-secondary">管理用户、角色与权限（占位）。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card mb-4 h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">组织/仓库</h5>
+                    <p class="text-body-secondary">组织与仓库配置（占位）。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card mb-4 h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">通知</h5>
+                    <p class="text-body-secondary">邮件/短信/企业IM（占位）。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card mb-4 h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">集成</h5>
+                    <p class="text-body-secondary">仪器/ERP/LIMS（占位）。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+  </body>
+</html>

@@ -64,7 +64,7 @@
   </head>
   <!--end::Head-->
   <!--begin::Body-->
-  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
       <!--begin::Header-->
@@ -79,10 +79,10 @@
               </a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link">Home</a>
+              <a href="#" class="nav-link" data-i18n="home">首页</a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link">Contact</a>
+              <a href="#" class="nav-link" data-i18n="contact">联系</a>
             </li>
           </ul>
           <!--end::Start Navbar Links-->
@@ -182,7 +182,9 @@
                   <!--end::Message-->
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllMessages"
+                  >查看所有消息</a
+                >
               </div>
             </li>
             <!--end::Messages Dropdown Menu-->
@@ -194,27 +196,57 @@
                 <span class="navbar-badge badge text-bg-warning">15</span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <span class="dropdown-item dropdown-header" data-i18n="notifications">15 通知</span>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-envelope me-2"></i> 4 new messages
-                  <span class="float-end text-secondary fs-7">3 mins</span>
+                  <i class="bi bi-envelope me-2"></i>
+                  <span data-i18n="newMessagesCount">4 条新消息</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="mins">3 分钟</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-people-fill me-2"></i> 8 friend requests
-                  <span class="float-end text-secondary fs-7">12 hours</span>
+                  <i class="bi bi-people-fill me-2"></i>
+                  <span data-i18n="friendRequestsCount">8 个好友请求</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="hoursCount">12 小时</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                  <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
-                  <span class="float-end text-secondary fs-7">2 days</span>
+                  <i class="bi bi-file-earmark-fill me-2"></i>
+                  <span data-i18n="newReportsCount">3 个新报告</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="daysCount">2 天</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllNotifications">
+                  查看所有通知
+                </a>
               </div>
             </li>
             <!--end::Notifications Dropdown Menu-->
+
+            <!--begin::Language Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+              >
+                <i class="bi bi-translate"></i>
+                <span id="current-language-flag" class="ms-1">🇨🇳</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <h6 class="dropdown-header">选择语言 / Select Language</h6>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item language-option" data-lang="zh">
+                  <span class="me-2">🇨🇳</span> 中文
+                </a>
+                <a href="#" class="dropdown-item language-option" data-lang="en">
+                  <span class="me-2">🇺🇸</span> English
+                </a>
+              </div>
+            </li>
+            <!--end::Language Dropdown Menu-->
 
             <!--begin::Fullscreen Toggle-->
             <li class="nav-item">
@@ -254,13 +286,13 @@
                   <!--begin::Row-->
                   <div class="row">
                     <div class="col-4 text-center">
-                      <a href="#">Followers</a>
+                      <a href="#" data-i18n="followers">关注者</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#">Sales</a>
+                      <a href="#" data-i18n="sales">销售</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#">Friends</a>
+                      <a href="#" data-i18n="friends">朋友</a>
                     </div>
                   </div>
                   <!--end::Row-->
@@ -268,8 +300,10 @@
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                  <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
+                  <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut"
+                    >退出登录</a
+                  >
                 </li>
                 <!--end::Menu Footer-->
               </ul>
@@ -317,7 +351,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
-                    Dashboard
+                    <span data-i18n="dashboard">仪表板</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -325,19 +359,19 @@
                   <li class="nav-item">
                     <a href="../index.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v1</p>
+                      <p><span data-i18n="dashboard">仪表板</span> v1</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../index2.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v2</p>
+                      <p><span data-i18n="dashboard">仪表板</span> v2</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../index3.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v3</p>
+                      <p><span data-i18n="dashboard">仪表板</span> v3</p>
                     </a>
                   </li>
                 </ul>
@@ -345,14 +379,14 @@
               <li class="nav-item">
                 <a href="../generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
-                  <p>Theme Generate</p>
+                  <p data-i18n="themeGenerate">主题生成</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
-                    Widgets
+                    <span data-i18n="widgets">小部件</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -360,19 +394,19 @@
                   <li class="nav-item">
                     <a href="../widgets/small-box.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Small Box</p>
+                      <p data-i18n="smallBox">小盒子</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../widgets/info-box.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>info Box</p>
+                      <p data-i18n="infoBox">信息盒子</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../widgets/cards.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Cards</p>
+                      <p data-i18n="cards">卡片</p>
                     </a>
                   </li>
                 </ul>
@@ -381,7 +415,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-clipboard-fill"></i>
                   <p>
-                    Layout Options
+                    <span data-i18n="layoutOptions">布局选项</span>
                     <span class="nav-badge badge text-bg-secondary me-3">6</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
@@ -390,61 +424,61 @@
                   <li class="nav-item">
                     <a href="../layout/unfixed-sidebar.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Default Sidebar</p>
+                      <p data-i18n="defaultSidebar">默认侧边栏</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/fixed-sidebar.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Sidebar</p>
+                      <p data-i18n="fixedSidebar">固定侧边栏</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/fixed-header.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Header</p>
+                      <p data-i18n="fixedHeader">固定头部</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/fixed-footer.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Footer</p>
+                      <p data-i18n="fixedFooter">固定底部</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/fixed-complete.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Complete</p>
+                      <p data-i18n="fixedComplete">完全固定</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/layout-custom-area.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Layout <small>+ Custom Area </small></p>
+                      <p data-i18n="layoutCustomArea">布局 <small>+ 自定义区域</small></p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/sidebar-mini.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini</p>
+                      <p data-i18n="sidebarMini">迷你侧边栏</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/collapsed-sidebar.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini <small>+ Collapsed</small></p>
+                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ 折叠</small></p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/logo-switch.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini <small>+ Logo Switch</small></p>
+                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ Logo切换</small></p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../layout/layout-rtl.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Layout RTL</p>
+                      <p data-i18n="layoutRtl">RTL布局</p>
                     </a>
                   </li>
                 </ul>
@@ -453,7 +487,7 @@
                 <a href="#" class="nav-link active">
                   <i class="nav-icon bi bi-tree-fill"></i>
                   <p>
-                    UI Elements
+                    <span data-i18n="uiElements">UI元素</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -461,19 +495,19 @@
                   <li class="nav-item">
                     <a href="../UI/general.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>General</p>
+                      <p data-i18n="general">通用</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../UI/icons.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Icons</p>
+                      <p data-i18n="icons">图标</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../UI/timeline.html" class="nav-link active">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Timeline</p>
+                      <p data-i18n="timeline">时间线</p>
                     </a>
                   </li>
                 </ul>
@@ -482,7 +516,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-pencil-square"></i>
                   <p>
-                    Forms
+                    <span data-i18n="forms">表单</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -490,7 +524,7 @@
                   <li class="nav-item">
                     <a href="../forms/general.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>General Elements</p>
+                      <p data-i18n="generalElements">通用元素</p>
                     </a>
                   </li>
                 </ul>
@@ -499,7 +533,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-table"></i>
                   <p>
-                    Tables
+                    <span data-i18n="tables">表格</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -507,18 +541,18 @@
                   <li class="nav-item">
                     <a href="../tables/simple.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Simple Tables</p>
+                      <p data-i18n="simpleTables">简单表格</p>
                     </a>
                   </li>
                 </ul>
               </li>
 
-              <li class="nav-header">EXAMPLES</li>
+              <li class="nav-header" data-i18n="examples">示例</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-arrow-in-right"></i>
                   <p>
-                    Auth
+                    <span data-i18n="auth">认证</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -527,7 +561,7 @@
                     <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-box-arrow-in-right"></i>
                       <p>
-                        Version 1
+                        <span data-i18n="version1">版本1</span>
                         <i class="nav-arrow bi bi-chevron-right"></i>
                       </p>
                     </a>
@@ -535,13 +569,13 @@
                       <li class="nav-item">
                         <a href="../examples/login.html" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
+                          <p data-i18n="login">登录</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="../examples/register.html" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
+                          <p data-i18n="register">注册</p>
                         </a>
                       </li>
                     </ul>
@@ -550,7 +584,7 @@
                     <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-box-arrow-in-right"></i>
                       <p>
-                        Version 2
+                        <span data-i18n="version2">版本2</span>
                         <i class="nav-arrow bi bi-chevron-right"></i>
                       </p>
                     </a>
@@ -558,13 +592,13 @@
                       <li class="nav-item">
                         <a href="../examples/login-v2.html" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
+                          <p data-i18n="login">登录</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="../examples/register-v2.html" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
+                          <p data-i18n="register">注册</p>
                         </a>
                       </li>
                     </ul>
@@ -572,36 +606,36 @@
                   <li class="nav-item">
                     <a href="../examples/lockscreen.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Lockscreen</p>
+                      <p data-i18n="lockscreen">锁屏</p>
                     </a>
                   </li>
                 </ul>
               </li>
 
-              <li class="nav-header">DOCUMENTATIONS</li>
+              <li class="nav-header" data-i18n="documentations">文档</li>
               <li class="nav-item">
                 <a href="../docs/introduction.html" class="nav-link">
                   <i class="nav-icon bi bi-download"></i>
-                  <p>Installation</p>
+                  <p data-i18n="installation">安装</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../docs/layout.html" class="nav-link">
                   <i class="nav-icon bi bi-grip-horizontal"></i>
-                  <p>Layout</p>
+                  <p data-i18n="layout">布局</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../docs/color-mode.html" class="nav-link">
                   <i class="nav-icon bi bi-star-half"></i>
-                  <p>Color Mode</p>
+                  <p data-i18n="colorMode">颜色模式</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-ui-checks-grid"></i>
                   <p>
-                    Components
+                    <span data-i18n="components">组件</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -609,13 +643,13 @@
                   <li class="nav-item">
                     <a href="../docs/components/main-header.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Header</p>
+                      <p data-i18n="mainHeader">主头部</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../docs/components/main-sidebar.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Sidebar</p>
+                      <p data-i18n="mainSidebar">主侧边栏</p>
                     </a>
                   </li>
                 </ul>
@@ -624,7 +658,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-filetype-js"></i>
                   <p>
-                    Javascript
+                    <span data-i18n="javascript">JavaScript</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -632,7 +666,7 @@
                   <li class="nav-item">
                     <a href="../docs/javascript/treeview.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Treeview</p>
+                      <p data-i18n="treeview">树形视图</p>
                     </a>
                   </li>
                 </ul>
@@ -640,40 +674,40 @@
               <li class="nav-item">
                 <a href="../docs/browser-support.html" class="nav-link">
                   <i class="nav-icon bi bi-browser-edge"></i>
-                  <p>Browser Support</p>
+                  <p data-i18n="browserSupport">浏览器支持</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../docs/how-to-contribute.html" class="nav-link">
                   <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                  <p>How To Contribute</p>
+                  <p data-i18n="howToContribute">如何贡献</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../docs/faq.html" class="nav-link">
                   <i class="nav-icon bi bi-question-circle-fill"></i>
-                  <p>FAQ</p>
+                  <p data-i18n="faq">常见问题</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../docs/license.html" class="nav-link">
                   <i class="nav-icon bi bi-patch-check-fill"></i>
-                  <p>License</p>
+                  <p data-i18n="license">许可证</p>
                 </a>
               </li>
 
-              <li class="nav-header">MULTI LEVEL EXAMPLE</li>
+              <li class="nav-header" data-i18n="multiLevelExample">多级示例</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
+                  <p data-i18n="level1">第1级</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle-fill"></i>
                   <p>
-                    Level 1
+                    <span data-i18n="level1">第1级</span>
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -681,14 +715,14 @@
                   <li class="nav-item">
                     <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
+                      <p data-i18n="level2">第2级</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>
-                        Level 2
+                        <span data-i18n="level2">第2级</span>
                         <i class="nav-arrow bi bi-chevron-right"></i>
                       </p>
                     </a>
@@ -696,19 +730,19 @@
                       <li class="nav-item">
                         <a href="#" class="nav-link">
                           <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
+                          <p data-i18n="level3">第3级</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="#" class="nav-link">
                           <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
+                          <p data-i18n="level3">第3级</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="#" class="nav-link">
                           <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
+                          <p data-i18n="level3">第3级</p>
                         </a>
                       </li>
                     </ul>
@@ -716,7 +750,7 @@
                   <li class="nav-item">
                     <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
+                      <p data-i18n="level2">第2级</p>
                     </a>
                   </li>
                 </ul>
@@ -724,27 +758,27 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
+                  <p data-i18n="level1">第1级</p>
                 </a>
               </li>
 
-              <li class="nav-header">LABELS</li>
+              <li class="nav-header" data-i18n="labels">标签</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle text-danger"></i>
-                  <p class="text">Important</p>
+                  <p class="text" data-i18n="important">重要</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle text-warning"></i>
-                  <p>Warning</p>
+                  <p data-i18n="warning">警告</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle text-info"></i>
-                  <p>Informational</p>
+                  <p data-i18n="informational">信息</p>
                 </a>
               </li>
             </ul>

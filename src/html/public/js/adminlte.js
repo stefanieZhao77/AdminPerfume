@@ -329,7 +329,7 @@
     const EVENT_KEY$3 = `.${DATA_KEY$3}`;
     const EVENT_EXPANDED$1 = `expanded${EVENT_KEY$3}`;
     const EVENT_COLLAPSED$1 = `collapsed${EVENT_KEY$3}`;
-    // const EVENT_LOAD_DATA_API = `load${EVENT_KEY}`
+    const EVENT_LOAD_DATA_API = `load${EVENT_KEY$3}`;
     const CLASS_NAME_MENU_OPEN$1 = 'menu-open';
     const SELECTOR_NAV_ITEM$1 = '.nav-item';
     const SELECTOR_NAV_LINK = '.nav-link';
@@ -395,6 +395,15 @@
      * ------------------------------------------------------------------------
      */
     onDOMContentLoaded(() => {
+        const openMenuItems = document.querySelectorAll(`${SELECTOR_NAV_ITEM$1}.${CLASS_NAME_MENU_OPEN$1}`);
+        openMenuItems.forEach(menuItem => {
+            const childElement = menuItem.querySelector(SELECTOR_TREEVIEW_MENU);
+            if (childElement) {
+                slideDown(childElement, 0);
+                const event = new Event(EVENT_LOAD_DATA_API);
+                menuItem.dispatchEvent(event);
+            }
+        });
         const button = document.querySelectorAll(SELECTOR_DATA_TOGGLE$1);
         button.forEach(btn => {
             btn.addEventListener('click', event => {
@@ -1138,6 +1147,402 @@
         return new AccessibilityManager(config);
     };
 
+    // Chinese (Simplified) translations
+    var zh = {
+      // Common
+      home: "首页",
+      dashboard: "仪表板",
+      language: "语言",
+      contact: "联系",
+      
+      // Navigation
+      themeGenerate: "主题生成",
+      widgets: "小部件",
+      layoutOptions: "布局选项",
+      uiElements: "UI元素",
+      forms: "表单",
+      tables: "表格",
+      
+      // Dashboard
+      newOrders: "新订单",
+      bounceRate: "跳出率", 
+      userRegistrations: "用户注册",
+      uniqueVisitors: "独立访客",
+      salesValue: "销售价值",
+      directChat: "直接聊天",
+      moreInfo: "更多信息",
+      
+      // Widgets
+      smallBox: "小盒子",
+      infoBox: "信息盒子",
+      cards: "卡片",
+      
+      // Layout Options
+      defaultSidebar: "默认侧边栏",
+      fixedSidebar: "固定侧边栏",
+      fixedHeader: "固定头部",
+      fixedFooter: "固定底部",
+      fixedComplete: "完全固定",
+      layoutCustomArea: "布局自定义区域",
+      sidebarMini: "迷你侧边栏",
+      layoutRtl: "RTL布局",
+      
+      // UI Elements
+      general: "通用",
+      icons: "图标",
+      timeline: "时间线",
+      
+      // Forms
+      generalElements: "通用元素",
+      
+      // Tables
+      simpleTables: "简单表格",
+      
+      // Examples
+      auth: "认证",
+      version1: "版本1",
+      version2: "版本2",
+      login: "登录",
+      register: "注册",
+      lockscreen: "锁屏",
+      
+      // Documentation
+      documentations: "文档",
+      installation: "安装",
+      layout: "布局",
+      colorMode: "颜色模式",
+      components: "组件",
+      javascript: "JavaScript",
+      mainHeader: "主头部",
+      mainSidebar: "主侧边栏",
+      treeview: "树形视图",
+      browserSupport: "浏览器支持",
+      howToContribute: "如何贡献",
+      faq: "常见问题",
+      license: "许可证",
+      
+      // Multi Level Example
+      multiLevelExample: "多级示例",
+      level1: "第1级",
+      level2: "第2级", 
+      level3: "第3级",
+      
+      // Labels
+      labels: "标签",
+      important: "重要",
+      warning: "警告",
+      informational: "信息",
+      
+      // User Menu
+      profile: "个人资料",
+      signOut: "退出登录",
+      followers: "关注者",
+      sales: "销售",
+      friends: "朋友",
+      
+      // Messages
+      newMessages: "条新消息",
+      seeAllMessages: "查看所有消息",
+      newMessagesCount: "4 条新消息",
+      
+      // Notifications  
+      notifications: "15 通知",
+      seeAllNotifications: "查看所有通知",
+      newReports: "新报告",
+      friendRequests: "好友请求",
+      newReportsCount: "3 个新报告",
+      friendRequestsCount: "8 个好友请求",
+      hoursCount: "12 小时",
+      daysCount: "2 天",
+      
+      // Chat
+      typeMessage: "输入消息...",
+      send: "发送",
+      contacts: "联系人",
+      
+      // Time
+      hoursAgo: "小时前",
+      mins: "分钟",
+      days: "天",
+      
+      // Card Actions
+      collapse: "折叠",
+      remove: "移除",
+      
+      // Footer
+      footer: "页脚",
+      
+      // Breadcrumb
+      breadcrumb: "面包屑导航"
+    };
+
+    // English translations
+    var en = {
+      // Common
+      home: "Home",
+      dashboard: "Dashboard",
+      language: "Language",
+      contact: "Contact",
+      
+      // Navigation
+      themeGenerate: "Theme Generate",
+      widgets: "Widgets",
+      layoutOptions: "Layout Options",
+      uiElements: "UI Elements",
+      forms: "Forms",
+      tables: "Tables",
+      
+      // Dashboard
+      newOrders: "New Orders",
+      bounceRate: "Bounce Rate",
+      userRegistrations: "User Registrations", 
+      uniqueVisitors: "Unique Visitors",
+      salesValue: "Sales Value",
+      directChat: "Direct Chat",
+      moreInfo: "More info",
+      
+      // Widgets
+      smallBox: "Small Box",
+      infoBox: "Info Box",
+      cards: "Cards",
+      
+      // Layout Options
+      defaultSidebar: "Default Sidebar",
+      fixedSidebar: "Fixed Sidebar", 
+      fixedHeader: "Fixed Header",
+      fixedFooter: "Fixed Footer",
+      fixedComplete: "Fixed Complete",
+      layoutCustomArea: "Layout + Custom Area",
+      sidebarMini: "Sidebar Mini",
+      layoutRtl: "Layout RTL",
+      
+      // UI Elements
+      general: "General",
+      icons: "Icons",
+      timeline: "Timeline",
+      
+      // Forms
+      generalElements: "General Elements",
+      
+      // Tables
+      simpleTables: "Simple Tables",
+      
+      // Examples
+      auth: "Auth",
+      version1: "Version 1",
+      version2: "Version 2",
+      login: "Login",
+      register: "Register", 
+      lockscreen: "Lockscreen",
+      
+      // Documentation
+      documentations: "DOCUMENTATIONS",
+      installation: "Installation",
+      layout: "Layout",
+      colorMode: "Color Mode",
+      components: "Components",
+      javascript: "Javascript",
+      mainHeader: "Main Header",
+      mainSidebar: "Main Sidebar",
+      treeview: "Treeview",
+      browserSupport: "Browser Support",
+      howToContribute: "How To Contribute",
+      faq: "FAQ",
+      license: "License",
+      
+      // Multi Level Example
+      multiLevelExample: "MULTI LEVEL EXAMPLE",
+      level1: "Level 1",
+      level2: "Level 2",
+      level3: "Level 3",
+      
+      // Labels
+      labels: "LABELS",
+      important: "Important",
+      warning: "Warning",
+      informational: "Informational",
+      
+      // User Menu
+      profile: "Profile",
+      signOut: "Sign out",
+      followers: "Followers",
+      sales: "Sales", 
+      friends: "Friends",
+      
+      // Messages
+      newMessages: "new messages",
+      seeAllMessages: "See All Messages",
+      newMessagesCount: "4 new messages",
+      
+      // Notifications
+      notifications: "15 Notifications",
+      seeAllNotifications: "See All Notifications",
+      newReports: "new reports",
+      friendRequests: "friend requests",
+      newReportsCount: "3 new reports",
+      friendRequestsCount: "8 friend requests",
+      hoursCount: "12 hours",
+      daysCount: "2 days",
+      
+      // Chat
+      typeMessage: "Type Message ...",
+      send: "Send",
+      contacts: "Contacts",
+      
+      // Time
+      hoursAgo: "Hours Ago",
+      mins: "mins",
+      days: "days",
+      
+      // Card Actions
+      collapse: "Collapse",
+      remove: "Remove",
+      
+      // Footer
+      footer: "Footer",
+      
+      // Breadcrumb
+      breadcrumb: "Breadcrumb"
+    };
+
+    // Internationalization utility
+
+    // Available languages
+    const languages = {
+      zh: { name: '中文', flag: '🇨🇳', translations: zh },
+      en: { name: 'English', flag: '🇺🇸', translations: en }
+    };
+
+    // Default language - now Chinese
+    const DEFAULT_LANGUAGE = 'zh';
+
+    // Get current language from localStorage or default
+    function getCurrentLanguage() {
+      if (typeof window !== 'undefined') {
+        return localStorage.getItem('adminlte-language') || DEFAULT_LANGUAGE;
+      }
+      return DEFAULT_LANGUAGE;
+    }
+
+    // Set language in localStorage
+    function setLanguage(lang) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('adminlte-language', lang);
+        // Reload page to apply language change
+        window.location.reload();
+      }
+    }
+
+    // Translation function
+    function t(key, lang = null) {
+      const currentLang = lang || getCurrentLanguage();
+      const translations = languages[currentLang]?.translations || languages[DEFAULT_LANGUAGE].translations;
+      return translations[key] || key;
+    }
+
+    // Get language info
+    function getLanguageInfo(lang = null) {
+      const currentLang = lang || getCurrentLanguage();
+      return languages[currentLang] || languages[DEFAULT_LANGUAGE];
+    }
+
+    /**
+     * Language Management System
+     * Handles language switching and translation updates
+     */
+    class LanguageManager {
+        currentLanguage;
+        initialized = false;
+        constructor() {
+            this.currentLanguage = getCurrentLanguage();
+            this.init();
+        }
+        /**
+         * Initialize language system
+         */
+        init() {
+            if (this.initialized)
+                return;
+            this.updatePageLanguage();
+            this.bindLanguageToggle();
+            this.updateCurrentLanguageFlag();
+            this.initialized = true;
+        }
+        /**
+         * Update all translatable elements on the page
+         */
+        updatePageLanguage() {
+            const elements = document.querySelectorAll('[data-i18n], [data-i18n-title], [data-i18n-placeholder]');
+            elements.forEach((element) => {
+                const key = element.getAttribute('data-i18n');
+                if (key) {
+                    const translation = t(key, this.currentLanguage);
+                    element.textContent = translation;
+                }
+                const titleKey = element.getAttribute('data-i18n-title');
+                if (titleKey) {
+                    const translation = t(titleKey, this.currentLanguage);
+                    element.title = translation;
+                }
+                const placeholderKey = element.getAttribute('data-i18n-placeholder');
+                if (placeholderKey) {
+                    const translation = t(placeholderKey, this.currentLanguage);
+                    element.placeholder = translation;
+                }
+            });
+            // Update HTML lang attribute
+            document.documentElement.setAttribute('lang', this.currentLanguage === 'zh' ? 'zh-CN' : 'en');
+        }
+        /**
+         * Update the current language flag in the navbar
+         */
+        updateCurrentLanguageFlag() {
+            const flagElement = document.getElementById('current-language-flag');
+            if (flagElement) {
+                const languageInfo = getLanguageInfo(this.currentLanguage);
+                flagElement.textContent = languageInfo.flag;
+            }
+        }
+        /**
+         * Bind click events to language toggle options
+         */
+        bindLanguageToggle() {
+            const languageOptions = document.querySelectorAll('.language-option');
+            languageOptions.forEach((option) => {
+                option.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const langCode = option.getAttribute('data-lang');
+                    if (langCode && langCode !== this.currentLanguage) {
+                        this.switchLanguage(langCode);
+                    }
+                });
+            });
+        }
+        /**
+         * Switch to a different language
+         */
+        switchLanguage(langCode) {
+            setLanguage(langCode);
+            // Page will reload automatically via setLanguage function
+        }
+        /**
+         * Get current language
+         */
+        getCurrentLanguage() {
+            return this.currentLanguage;
+        }
+        /**
+         * Manually update translations (useful for dynamic content)
+         */
+        updateTranslations() {
+            this.updatePageLanguage();
+        }
+    }
+    // Auto-initialize when DOM is ready
+    function initLanguageManager() {
+        return new LanguageManager();
+    }
+
     /**
      * AdminLTE v4.0.0-rc3
      * Author: Colorlib
@@ -1145,6 +1550,12 @@
      * License: Open source - MIT <https://opensource.org/licenses/MIT>
      */
     onDOMContentLoaded(() => {
+        /**
+         * Initialize Language System
+         * -------------------------
+         */
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        initLanguageManager();
         /**
          * Initialize AdminLTE Core Components
          * -------------------------------
@@ -1177,6 +1588,7 @@
     exports.PushMenu = PushMenu;
     exports.Treeview = Treeview;
     exports.initAccessibility = initAccessibility;
+    exports.initLanguageManager = initLanguageManager;
 
 }));
 //# sourceMappingURL=adminlte.js.map

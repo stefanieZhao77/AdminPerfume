@@ -6,6 +6,7 @@ import DirectChat from './direct-chat.js'
 import FullScreen from './fullscreen.js'
 import PushMenu from './push-menu.js'
 import { initAccessibility } from './accessibility.js'
+import { initLanguageManager } from './language.js'
 
 /**
  * AdminLTE v4.0.0-rc3
@@ -15,6 +16,13 @@ import { initAccessibility } from './accessibility.js'
  */
 
 onDOMContentLoaded(() => {
+  /**
+   * Initialize Language System
+   * -------------------------
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const languageManager = initLanguageManager()
+  
   /**
    * Initialize AdminLTE Core Components
    * -------------------------------
@@ -50,5 +58,6 @@ export {
   DirectChat,
   FullScreen,
   PushMenu,
-  initAccessibility
+  initAccessibility,
+  initLanguageManager
 }

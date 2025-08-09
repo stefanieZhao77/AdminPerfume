@@ -1,0 +1,171 @@
+---
+---
+<style is:inline>
+  .qt-col-menu { position: relative; }
+  .qt-dropdown { position: absolute; right: 0; top: 100%; z-index: 1000; min-width: 220px; background: var(--bs-body-bg); border: 1px solid var(--bs-border-color); border-radius: .375rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); display: none; }
+  .qt-dropdown.show { display: block; }
+  .qt-dropdown .form-check { padding: .5rem .75rem; }
+  .qt-col-btn { display: inline-flex; align-items: center; gap: .25rem; }
+  .qt-resizer { position: absolute; right: 0; top: 0; width: 6px; height: 100%; cursor: col-resize; user-select: none; }
+  th[data-qt-key] { position: relative; }
+</style>
+<script is:inline>
+  (function(){
+    if (window.QueryTable) return;
+    function save(key, value){ try{ localStorage.setItem(key, JSON.stringify(value)) }catch(_){} }
+    function load(key, fallback){ try{ const v = JSON.parse(localStorage.getItem(key)); return v??fallback }catch(_){ return fallback } }
+
+    class QueryTable {
+      constructor(cfg){
+        this.cfg = cfg;
+        this.state = { page: 1, pageSize: cfg.pageSize || 10 };
+        this.columns = this._initColumns(cfg.columns);
+        this._bindStatic();
+        this.render();
+      }
+      _initColumns(cols){
+        const stored = load(`qt:${this.cfg.storageKey}:columns`, null);
+        const byKey = Object.fromEntries(cols.map(c=>[c.key, c]));
+        if (stored) {
+          stored.forEach(s=>{ if(byKey[s.key]) Object.assign(byKey[s.key], s) })
+        }
+        return Object.values(byKey);
+      }
+      _persistColumns(){ save(`qt:${this.cfg.storageKey}:columns`, this.columns.map(({key,label,visible,width})=>({key,label,visible,width})) ) }
+
+      _bindStatic(){
+        // Column menu
+        const btn = document.querySelector(this.cfg.colMenuButtonSelector);
+        const menu = document.querySelector(this.cfg.colMenuDropdownSelector);
+        if (btn && menu) {
+          btn.addEventListener('click', (e)=>{ e.preventDefault(); menu.classList.toggle('show') })
+          document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('show') })
+          this._renderColMenu(menu)
+        }
+        // Pagination
+        const pag = document.querySelector(this.cfg.paginationSelector);
+        if (pag) {
+          pag.addEventListener('click', (e)=>{
+            const a = e.target.closest('a.page-link'); if(!a) return; e.preventDefault();
+            const p = Number(a.dataset.page); if(Number.isNaN(p)) return;
+            const total = this._filtered().length; const totalPages = Math.max(1, Math.ceil(total/this.state.pageSize));
+            this.state.page = Math.min(Math.max(1,p), totalPages); this.render();
+          })
+        }
+        // Export
+        if (this.cfg.exportButtonSelector) {
+          const ex = document.querySelector(this.cfg.exportButtonSelector);
+          ex?.addEventListener('click', ()=> this.exportCSV());
+        }
+        // Resizers
+        this._attachResizers();
+      }
+      _attachResizers(){
+        const thead = document.querySelector(this.cfg.tableSelector + ' thead');
+        if (!thead) return;
+        const ths = thead.querySelectorAll('th[data-qt-key]');
+        ths.forEach(th=>{
+          const key = th.getAttribute('data-qt-key');
+          const col = this.columns.find(c=>c.key===key); if(!col) return;
+          if (col.width) th.style.width = col.width;
+          let grip = th.querySelector('.qt-resizer'); if(!grip){
+            grip = document.createElement('div'); grip.className='qt-resizer'; th.appendChild(grip);
+          }
+          let startX=0, startW=0;
+          const onMove = (e)=>{
+            const dx = (e.clientX || e.touches?.[0]?.clientX) - startX;
+            const w = Math.max(50, startW + dx);
+            th.style.width = w + 'px'; col.width = th.style.width; this._persistColumns();
+          }
+          const onUp = ()=>{ document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
+          grip.addEventListener('mousedown', (e)=>{ e.preventDefault(); startX=e.clientX; startW=th.offsetWidth; document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp) })
+        })
+      }
+      _renderColMenu(menu){
+        const list = this.columns.map(c=>`<div class="form-check">
+          <input class="form-check-input" type="checkbox" id="qt-col-${this.cfg.storageKey}-${c.key}" ${c.visible!==false?'checked':''} data-key="${c.key}">
+          <label class="form-check-label" for="qt-col-${this.cfg.storageKey}-${c.key}">${c.label}</label>
+        </div>`).join('');
+        menu.innerHTML = list;
+        menu.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+          cb.addEventListener('change', ()=>{
+            const key = cb.getAttribute('data-key');
+            const col = this.columns.find(c=>c.key===key); if(!col) return;
+            col.visible = cb.checked;
+            this._persistColumns();
+            this._applyVisibility();
+            this.render();
+          })
+        })
+        this._applyVisibility();
+      }
+      _applyVisibility(){
+        const ths = document.querySelectorAll(this.cfg.tableSelector + ' thead th[data-qt-key]');
+        ths.forEach(th=>{
+          const key = th.getAttribute('data-qt-key');
+          const col = this.columns.find(c=>c.key===key); if(!col) return;
+          th.style.display = (col.visible===false)?'none':'';
+        })
+      }
+      _filtered(){ return this.cfg.getFilteredData() }
+      _visibleColumns(){ return this.columns.filter(c=>c.visible!==false) }
+
+      render(){
+        // Body
+        const data = this._filtered();
+        const start = (this.state.page-1)*this.state.pageSize;
+        const end = start + this.state.pageSize;
+        const pageData = data.slice(start, end);
+        const tbody = document.querySelector(this.cfg.tbodySelector);
+        tbody.innerHTML = pageData.map(row=> this.cfg.renderRow(row, this.columns)).join('');
+        // Stats
+        if (this.cfg.statsSelector){
+          const stats = document.querySelector(this.cfg.statsSelector)
+          stats.textContent = `共 ${data.length} 条，当前第 ${data.length?this.state.page:0}/${Math.max(1,Math.ceil(data.length/this.state.pageSize))} 页`
+        }
+        // Pagination
+        const totalPages = Math.max(1, Math.ceil(data.length/this.state.pageSize));
+        const ul = document.querySelector(this.cfg.paginationSelector);
+        if (ul){
+          const page = this.state.page;
+          const li = (label, pageNum, disabled=false, active=false)=>`<li class="page-item ${disabled?'disabled':''} ${active?'active':''}"><a class="page-link" href="#" data-page="${pageNum}">${label}</a></li>`;
+          let html='';
+          html += li('«', page-1, page===1);
+          const pages = [...Array(totalPages).keys()].map(i=>i+1);
+          const range = pages.slice(Math.max(0,page-3), Math.max(0,page-3)+5);
+          range.forEach(p=> html += li(String(p), p, false, p===page));
+          html += li('»', page+1, page===totalPages);
+          ul.innerHTML = html;
+        }
+        // Apply visibility for body
+        const visKeys = new Set(this._visibleColumns().map(c=>c.key));
+        document.querySelectorAll(this.cfg.tableSelector + ' tbody tr').forEach(tr=>{
+          Array.from(tr.children).forEach((td, idx)=>{
+            const ths = document.querySelectorAll(this.cfg.tableSelector + ' thead th[data-qt-key]');
+            const key = ths[idx]?.getAttribute('data-qt-key');
+            if (!key) return; td.style.display = visKeys.has(key)?'':'none';
+          })
+        })
+      }
+
+      exportCSV(){
+        const data = this._filtered();
+        const cols = this._visibleColumns();
+        const rows = [ cols.map(c=>c.label) ];
+        data.forEach(row=>{
+          rows.push( cols.map(c=> {
+            const v = (this.cfg.getCellValue? this.cfg.getCellValue(row, c.key) : (row[c.key] ?? ''))
+            return String(v)
+          }))
+        })
+        const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'\"')}"`).join(',')).join('\n')
+        const blob = new Blob(["\ufeff"+csv], {type:'text/csv;charset=utf-8;'})
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a'); a.href=url; a.download=(this.cfg.storageKey||'export')+'.csv'; a.click()
+        URL.revokeObjectURL(url)
+      }
+    }
+
+    window.QueryTable = { create: (cfg)=> new QueryTable(cfg) };
+  })();
+</script>
