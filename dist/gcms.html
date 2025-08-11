@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GC-MS</title>
+
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="GC-MS" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="description"
+      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
+    />
+    <meta
+      name="keywords"
+      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
+    />
+    <!--end::Primary Meta Tags-->
+
+    <!--begin::Accessibility Features-->
+    <!-- Skip links will be dynamically added by accessibility.js -->
+    <meta name="supported-color-schemes" content="light dark" />
+    <link rel="preload" href="./css/adminlte.css" as="style" />
+    <!--end::Accessibility Features-->
+
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!--end::Fonts-->
+
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    <!--end::Required Plugin(AdminLTE)-->
+    <style>
+      .table-sticky thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bs-body-bg);
+      }
+      .table thead th {
+        white-space: nowrap;
+      }
+      .qt-col-btn {
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <!--begin::Header-->
+      <nav class="app-header navbar navbar-expand bg-body">
+        <!--begin::Container-->
+        <div class="container-fluid">
+          <!--begin::Start Navbar Links-->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="#" class="nav-link" data-i18n="home">首页</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="#" class="nav-link" data-i18n="contact">联系</a>
+            </li>
+          </ul>
+          <!--end::Start Navbar Links-->
+
+          <!--begin::End Navbar Links-->
+          <ul class="navbar-nav ms-auto">
+            <!--begin::Navbar Search-->
+            <li class="nav-item">
+              <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                <i class="bi bi-search"></i>
+              </a>
+            </li>
+            <!--end::Navbar Search-->
+
+            <!--begin::Messages Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-chat-text"></i>
+                <span class="navbar-badge badge text-bg-danger">3</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/user1-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Brad Diesel
+                        <span class="float-end fs-7 text-danger"
+                          ><i class="bi bi-star-fill"></i
+                        ></span>
+                      </h3>
+                      <p class="fs-7">Call me whenever you can...</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/user8-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        John Pierce
+                        <span class="float-end fs-7 text-secondary">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">I got your message bro</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/user3-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Nora Silvester
+                        <span class="float-end fs-7 text-warning">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">The subject goes here</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllMessages"
+                  >查看所有消息</a
+                >
+              </div>
+            </li>
+            <!--end::Messages Dropdown Menu-->
+
+            <!--begin::Notifications Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-bell-fill"></i>
+                <span class="navbar-badge badge text-bg-warning">15</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header" data-i18n="notifications">15 通知</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-envelope me-2"></i>
+                  <span data-i18n="newMessagesCount">4 条新消息</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="mins">3 分钟</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-people-fill me-2"></i>
+                  <span data-i18n="friendRequestsCount">8 个好友请求</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="hoursCount">12 小时</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-file-earmark-fill me-2"></i>
+                  <span data-i18n="newReportsCount">3 个新报告</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="daysCount">2 天</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllNotifications">
+                  查看所有通知
+                </a>
+              </div>
+            </li>
+            <!--end::Notifications Dropdown Menu-->
+
+            <!--begin::Language Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+              >
+                <i class="bi bi-translate"></i>
+                <span id="current-language-flag" class="ms-1">🇨🇳</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <h6 class="dropdown-header">选择语言 / Select Language</h6>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item language-option" data-lang="zh">
+                  <span class="me-2">🇨🇳</span> 中文
+                </a>
+                <a href="#" class="dropdown-item language-option" data-lang="en">
+                  <span class="me-2">🇺🇸</span> English
+                </a>
+              </div>
+            </li>
+            <!--end::Language Dropdown Menu-->
+
+            <!--begin::Fullscreen Toggle-->
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+              </a>
+            </li>
+            <!--end::Fullscreen Toggle-->
+
+            <!--begin::User Menu Dropdown-->
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img
+                  src="./assets/img/avatar.png"
+                  class="user-image rounded-circle shadow"
+                  alt="User Image"
+                />
+                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <!--begin::User Image-->
+                <li class="user-header text-bg-primary">
+                  <img
+                    src="./assets/img/avatar.png"
+                    class="rounded-circle shadow"
+                    alt="User Image"
+                  />
+                  <p>
+                    <span id="userName">未登录</span> -
+                    <span id="userRole"></span>
+                    <small>登录时间: <span id="loginTime"></span></small>
+                  </p>
+                </li>
+                <!--end::User Image-->
+                <!--begin::Menu Body-->
+                <li class="user-body">
+                  <!--begin::Row-->
+                  <div class="row">
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="orders">订单</a>
+                    </div>
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="formulas">配方</a>
+                    </div>
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="tasks">任务</a>
+                    </div>
+                  </div>
+                  <!--end::Row-->
+                </li>
+                <!--end::Menu Body-->
+                <!--begin::Menu Footer-->
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
+                  <a
+                    href="#"
+                    class="btn btn-default btn-flat float-end"
+                    onclick="logout()"
+                    data-i18n="signOut"
+                    >退出登录</a
+                  >
+                </li>
+                <!--end::Menu Footer-->
+              </ul>
+            </li>
+            <!--end::User Menu Dropdown-->
+          </ul>
+          <!--end::End Navbar Links-->
+        </div>
+        <!--end::Container-->
+      </nav>
+      <!--end::Header-->
+
+      <script>
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          window.location.href = '/examples/login.html';
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+          const user = getCurrentUser();
+          if (user) {
+            const userNameElements = document.querySelectorAll('#userName, #userDisplayName');
+            const userRoleElement = document.getElementById('userRole');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            userNameElements.forEach((el) => {
+              if (el) el.textContent = user.name;
+            });
+
+            if (userRoleElement) {
+              userRoleElement.textContent =
+                user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师';
+            }
+
+            if (loginTimeElement) {
+              loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN');
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        }
+
+        // 页面加载时更新用户信息
+        document.addEventListener('DOMContentLoaded', function () {
+          updateUserInfo();
+        });
+
+        // 立即执行一次更新
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserInfo);
+        } else {
+          updateUserInfo();
+        }
+      </script>
+      <!--begin::Sidebar-->
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <!--begin::Sidebar Brand-->
+        <div class="sidebar-brand">
+          <!--begin::Brand Link-->
+          <a href="../index.html" class="brand-link">
+            <!--begin::Brand Image-->
+            <img
+              src="./assets/img/AdminLTELogo.png"
+              alt="AdminLTE Logo"
+              class="brand-image opacity-75 shadow"
+            />
+            <!--end::Brand Image-->
+            <!--begin::Brand Text-->
+            <span class="brand-text fw-light">Perfume AI</span>
+            <!--end::Brand Text-->
+          </a>
+          <!--end::Brand Link-->
+        </div>
+        <!--end::Sidebar Brand-->
+        <!--begin::Sidebar Wrapper-->
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <!--begin::Sidebar Menu-->
+            <ul
+              class="nav sidebar-menu flex-column"
+              data-lte-toggle="treeview"
+              role="navigation"
+              aria-label="Main navigation"
+              data-accordion="false"
+              id="navigation"
+            >
+              <!-- 动态菜单将根据角色生成 -->
+            </ul>
+            <!--end::Sidebar Menu-->
+          </nav>
+        </div>
+        <!--end::Sidebar Wrapper-->
+      </aside>
+      <!--end::Sidebar-->
+
+      <script>
+        // 菜单配置
+        const menuConfig = {
+          admin: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/index.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+            {
+              id: 'customers',
+              label: '客户管理',
+              icon: 'bi-people',
+              path: '/customers/index.html',
+            },
+            { id: 'settings', label: '系统设置', icon: 'bi-gear', path: '/settings/index.html' },
+          ],
+          perfumer: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+          evaluator: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+        };
+
+        // 生成菜单HTML
+        function generateMenu(userRole) {
+          const menuItems = menuConfig[userRole] || menuConfig.admin;
+          const navigation = document.getElementById('navigation');
+
+          if (!navigation) return;
+
+          let menuHTML = '';
+
+          menuItems.forEach((item) => {
+            const isActive = item.id === 'dashboard' || item.id === 'orders';
+            const hasChildren = item.children && item.children.length > 0;
+
+            if (hasChildren) {
+              menuHTML += `
+          <li class="nav-item ${isActive ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" onclick="toggleSubmenu(this)">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>
+                ${item.label}
+                <i class="nav-arrow bi bi-chevron-right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+        `;
+
+              item.children.forEach((child) => {
+                const childActive = child.id === 'ai-formulas' || child.id === 'ai-studio';
+                menuHTML += `
+            <li class="nav-item">
+              <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>${child.label}</p>
+              </a>
+            </li>
+          `;
+              });
+
+              menuHTML += `
+            </ul>
+          </li>
+        `;
+            } else {
+              menuHTML += `
+          <li class="nav-item">
+            <a href="${item.path}" class="nav-link ${isActive ? 'active' : ''}">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>${item.label}</p>
+            </a>
+          </li>
+        `;
+            }
+          });
+
+          navigation.innerHTML = menuHTML;
+        }
+
+        // 切换子菜单展开状态
+        function toggleSubmenu(element) {
+          const parentLi = element.closest('.nav-item');
+          const submenu = parentLi.querySelector('.nav-treeview');
+          const arrow = element.querySelector('.nav-arrow');
+
+          if (parentLi.classList.contains('menu-open')) {
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+          } else {
+            parentLi.classList.add('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(90deg)';
+          }
+
+          // 阻止默认行为
+          event.preventDefault();
+          return false;
+        }
+
+        // 获取当前用户角色
+        function getCurrentUserRole() {
+          const userStr = sessionStorage.getItem('currentUser');
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            return user.role;
+          }
+          return 'admin';
+        }
+
+        // 页面加载时生成菜单
+        document.addEventListener('DOMContentLoaded', function () {
+          const userRole = getCurrentUserRole();
+          if (userRole) {
+            generateMenu(userRole);
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        });
+      </script>
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">GC-MS</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">GC-MS</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card mb-4">
+              <div class="card-header"><h3 class="card-title">查询</h3></div>
+              <div class="card-body">
+                <form id="gcms-form" class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">样品关键词</label>
+                    <input id="kw" type="text" class="form-control" placeholder="样品名/编号" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">状态</label>
+                    <select id="status" class="form-select">
+                      <option value="">全部</option>
+                      <option>待解析</option>
+                      <option>解析中</option>
+                      <option>已完成</option>
+                      <option>失败</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">测试日期</label>
+                    <input id="date" type="date" class="form-control" />
+                  </div>
+                  <div class="col-md-2 align-self-end">
+                    <button id="searchBtn" type="button" class="btn btn-primary me-2">查询</button>
+                    <button id="resetBtn" type="button" class="btn btn-outline-secondary">
+                      重置
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h3 class="card-title">样品列表</h3>
+                <div class="qt-col-menu">
+                  <button class="btn btn-outline-secondary btn-sm me-2" id="exportBtn">
+                    导出可见列
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm qt-col-btn" id="colMenuBtn">
+                    列显示/隐藏
+                  </button>
+                  <div class="qt-dropdown" id="colMenu"></div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 520px">
+                  <table class="table table-hover mb-0 table-sticky" id="gcms-table">
+                    <thead class="table-light border-bottom">
+                      <tr>
+                        <th data-qt-key="id" style="width: 140px">样品ID</th>
+                        <th data-qt-key="name">名称</th>
+                        <th data-qt-key="lot">批次</th>
+                        <th data-qt-key="date">测试日期</th>
+                        <th data-qt-key="status">状态</th>
+                        <th data-qt-key="actions" style="width: 120px">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="gcms-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="text-body-secondary small" id="gcms-stats">共 0 条</div>
+                <ul class="pagination pagination-sm m-0" id="gcms-pagination"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!--begin::Footer-->
+      <footer class="app-footer">
+        <!--begin::To the end-->
+        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <!--end::To the end-->
+        <!--begin::Copyright-->
+        <strong>
+          Copyright &copy; 2025-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none"
+            >香知香遇科技（上海）有限责任公司</a
+          >.
+        </strong>
+        All rights reserved.
+        <!--end::Copyright-->
+      </footer>
+      <!--end::Footer-->
+    </div>
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+    <script src="./js/adminlte.js"></script>
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+
+        // Disable OverlayScrollbars on mobile devices to prevent touch interference
+        const isMobile = window.innerWidth <= 992;
+
+        if (
+          sidebarWrapper &&
+          OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+          !isMobile
+        ) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
+    <!--end::OverlayScrollbars Configure-->
+    <style>
+      .qt-col-menu {
+        position: relative;
+      }
+      .qt-dropdown {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        z-index: 1000;
+        min-width: 220px;
+        background: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        display: none;
+      }
+      .qt-dropdown.show {
+        display: block;
+      }
+      .qt-dropdown .form-check {
+        padding: 0.5rem 0.75rem;
+      }
+      .qt-col-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .qt-resizer {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 6px;
+        height: 100%;
+        cursor: col-resize;
+        user-select: none;
+      }
+      th[data-qt-key] {
+        position: relative;
+      }
+    </style>
+    <script>
+      (function () {
+        if (window.QueryTable) return;
+        function save(key, value) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (_) {}
+        }
+        function load(key, fallback) {
+          try {
+            const v = JSON.parse(localStorage.getItem(key));
+            return v ?? fallback;
+          } catch (_) {
+            return fallback;
+          }
+        }
+
+        class QueryTable {
+          constructor(cfg) {
+            this.cfg = cfg;
+            this.state = { page: 1, pageSize: cfg.pageSize || 10 };
+            this.columns = this._initColumns(cfg.columns);
+            this._bindStatic();
+            this.render();
+          }
+          _initColumns(cols) {
+            const stored = load(`qt:${this.cfg.storageKey}:columns`, null);
+            const byKey = Object.fromEntries(cols.map((c) => [c.key, c]));
+            if (stored) {
+              stored.forEach((s) => {
+                if (byKey[s.key]) Object.assign(byKey[s.key], s);
+              });
+            }
+            return Object.values(byKey);
+          }
+          _persistColumns() {
+            save(
+              `qt:${this.cfg.storageKey}:columns`,
+              this.columns.map(({ key, label, visible, width }) => ({
+                key,
+                label,
+                visible,
+                width,
+              })),
+            );
+          }
+
+          _bindStatic() {
+            // Column menu
+            const btn = document.querySelector(this.cfg.colMenuButtonSelector);
+            const menu = document.querySelector(this.cfg.colMenuDropdownSelector);
+            if (btn && menu) {
+              btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menu.classList.toggle('show');
+              });
+              document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target))
+                  menu.classList.remove('show');
+              });
+              this._renderColMenu(menu);
+            }
+            // Pagination
+            const pag = document.querySelector(this.cfg.paginationSelector);
+            if (pag) {
+              pag.addEventListener('click', (e) => {
+                const a = e.target.closest('a.page-link');
+                if (!a) return;
+                e.preventDefault();
+                const p = Number(a.dataset.page);
+                if (Number.isNaN(p)) return;
+                const total = this._filtered().length;
+                const totalPages = Math.max(1, Math.ceil(total / this.state.pageSize));
+                this.state.page = Math.min(Math.max(1, p), totalPages);
+                this.render();
+              });
+            }
+            // Export
+            if (this.cfg.exportButtonSelector) {
+              const ex = document.querySelector(this.cfg.exportButtonSelector);
+              ex?.addEventListener('click', () => this.exportCSV());
+            }
+            // Resizers
+            this._attachResizers();
+          }
+          _attachResizers() {
+            const thead = document.querySelector(this.cfg.tableSelector + ' thead');
+            if (!thead) return;
+            const ths = thead.querySelectorAll('th[data-qt-key]');
+            ths.forEach((th) => {
+              const key = th.getAttribute('data-qt-key');
+              const col = this.columns.find((c) => c.key === key);
+              if (!col) return;
+              if (col.width) th.style.width = col.width;
+              let grip = th.querySelector('.qt-resizer');
+              if (!grip) {
+                grip = document.createElement('div');
+                grip.className = 'qt-resizer';
+                th.appendChild(grip);
+              }
+              let startX = 0,
+                startW = 0;
+              const onMove = (e) => {
+                const dx = (e.clientX || e.touches?.[0]?.clientX) - startX;
+                const w = Math.max(50, startW + dx);
+                th.style.width = w + 'px';
+                col.width = th.style.width;
+                this._persistColumns();
+              };
+              const onUp = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+              };
+              grip.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startX = e.clientX;
+                startW = th.offsetWidth;
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+              });
+            });
+          }
+          _renderColMenu(menu) {
+            const list = this.columns
+              .map(
+                (c) => `<div class="form-check">
+          <input class="form-check-input" type="checkbox" id="qt-col-${this.cfg.storageKey}-${c.key}" ${c.visible !== false ? 'checked' : ''} data-key="${c.key}">
+          <label class="form-check-label" for="qt-col-${this.cfg.storageKey}-${c.key}">${c.label}</label>
+        </div>`,
+              )
+              .join('');
+            menu.innerHTML = list;
+            menu.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+              cb.addEventListener('change', () => {
+                const key = cb.getAttribute('data-key');
+                const col = this.columns.find((c) => c.key === key);
+                if (!col) return;
+                col.visible = cb.checked;
+                this._persistColumns();
+                this._applyVisibility();
+                this.render();
+              });
+            });
+            this._applyVisibility();
+          }
+          _applyVisibility() {
+            const ths = document.querySelectorAll(
+              this.cfg.tableSelector + ' thead th[data-qt-key]',
+            );
+            ths.forEach((th) => {
+              const key = th.getAttribute('data-qt-key');
+              const col = this.columns.find((c) => c.key === key);
+              if (!col) return;
+              th.style.display = col.visible === false ? 'none' : '';
+            });
+          }
+          _filtered() {
+            return this.cfg.getFilteredData();
+          }
+          _visibleColumns() {
+            return this.columns.filter((c) => c.visible !== false);
+          }
+
+          render() {
+            // Body
+            const data = this._filtered();
+            const start = (this.state.page - 1) * this.state.pageSize;
+            const end = start + this.state.pageSize;
+            const pageData = data.slice(start, end);
+            const tbody = document.querySelector(this.cfg.tbodySelector);
+            tbody.innerHTML = pageData.map((row) => this.cfg.renderRow(row, this.columns)).join('');
+            // Stats
+            if (this.cfg.statsSelector) {
+              const stats = document.querySelector(this.cfg.statsSelector);
+              stats.textContent = `共 ${data.length} 条，当前第 ${data.length ? this.state.page : 0}/${Math.max(1, Math.ceil(data.length / this.state.pageSize))} 页`;
+            }
+            // Pagination
+            const totalPages = Math.max(1, Math.ceil(data.length / this.state.pageSize));
+            const ul = document.querySelector(this.cfg.paginationSelector);
+            if (ul) {
+              const page = this.state.page;
+              const li = (label, pageNum, disabled = false, active = false) =>
+                `<li class="page-item ${disabled ? 'disabled' : ''} ${active ? 'active' : ''}"><a class="page-link" href="#" data-page="${pageNum}">${label}</a></li>`;
+              let html = '';
+              html += li('«', page - 1, page === 1);
+              const pages = [...Array(totalPages).keys()].map((i) => i + 1);
+              const range = pages.slice(Math.max(0, page - 3), Math.max(0, page - 3) + 5);
+              range.forEach((p) => (html += li(String(p), p, false, p === page)));
+              html += li('»', page + 1, page === totalPages);
+              ul.innerHTML = html;
+            }
+            // Apply visibility for body
+            const visKeys = new Set(this._visibleColumns().map((c) => c.key));
+            document.querySelectorAll(this.cfg.tableSelector + ' tbody tr').forEach((tr) => {
+              Array.from(tr.children).forEach((td, idx) => {
+                const ths = document.querySelectorAll(
+                  this.cfg.tableSelector + ' thead th[data-qt-key]',
+                );
+                const key = ths[idx]?.getAttribute('data-qt-key');
+                if (!key) return;
+                td.style.display = visKeys.has(key) ? '' : 'none';
+              });
+            });
+          }
+
+          exportCSV() {
+            const data = this._filtered();
+            const cols = this._visibleColumns();
+            const rows = [cols.map((c) => c.label)];
+            data.forEach((row) => {
+              rows.push(
+                cols.map((c) => {
+                  const v = this.cfg.getCellValue
+                    ? this.cfg.getCellValue(row, c.key)
+                    : (row[c.key] ?? '');
+                  return String(v);
+                }),
+              );
+            });
+            const csv = rows
+              .map((r) => r.map((v) => `"${String(v).replace(/"/g, '\"')}"`).join(','))
+              .join('\n');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (this.cfg.storageKey || 'export') + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+          }
+        }
+
+        window.QueryTable = { create: (cfg) => new QueryTable(cfg) };
+      })();
+    </script>
+
+    <script>
+      const statuses = ['待解析', '解析中', '已完成', '失败'];
+      function randomDate() {
+        const t = Date.now() - Math.random() * 120 * 24 * 3600 * 1000;
+        return new Date(t).toISOString().slice(0, 10);
+      }
+      const mockSamples = Array.from({ length: 86 }, (_, i) => ({
+        id: `SP-${String(i + 1).padStart(4, '0')}`,
+        name: `样品${i + 1}`,
+        lot: `${2024 - Math.floor(i / 30)}${((i % 12) + 1).toString().padStart(2, '0')}A`,
+        date: randomDate(),
+        status: statuses[(i * 13) % statuses.length],
+      }));
+
+      const state = { page: 1, pageSize: 10, kw: '', status: '', date: '' };
+      function filterData() {
+        return mockSamples.filter((s) => {
+          const hitKw =
+            state.kw === '' ||
+            [s.id, s.name, s.lot].some((v) => v.toLowerCase().includes(state.kw.toLowerCase()));
+          const hitSt = state.status === '' || s.status === state.status;
+          const hitDate = state.date === '' || s.date === state.date;
+          return hitKw && hitSt && hitDate;
+        });
+      }
+
+      function badge(st) {
+        const map = { 待解析: 'secondary', 解析中: 'info', 已完成: 'success', 失败: 'danger' };
+        return `<span class=\"badge text-bg-${map[st] || 'secondary'}\">${st}</span>`;
+      }
+
+      const qt = window.QueryTable.create({
+        storageKey: 'gcms',
+        pageSize: state.pageSize,
+        tableSelector: '#gcms-table',
+        tbodySelector: '#gcms-tbody',
+        statsSelector: '#gcms-stats',
+        paginationSelector: '#gcms-pagination',
+        colMenuButtonSelector: '#colMenuBtn',
+        colMenuDropdownSelector: '#colMenu',
+        exportButtonSelector: '#exportBtn',
+        columns: [
+          { key: 'id', label: '样品ID', visible: true, width: '140px' },
+          { key: 'name', label: '名称', visible: true },
+          { key: 'lot', label: '批次', visible: true },
+          { key: 'date', label: '测试日期', visible: true },
+          { key: 'status', label: '状态', visible: true },
+          { key: 'actions', label: '操作', visible: true, width: '120px' },
+        ],
+        getFilteredData: () => filterData(),
+        renderRow: (s) => `
+          <tr class="align-middle">
+            <td><span class="fw-medium">${s.id}</span></td>
+            <td>${s.name}</td>
+            <td>${s.lot}</td>
+            <td>${s.date}</td>
+            <td>${badge(s.status)}</td>
+            <td><button class="btn btn-link btn-sm" data-action="view" data-id="${s.id}">查看</button></td>
+          </tr>`,
+        getCellValue: (s, key) =>
+          key === 'status' ? s.status : key === 'actions' ? '' : (s[key] ?? ''),
+      });
+
+      function bindEvents() {
+        document.getElementById('gcms-pagination').addEventListener('click', (e) => {
+          const a = e.target.closest('a.page-link');
+          if (!a) return;
+          e.preventDefault();
+          const p = Number(a.dataset.page);
+          if (Number.isNaN(p)) return;
+          qt.state.page = Math.max(1, p);
+          qt.render();
+        });
+        document.getElementById('searchBtn').addEventListener('click', () => {
+          state.kw = document.getElementById('kw').value.trim();
+          state.status = document.getElementById('status').value;
+          state.date = document.getElementById('date').value;
+          qt.state.page = 1;
+          qt.render();
+        });
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          document.getElementById('gcms-form').reset();
+          state.kw = '';
+          state.status = '';
+          state.date = '';
+          qt.state.page = 1;
+          qt.render();
+        });
+        document.getElementById('gcms-table').addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-action="view"]');
+          if (!btn) return;
+          const id = btn.dataset.id;
+          alert(`查看 ${id} 的详情（占位）`);
+        });
+        document.getElementById('kw').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('searchBtn').click();
+          }
+        });
+      }
+
+      bindEvents();
+      qt.render();
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE v4 | 仪表板</title>
+    <title>AI智能用户和制香管理系统</title>
 
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -13,7 +13,7 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE v4 | 仪表板" />
+    <meta name="title" content="AI智能用户和制香管理系统" />
     <meta name="author" content="ColorlibHQ" />
     <meta
       name="description"
@@ -277,23 +277,24 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
-                  src="./assets/img/user2-160x160.jpg"
+                  src="./assets/img/avatar.png"
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="./assets/img/user2-160x160.jpg"
+                    src="./assets/img/avatar.png"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2023</small>
+                    <span id="userName">未登录</span> -
+                    <span id="userRole"></span>
+                    <small>登录时间: <span id="loginTime"></span></small>
                   </p>
                 </li>
                 <!--end::User Image-->
@@ -302,13 +303,13 @@
                   <!--begin::Row-->
                   <div class="row">
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="followers">关注者</a>
+                      <a href="#" data-i18n="orders">订单</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="sales">销售</a>
+                      <a href="#" data-i18n="formulas">配方</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="friends">朋友</a>
+                      <a href="#" data-i18n="tasks">任务</a>
                     </div>
                   </div>
                   <!--end::Row-->
@@ -317,7 +318,11 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                   <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
-                  <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut"
+                  <a
+                    href="#"
+                    class="btn btn-default btn-flat float-end"
+                    onclick="logout()"
+                    data-i18n="signOut"
                     >退出登录</a
                   >
                 </li>
@@ -331,6 +336,51 @@
         <!--end::Container-->
       </nav>
       <!--end::Header-->
+
+      <script>
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          window.location.href = '/examples/login.html';
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+          const user = getCurrentUser();
+          if (user) {
+            const userNameElements = document.querySelectorAll('#userName, #userDisplayName');
+            const userRoleElement = document.getElementById('userRole');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            userNameElements.forEach((el) => {
+              if (el) el.textContent = user.name;
+            });
+
+            if (userRoleElement) {
+              userRoleElement.textContent =
+                user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师';
+            }
+
+            if (loginTimeElement) {
+              loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN');
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        }
+
+        // 页面加载时更新用户信息
+        document.addEventListener('DOMContentLoaded', function () {
+          updateUserInfo();
+        });
+
+        // 立即执行一次更新
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserInfo);
+        } else {
+          updateUserInfo();
+        }
+      </script>
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <!--begin::Sidebar Brand-->
@@ -345,7 +395,7 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">Perfume AI</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -363,440 +413,7 @@
               data-accordion="false"
               id="navigation"
             >
-              <li class="nav-item menu-open">
-                <a href="#" class="nav-link active">
-                  <i class="nav-icon bi bi-speedometer"></i>
-                  <p>
-                    <span data-i18n="dashboard">仪表板</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./index.html" class="nav-link active">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./index2.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./index3.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v3</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="./generate/theme.html" class="nav-link">
-                  <i class="nav-icon bi bi-palette"></i>
-                  <p data-i18n="themeGenerate">主题生成</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill"></i>
-                  <p>
-                    <span data-i18n="widgets">小部件</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./widgets/small-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="smallBox">小盒子</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./widgets/info-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="infoBox">信息盒子</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./widgets/cards.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="cards">卡片</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-clipboard-fill"></i>
-                  <p>
-                    <span data-i18n="layoutOptions">布局选项</span>
-                    <span class="nav-badge badge text-bg-secondary me-3">6</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./layout/unfixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="defaultSidebar">默认侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedSidebar">固定侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedHeader">固定头部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-footer.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedFooter">固定底部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-complete.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedComplete">完全固定</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/layout-custom-area.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="layoutCustomArea">布局 <small>+ 自定义区域</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/sidebar-mini.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/collapsed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ 折叠</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/logo-switch.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ Logo切换</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/layout-rtl.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="layoutRtl">RTL布局</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-tree-fill"></i>
-                  <p>
-                    <span data-i18n="uiElements">UI元素</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./UI/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="general">通用</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./UI/icons.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="icons">图标</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./UI/timeline.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="timeline">时间线</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-pencil-square"></i>
-                  <p>
-                    <span data-i18n="forms">表单</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./forms/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="generalElements">通用元素</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-table"></i>
-                  <p>
-                    <span data-i18n="tables">表格</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./tables/simple.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="simpleTables">简单表格</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header" data-i18n="examples">示例</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                  <p>
-                    <span data-i18n="auth">认证</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        <span data-i18n="version1">版本1</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="login">登录</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="register">注册</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        <span data-i18n="version2">版本2</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="login">登录</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="register">注册</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./examples/lockscreen.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="lockscreen">锁屏</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header" data-i18n="documentations">文档</li>
-              <li class="nav-item">
-                <a href="./docs/introduction.html" class="nav-link">
-                  <i class="nav-icon bi bi-download"></i>
-                  <p data-i18n="installation">安装</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/layout.html" class="nav-link">
-                  <i class="nav-icon bi bi-grip-horizontal"></i>
-                  <p data-i18n="layout">布局</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/color-mode.html" class="nav-link">
-                  <i class="nav-icon bi bi-star-half"></i>
-                  <p data-i18n="colorMode">颜色模式</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-ui-checks-grid"></i>
-                  <p>
-                    <span data-i18n="components">组件</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/components/main-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="mainHeader">主头部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./docs/components/main-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="mainSidebar">主侧边栏</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-filetype-js"></i>
-                  <p>
-                    <span data-i18n="javascript">JavaScript</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/javascript/treeview.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="treeview">树形视图</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/browser-support.html" class="nav-link">
-                  <i class="nav-icon bi bi-browser-edge"></i>
-                  <p data-i18n="browserSupport">浏览器支持</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/how-to-contribute.html" class="nav-link">
-                  <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                  <p data-i18n="howToContribute">如何贡献</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/faq.html" class="nav-link">
-                  <i class="nav-icon bi bi-question-circle-fill"></i>
-                  <p data-i18n="faq">常见问题</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/license.html" class="nav-link">
-                  <i class="nav-icon bi bi-patch-check-fill"></i>
-                  <p data-i18n="license">许可证</p>
-                </a>
-              </li>
-
-              <li class="nav-header" data-i18n="multiLevelExample">多级示例</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p data-i18n="level1">第1级</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>
-                    <span data-i18n="level1">第1级</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="level2">第2级</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>
-                        <span data-i18n="level2">第2级</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="level2">第2级</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p data-i18n="level1">第1级</p>
-                </a>
-              </li>
-
-              <li class="nav-header" data-i18n="labels">标签</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-danger"></i>
-                  <p class="text" data-i18n="important">重要</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-warning"></i>
-                  <p data-i18n="warning">警告</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-info"></i>
-                  <p data-i18n="informational">信息</p>
-                </a>
-              </li>
+              <!-- 动态菜单将根据角色生成 -->
             </ul>
             <!--end::Sidebar Menu-->
           </nav>
@@ -804,6 +421,160 @@
         <!--end::Sidebar Wrapper-->
       </aside>
       <!--end::Sidebar-->
+
+      <script>
+        // 菜单配置
+        const menuConfig = {
+          admin: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/index.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+            {
+              id: 'customers',
+              label: '客户管理',
+              icon: 'bi-people',
+              path: '/customers/index.html',
+            },
+            { id: 'settings', label: '系统设置', icon: 'bi-gear', path: '/settings/index.html' },
+          ],
+          perfumer: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+          evaluator: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+        };
+
+        // 生成菜单HTML
+        function generateMenu(userRole) {
+          const menuItems = menuConfig[userRole] || menuConfig.admin;
+          const navigation = document.getElementById('navigation');
+
+          if (!navigation) return;
+
+          let menuHTML = '';
+
+          menuItems.forEach((item) => {
+            const isActive = item.id === 'dashboard' || item.id === 'orders';
+            const hasChildren = item.children && item.children.length > 0;
+
+            if (hasChildren) {
+              menuHTML += `
+          <li class="nav-item ${isActive ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" onclick="toggleSubmenu(this)">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>
+                ${item.label}
+                <i class="nav-arrow bi bi-chevron-right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+        `;
+
+              item.children.forEach((child) => {
+                const childActive = child.id === 'ai-formulas' || child.id === 'ai-studio';
+                menuHTML += `
+            <li class="nav-item">
+              <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>${child.label}</p>
+              </a>
+            </li>
+          `;
+              });
+
+              menuHTML += `
+            </ul>
+          </li>
+        `;
+            } else {
+              menuHTML += `
+          <li class="nav-item">
+            <a href="${item.path}" class="nav-link ${isActive ? 'active' : ''}">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>${item.label}</p>
+            </a>
+          </li>
+        `;
+            }
+          });
+
+          navigation.innerHTML = menuHTML;
+        }
+
+        // 切换子菜单展开状态
+        function toggleSubmenu(element) {
+          const parentLi = element.closest('.nav-item');
+          const submenu = parentLi.querySelector('.nav-treeview');
+          const arrow = element.querySelector('.nav-arrow');
+
+          if (parentLi.classList.contains('menu-open')) {
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+          } else {
+            parentLi.classList.add('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(90deg)';
+          }
+
+          // 阻止默认行为
+          event.preventDefault();
+          return false;
+        }
+
+        // 获取当前用户角色
+        function getCurrentUserRole() {
+          const userStr = sessionStorage.getItem('currentUser');
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            return user.role;
+          }
+          return 'admin';
+        }
+
+        // 页面加载时生成菜单
+        document.addEventListener('DOMContentLoaded', function () {
+          const userRole = getCurrentUserRole();
+          if (userRole) {
+            generateMenu(userRole);
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        });
+      </script>
       <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -840,9 +611,9 @@
                 <!--begin::Small Box Widget 1-->
                 <div class="small-box text-bg-primary">
                   <div class="inner">
-                    <h3>150</h3>
+                    <h3 id="metric-orders">1,286</h3>
 
-                    <p data-i18n="newOrders">新订单</p>
+                    <p>总订单数</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -870,9 +641,9 @@
                 <!--begin::Small Box Widget 2-->
                 <div class="small-box text-bg-success">
                   <div class="inner">
-                    <h3>53<sup class="fs-5">%</sup></h3>
+                    <h3 id="metric-users">482</h3>
 
-                    <p data-i18n="bounceRate">跳出率</p>
+                    <p>总用户数</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -900,9 +671,9 @@
                 <!--begin::Small Box Widget 3-->
                 <div class="small-box text-bg-warning">
                   <div class="inner">
-                    <h3>44</h3>
+                    <h3 id="metric-formulas">236</h3>
 
-                    <p data-i18n="userRegistrations">用户注册</p>
+                    <p>配方总数</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -930,9 +701,9 @@
                 <!--begin::Small Box Widget 4-->
                 <div class="small-box text-bg-danger">
                   <div class="inner">
-                    <h3>65</h3>
+                    <h3 id="metric-order-growth">+18%</h3>
 
-                    <p data-i18n="uniqueVisitors">独立访客</p>
+                    <p>订单增长率</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -965,314 +736,64 @@
               <!--end::Col-->
             </div>
             <!--end::Row-->
-            <!--begin::Row-->
+            <!--begin::Row 第一行：地图和项目状态饼图-->
             <div class="row">
-              <!-- Start col -->
-              <div class="col-lg-7 connectedSortable">
+              <!-- 销售地图 -->
+              <div class="col-lg-8">
                 <div class="card mb-4">
                   <div class="card-header">
-                    <h3 class="card-title" data-i18n="salesValue">销售价值</h3>
+                    <h3 class="card-title">全国销售分布图</h3>
                   </div>
-
                   <div class="card-body">
-                    <div id="revenue-chart"></div>
+                    <div id="sales-map" style="height: 420px"></div>
                   </div>
                 </div>
-                <!-- /.card -->
+              </div>
 
-                <!-- DIRECT CHAT -->
-                <div class="card direct-chat direct-chat-primary mb-4">
+              <!-- 项目状态分布 -->
+              <div class="col-lg-4">
+                <div class="card mb-4" style="height: 508px">
                   <div class="card-header">
-                    <h3 class="card-title" data-i18n="directChat">直接聊天</h3>
-
+                    <h3 class="card-title">项目状态分布</h3>
                     <div class="card-tools">
-                      <span title="3 New Messages" class="badge text-bg-primary"> 3 </span>
                       <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
                         <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
                         <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-tool"
-                        title="Contacts"
-                        data-lte-toggle="chat-pane"
-                      >
-                        <i class="bi bi-chat-text-fill"></i>
-                      </button>
-                      <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
                     </div>
                   </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <!-- Conversations are loaded here -->
-                    <div class="direct-chat-messages">
-                      <!-- Message. Default to the start -->
-                      <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                          <span class="direct-chat-timestamp float-end"> 23 Jan 2:00 pm </span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img
-                          class="direct-chat-img"
-                          src="./assets/img/user1-128x128.jpg"
-                          alt="message user image"
-                        />
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">
-                          Is this template really for free? That's unbelievable!
-                        </div>
-                        <!-- /.direct-chat-text -->
-                      </div>
-                      <!-- /.direct-chat-msg -->
-
-                      <!-- Message to the end -->
-                      <div class="direct-chat-msg end">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                          <span class="direct-chat-timestamp float-start"> 23 Jan 2:05 pm </span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img
-                          class="direct-chat-img"
-                          src="./assets/img/user3-128x128.jpg"
-                          alt="message user image"
-                        />
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">You better believe it!</div>
-                        <!-- /.direct-chat-text -->
-                      </div>
-                      <!-- /.direct-chat-msg -->
-
-                      <!-- Message. Default to the start -->
-                      <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                          <span class="direct-chat-timestamp float-end"> 23 Jan 5:37 pm </span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img
-                          class="direct-chat-img"
-                          src="./assets/img/user1-128x128.jpg"
-                          alt="message user image"
-                        />
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">
-                          Working with AdminLTE on a great new app! Wanna join?
-                        </div>
-                        <!-- /.direct-chat-text -->
-                      </div>
-                      <!-- /.direct-chat-msg -->
-
-                      <!-- Message to the end -->
-                      <div class="direct-chat-msg end">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                          <span class="direct-chat-timestamp float-start"> 23 Jan 6:10 pm </span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img
-                          class="direct-chat-img"
-                          src="./assets/img/user3-128x128.jpg"
-                          alt="message user image"
-                        />
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">I would love to.</div>
-                        <!-- /.direct-chat-text -->
-                      </div>
-                      <!-- /.direct-chat-msg -->
-                    </div>
-                    <!-- /.direct-chat-messages-->
-
-                    <!-- Contacts are loaded here -->
-                    <div class="direct-chat-contacts">
-                      <ul class="contacts-list">
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user1-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                Count Dracula
-                                <small class="contacts-list-date float-end"> 2/28/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> How have you been? I was... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user7-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                Sarah Doe
-                                <small class="contacts-list-date float-end"> 2/23/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> I will be waiting for... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user3-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                Nadia Jolie
-                                <small class="contacts-list-date float-end"> 2/20/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> I'll call you back at... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user5-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                Nora S. Vans
-                                <small class="contacts-list-date float-end"> 2/10/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> Where is your new... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user6-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                John K.
-                                <small class="contacts-list-date float-end"> 1/27/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> Can I take a look at... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                        <li>
-                          <a href="#">
-                            <img
-                              class="contacts-list-img"
-                              src="./assets/img/user8-128x128.jpg"
-                              alt="User Avatar"
-                            />
-
-                            <div class="contacts-list-info">
-                              <span class="contacts-list-name">
-                                Kenneth M.
-                                <small class="contacts-list-date float-end"> 1/4/2023 </small>
-                              </span>
-                              <span class="contacts-list-msg"> Never mind I found... </span>
-                            </div>
-                            <!-- /.contacts-list-info -->
-                          </a>
-                        </li>
-                        <!-- End Contact Item -->
-                      </ul>
-                      <!-- /.contacts-list -->
-                    </div>
-                    <!-- /.direct-chat-pane -->
-                  </div>
-                  <!-- /.card-body -->
-                  <div class="card-footer">
-                    <form action="#" method="post">
-                      <div class="input-group">
-                        <input
-                          type="text"
-                          name="message"
-                          placeholder="Type Message ..."
-                          class="form-control"
-                          data-i18n-placeholder="typeMessage"
-                        />
-                        <span class="input-group-append">
-                          <button type="button" class="btn btn-primary" data-i18n="send">
-                            发送
-                          </button>
-                        </span>
-                      </div>
-                    </form>
-                  </div>
-                  <!-- /.card-footer-->
-                </div>
-                <!-- /.direct-chat -->
-              </div>
-              <!-- /.Start col -->
-
-              <!-- Start col -->
-              <div class="col-lg-5 connectedSortable">
-                <div class="card text-white bg-primary bg-gradient border-primary mb-4">
-                  <div class="card-header border-0">
-                    <h3 class="card-title" data-i18n="salesValue">销售价值</h3>
-                    <div class="card-tools">
-                      <button
-                        type="button"
-                        class="btn btn-primary btn-sm"
-                        data-lte-toggle="card-collapse"
-                      >
-                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div id="world-map" style="height: 220px"></div>
-                  </div>
-                  <div class="card-footer border-0">
-                    <!--begin::Row-->
-                    <div class="row">
-                      <div class="col-4 text-center">
-                        <div id="sparkline-1" class="text-dark"></div>
-                        <div class="text-white" data-i18n="uniqueVisitors">访客</div>
-                      </div>
-                      <div class="col-4 text-center">
-                        <div id="sparkline-2" class="text-dark"></div>
-                        <div class="text-white" data-i18n="online">在线</div>
-                      </div>
-                      <div class="col-4 text-center">
-                        <div id="sparkline-3" class="text-dark"></div>
-                        <div class="text-white" data-i18n="sales">销售</div>
-                      </div>
-                    </div>
-                    <!--end::Row-->
+                  <div class="card-body" style="padding: 30px 20px">
+                    <div id="project-status-chart" style="height: 420px; width: 100%"></div>
                   </div>
                 </div>
               </div>
-              <!-- /.Start col -->
+            </div>
+
+            <!--begin::Row 第二行：订单趋势和配方分类-->
+            <div class="row">
+              <!-- 订单趋势分析 -->
+              <div class="col-lg-8">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title">订单趋势分析</h3>
+                  </div>
+                  <div class="card-body">
+                    <div id="order-trend-chart" style="height: 380px"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 配方分类统计 -->
+              <div class="col-lg-4">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title">配方分类统计</h3>
+                  </div>
+                  <div class="card-body">
+                    <div id="formula-category-chart" style="height: 380px"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- /.row (main row) -->
           </div>
@@ -1288,8 +809,10 @@
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          Copyright &copy; 2025-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none"
+            >香知香遇科技（上海）有限责任公司</a
+          >.
         </strong>
         All rights reserved.
         <!--end::Copyright-->
@@ -1367,177 +890,330 @@
       });
     </script>
 
-    <!-- apexcharts -->
+    <!-- ECharts -->
     <script
-      src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
-      integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
+      src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"
       crossorigin="anonymous"
     ></script>
 
-    <!-- ChartJS -->
+    <!-- ECharts charts -->
     <script>
-      // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-      // IT'S ALL JUST JUNK FOR DEMO
-      // ++++++++++++++++++++++++++++++++++++++++++
+      document.addEventListener('DOMContentLoaded', async function () {
+        // 检查 ECharts 是否加载
+        if (typeof echarts === 'undefined') {
+          console.error('ECharts 未正确加载');
+          return;
+        }
 
-      const sales_chart_options = {
-        series: [
-          {
-            name: 'Digital Goods',
-            data: [28, 48, 40, 19, 86, 27, 90],
-          },
-          {
-            name: 'Electronics',
-            data: [65, 59, 80, 81, 56, 55, 40],
-          },
-        ],
-        chart: {
-          height: 300,
-          type: 'area',
-          toolbar: {
-            show: false,
-          },
-        },
-        legend: {
-          show: false,
-        },
-        colors: ['#0d6efd', '#20c997'],
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: [
-            '2023-01-01',
-            '2023-02-01',
-            '2023-03-01',
-            '2023-04-01',
-            '2023-05-01',
-            '2023-06-01',
-            '2023-07-01',
+        async function loadChina() {
+          try {
+            const res = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
+            return res.json();
+          } catch (error) {
+            console.error('加载中国地图数据失败:', error);
+            return null;
+          }
+        }
+
+        function genMonths(n) {
+          const d = new Date();
+          d.setDate(1);
+          const arr = [];
+          for (let i = n - 1; i >= 0; i--) {
+            const x = new Date(d.getFullYear(), d.getMonth() - i, 1);
+            arr.push(x.toISOString().slice(0, 10));
+          }
+          return arr;
+        }
+        function randSeries(n, base, variance) {
+          return Array.from({ length: n }, () =>
+            Math.max(0, Math.round(base + (Math.random() - 0.5) * variance)),
+          );
+        }
+        const months = genMonths(12);
+
+        // 订单趋势分析
+        const orderEl = document.getElementById('order-trend-chart');
+        if (!orderEl) {
+          console.error('订单趋势图容器未找到');
+          return;
+        }
+        const orderChart = echarts.init(orderEl);
+        const orderData = randSeries(months.length, 120, 80);
+        const orderValue = randSeries(months.length, 580000, 300000);
+        const orderOption = {
+          tooltip: { trigger: 'axis' },
+          legend: { data: ['订单数量', '订单金额'] },
+          grid: { left: 60, right: 60, top: 40, bottom: 40 },
+          xAxis: { type: 'category', data: months.map((m) => m.slice(5)) },
+          yAxis: [
+            { type: 'value', name: '订单数量', position: 'left' },
+            { type: 'value', name: '订单金额(万)', position: 'right' },
           ],
-        },
-        tooltip: {
-          x: {
-            format: 'MMMM yyyy',
+          series: [
+            {
+              name: '订单数量',
+              type: 'line',
+              data: orderData,
+              itemStyle: { color: '#3b82f6' },
+              yAxisIndex: 0,
+              smooth: true,
+              areaStyle: { opacity: 0.2 },
+            },
+            {
+              name: '订单金额',
+              type: 'bar',
+              data: orderValue.map((v) => Math.round(v / 10000)),
+              itemStyle: { color: '#10b981' },
+              yAxisIndex: 1,
+              barMaxWidth: 25,
+            },
+          ],
+        };
+        orderChart.setOption(orderOption);
+
+        // 配方分类统计
+        const formulaEl = document.getElementById('formula-category-chart');
+        if (!formulaEl) {
+          console.error('配方分类图容器未找到');
+          return;
+        }
+        const formulaChart = echarts.init(formulaEl);
+        const formulaCategories = ['花香调', '果香调', '木质调', '东方调', '清新调', '海洋调'];
+        const formulaCategoryData = formulaCategories.map((cat) => ({
+          name: cat,
+          value: Math.round(20 + Math.random() * 60),
+        }));
+        formulaChart.setOption({
+          tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+          legend: { bottom: 0, itemGap: 10 },
+          series: [
+            {
+              type: 'pie',
+              radius: '70%',
+              center: ['50%', '45%'],
+              data: formulaCategoryData,
+              itemStyle: {
+                borderColor: '#fff',
+                borderWidth: 2,
+                borderRadius: 8,
+              },
+              label: { formatter: '{b}\n{d}%' },
+              emphasis: {
+                itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' },
+              },
+            },
+          ],
+        });
+
+        // 项目状态分布
+        const statusEl = document.getElementById('project-status-chart');
+        if (!statusEl) {
+          console.error('项目状态图容器未找到');
+          return;
+        }
+        const statusChart = echarts.init(statusEl);
+        const statusData = [
+          { value: 12, name: '未开始' },
+          { value: 34, name: '进行中' },
+          { value: 6, name: '阻塞' },
+          { value: 28, name: '已完成' },
+        ];
+        statusChart.setOption({
+          tooltip: { trigger: 'item' },
+          legend: {
+            bottom: 20,
+            left: 'center',
+            itemGap: 15,
+            textStyle: { fontSize: 13 },
+            orient: 'horizontal',
           },
-        },
-      };
+          series: [
+            {
+              type: 'pie',
+              radius: ['40%', '65%'],
+              center: ['50%', '50%'],
+              avoidLabelOverlap: true,
+              itemStyle: { borderColor: '#fff', borderWidth: 2 },
+              data: statusData,
+              label: {
+                show: true,
+                formatter: '{b}\n{d}%',
+                fontSize: 11,
+                fontWeight: 'normal',
+                position: 'outside',
+              },
+              labelLine: {
+                show: true,
+                length: 10,
+                length2: 8,
+                smooth: false,
+              },
+            },
+          ],
+        });
 
-      const sales_chart = new ApexCharts(
-        document.querySelector('#revenue-chart'),
-        sales_chart_options,
-      );
-      sales_chart.render();
-    </script>
+        // 销售地图 - 中国各省销售分布
+        const mapEl = document.getElementById('sales-map');
+        if (!mapEl) {
+          console.error('销售地图容器未找到');
+          return;
+        }
+        const mapChart = echarts.init(mapEl);
+        const china = await loadChina();
+        if (china) {
+          echarts.registerMap('china', china);
+          const salesData = [
+            { name: '北京', value: 1580, orders: 342, customers: 128 },
+            { name: '上海', value: 1420, orders: 296, customers: 115 },
+            { name: '广东', value: 1320, orders: 284, customers: 98 },
+            { name: '江苏', value: 980, orders: 218, customers: 76 },
+            { name: '浙江', value: 860, orders: 186, customers: 65 },
+            { name: '山东', value: 720, orders: 158, customers: 54 },
+            { name: '四川', value: 640, orders: 142, customers: 48 },
+            { name: '湖北', value: 520, orders: 115, customers: 39 },
+            { name: '河南', value: 480, orders: 96, customers: 32 },
+            { name: '福建', value: 420, orders: 89, customers: 28 },
+            { name: '湖南', value: 380, orders: 76, customers: 25 },
+            { name: '安徽', value: 340, orders: 68, customers: 22 },
+            { name: '重庆', value: 310, orders: 62, customers: 20 },
+            { name: '天津', value: 280, orders: 56, customers: 18 },
+            { name: '陕西', value: 250, orders: 48, customers: 16 },
+            { name: '辽宁', value: 220, orders: 42, customers: 14 },
+            { name: '河北', value: 200, orders: 38, customers: 12 },
+            { name: '江西', value: 180, orders: 34, customers: 11 },
+            { name: '广西', value: 160, orders: 30, customers: 10 },
+            { name: '云南', value: 140, orders: 26, customers: 9 },
+          ];
 
-    <!-- jsvectormap -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"
-      integrity="sha256-/t1nN2956BT869E6H4V1dnt0X5pAQHPytli+1nTZm2Y="
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"
-      integrity="sha256-XPpPaZlU8S/HWf7FZLAncLg2SAkP8ScUTII89x9D3lY="
-      crossorigin="anonymous"
-    ></script>
+          // 地图上的销售数据标注点
+          const markPointData = [
+            { name: '北京', coord: [116.4074, 39.9042], value: 1580, symbolSize: 60 },
+            { name: '上海', coord: [121.4737, 31.2304], value: 1420, symbolSize: 55 },
+            { name: '广州', coord: [113.2644, 23.1291], value: 1320, symbolSize: 50 },
+            { name: '杭州', coord: [120.1551, 30.2741], value: 860, symbolSize: 45 },
+            { name: '南京', coord: [118.7969, 32.0603], value: 980, symbolSize: 48 },
+          ];
 
-    <!-- jsvectormap -->
-    <script>
-      // World map by jsVectorMap
-      new jsVectorMap({
-        selector: '#world-map',
-        map: 'world',
-      });
+          mapChart.setOption({
+            title: {
+              text: '全国销售分布',
+              left: 'center',
+              textStyle: { fontSize: 16, color: '#333' },
+            },
+            tooltip: {
+              trigger: 'item',
+              formatter: (params) => {
+                if (params.componentType === 'markPoint') {
+                  return `${params.name}<br/>销售额: ${params.value}万元<br/>重点区域`;
+                } else {
+                  const item = salesData.find((d) => d.name === params.name);
+                  if (item) {
+                    return `${params.name}<br/>销售额: ${item.value}万元<br/>订单数: ${item.orders}<br/>客户数: ${item.customers}`;
+                  }
+                  return `${params.name}: 暂无数据`;
+                }
+              },
+            },
+            visualMap: {
+              min: 0,
+              max: 1600,
+              left: 'left',
+              bottom: 20,
+              text: ['高', '低'],
+              calculable: true,
+              inRange: {
+                color: ['#e0f3ff', '#1890ff', '#006edd'],
+              },
+            },
+            series: [
+              {
+                type: 'map',
+                map: 'china',
+                roam: true,
+                zoom: 1.2,
+                itemStyle: {
+                  areaColor: '#f0f8ff',
+                  borderColor: '#999',
+                  borderWidth: 1,
+                },
+                emphasis: {
+                  itemStyle: {
+                    areaColor: '#4da6ff',
+                    borderColor: '#333',
+                    borderWidth: 2,
+                  },
+                },
+                data: salesData,
+                markPoint: {
+                  symbol: 'pin',
+                  symbolSize: (data) => data.symbolSize || 40,
+                  itemStyle: {
+                    color: '#ff4757',
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                  },
+                  label: {
+                    show: true,
+                    formatter: '{b}',
+                    color: '#fff',
+                    fontSize: 10,
+                    fontWeight: 'bold',
+                  },
+                  data: markPointData,
+                },
+                markLine: {
+                  effect: {
+                    show: true,
+                    trailLength: 0.3,
+                    symbol: 'arrow',
+                    symbolSize: 8,
+                  },
+                  lineStyle: {
+                    color: '#ff6b81',
+                    width: 2,
+                    type: 'dashed',
+                  },
+                  data: [
+                    [
+                      { name: '北京', coord: [116.4074, 39.9042] },
+                      { name: '上海', coord: [121.4737, 31.2304] },
+                    ],
+                    [
+                      { name: '上海', coord: [121.4737, 31.2304] },
+                      { name: '广州', coord: [113.2644, 23.1291] },
+                    ],
+                    [
+                      { name: '北京', coord: [116.4074, 39.9042] },
+                      { name: '杭州', coord: [120.1551, 30.2741] },
+                    ],
+                  ],
+                },
+              },
+            ],
+          });
+        }
 
-      // Sparkline charts
-      const option_sparkline1 = {
-        series: [
-          {
-            data: [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021],
-          },
-        ],
-        chart: {
-          type: 'area',
-          height: 50,
-          sparkline: {
-            enabled: true,
-          },
-        },
-        stroke: {
-          curve: 'straight',
-        },
-        fill: {
-          opacity: 0.3,
-        },
-        yaxis: {
-          min: 0,
-        },
-        colors: ['#DCE6EC'],
-      };
+        // 移除了sparkline图表，专注于主要数据展示
 
-      const sparkline1 = new ApexCharts(document.querySelector('#sparkline-1'), option_sparkline1);
-      sparkline1.render();
+        // 动态指标（仅示例）
+        function setText(id, val) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.textContent = val;
+          }
+        }
+        setText('metric-orders', String(Math.round(1200 + Math.random() * 200)));
+        setText('metric-users', String(Math.round(450 + Math.random() * 100)));
+        setText('metric-formulas', String(Math.round(220 + Math.random() * 50)));
+        setText('metric-order-growth', `+${Math.round(15 + Math.random() * 10)}%`);
 
-      const option_sparkline2 = {
-        series: [
-          {
-            data: [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921],
-          },
-        ],
-        chart: {
-          type: 'area',
-          height: 50,
-          sparkline: {
-            enabled: true,
-          },
-        },
-        stroke: {
-          curve: 'straight',
-        },
-        fill: {
-          opacity: 0.3,
-        },
-        yaxis: {
-          min: 0,
-        },
-        colors: ['#DCE6EC'],
-      };
-
-      const sparkline2 = new ApexCharts(document.querySelector('#sparkline-2'), option_sparkline2);
-      sparkline2.render();
-
-      const option_sparkline3 = {
-        series: [
-          {
-            data: [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21],
-          },
-        ],
-        chart: {
-          type: 'area',
-          height: 50,
-          sparkline: {
-            enabled: true,
-          },
-        },
-        stroke: {
-          curve: 'straight',
-        },
-        fill: {
-          opacity: 0.3,
-        },
-        yaxis: {
-          min: 0,
-        },
-        colors: ['#DCE6EC'],
-      };
-
-      const sparkline3 = new ApexCharts(document.querySelector('#sparkline-3'), option_sparkline3);
-      sparkline3.render();
+        // 响应式
+        window.addEventListener('resize', () => {
+          const charts = [orderChart, formulaChart, statusChart, mapChart].filter(Boolean);
+          charts.forEach((chart) => chart.resize());
+        });
+      }); // 关闭 DOMContentLoaded 事件监听器
     </script>
     <!--end::Script-->
   </body>

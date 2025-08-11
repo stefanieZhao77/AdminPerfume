@@ -129,7 +129,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
       <!--begin::Notifications Dropdown Menu-->
       <li class="nav-item dropdown">
         <a class="nav-link" data-bs-toggle="dropdown" href="#">
-          <i class="bi bi-bell-fill"></i>
+          <i class="bi bi-bell-fill" style="font-size: 1rem; display: inline-block; color: #ffc107;"></i>
           <span class="navbar-badge badge text-bg-warning">15</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -188,24 +188,25 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
       <!--begin::User Menu Dropdown-->
       <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-          <img
-            src={deploymentPath + "assets/img/user2-160x160.jpg"}
-            class="user-image rounded-circle shadow"
-            alt="User Image"
-          />
-          <span class="d-none d-md-inline">Alexander Pierce</span>
+          <div id="navUserAvatar" class="user-image rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold" 
+               style="width: 30px; height: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 0.75rem;">
+            A
+          </div>
+          <span class="d-none d-md-inline ms-1" id="userDisplayName">
+            未登录
+          </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
           <!--begin::User Image-->
           <li class="user-header text-bg-primary">
-            <img
-              src={deploymentPath + "assets/img/user2-160x160.jpg"}
-              class="rounded-circle shadow"
-              alt="User Image"
-            />
+            <div id="topbarUserAvatar" class="rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold mx-auto mb-2" 
+                 style="width: 90px; height: 90px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 2rem;">
+              A
+            </div>
             <p>
-              Alexander Pierce - Web Developer
-              <small>Member since Nov. 2023</small>
+              <span id="userName">未登录</span> - 
+              <span id="userRole"></span>
+              <small>登录时间: <span id="loginTime"></span></small>
             </p>
           </li>
           <!--end::User Image-->
@@ -214,13 +215,13 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
             <!--begin::Row-->
             <div class="row">
               <div class="col-4 text-center">
-                <a href="#" data-i18n="followers">关注者</a>
+                <a href="#" data-i18n="orders">订单</a>
               </div>
               <div class="col-4 text-center">
-                <a href="#" data-i18n="sales">销售</a>
+                <a href="#" data-i18n="formulas">配方</a>
               </div>
               <div class="col-4 text-center">
-                <a href="#" data-i18n="friends">朋友</a>
+                <a href="#" data-i18n="tasks">任务</a>
               </div>
             </div>
             <!--end::Row-->
@@ -229,7 +230,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
           <!--begin::Menu Footer-->
           <li class="user-footer">
             <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
-            <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut">退出登录</a>
+            <a href="#" class="btn btn-default btn-flat float-end" onclick="logout()" data-i18n="signOut">退出登录</a>
           </li>
           <!--end::Menu Footer-->
         </ul>
@@ -241,3 +242,121 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
   <!--end::Container-->
 </nav>
 <!--end::Header-->
+
+<style is:inline>
+  /* 修复用户头像样式 */
+  .user-menu .nav-link {
+    display: flex !important;
+    align-items: center;
+  }
+  
+  .user-menu .user-image {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .user-menu #userDisplayName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+  
+  /* 确保通知图标可见 */
+  .bi-bell-fill {
+    display: inline-block !important;
+    font-size: 1rem;
+  }
+  
+  /* 确保所有Bootstrap Icons可见 */
+  .bi {
+    display: inline-block !important;
+  }
+  
+  /* 通知图标特殊样式 */
+  .nav-item.dropdown .bi-bell-fill {
+    font-size: 1.1rem !important;
+    color: #ffc107 !important;
+    margin-right: 0.25rem;
+  }
+  
+  /* 确保通知徽章可见 */
+  .navbar-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+</style>
+
+<script is:inline>
+  // 获取当前用户信息
+  function getCurrentUser() {
+    if (typeof globalThis.sessionStorage !== 'undefined') {
+      const userStr = globalThis.sessionStorage.getItem('currentUser')
+      return userStr ? JSON.parse(userStr) : null
+    }
+    return null
+  }
+  
+  function logout() {
+    if (typeof globalThis.sessionStorage !== 'undefined') {
+      globalThis.sessionStorage.removeItem('currentUser')
+    }
+    globalThis.location.href = '/login.html'
+  }
+  
+  // 更新用户信息显示
+  function updateUserInfo() {
+    const user = getCurrentUser()
+    if (user) {
+      const userNameElements = document.querySelectorAll('#userName, #userDisplayName')
+      const userRoleElement = document.getElementById('userRole')
+      const loginTimeElement = document.getElementById('loginTime')
+      
+      userNameElements.forEach(el => {
+        if (el) el.textContent = user.name || user.username
+      })
+      
+      // 更新顶部导航栏用户头像（使用用户名首字母）
+      const topbarUserAvatar = document.getElementById('topbarUserAvatar')
+      if (topbarUserAvatar) {
+        const firstLetter = user.username.charAt(0).toUpperCase()
+        topbarUserAvatar.textContent = firstLetter
+      }
+      
+      // 更新右上角导航栏用户头像
+      const navUserAvatar = document.getElementById('navUserAvatar')
+      if (navUserAvatar) {
+        const firstLetter = user.username.charAt(0).toUpperCase()
+        navUserAvatar.textContent = firstLetter
+      }
+      
+      if (userRoleElement) {
+        userRoleElement.textContent = user.role === 'admin' ? '技术总监' : 
+                                     user.role === 'perfumer' ? '调香师' : '评香师'
+      }
+      
+      if (loginTimeElement) {
+        loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN')
+      }
+    } else {
+      // 如果没有用户信息，跳转到登录页面
+      globalThis.location.href = '/login.html'
+    }
+  }
+  
+  // 页面加载时更新用户信息
+  document.addEventListener('DOMContentLoaded', function() {
+    updateUserInfo()
+  })
+  
+  // 立即执行一次更新
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateUserInfo)
+  } else {
+    updateUserInfo()
+  }
+</script>
+

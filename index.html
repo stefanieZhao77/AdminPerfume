@@ -7,6 +7,20 @@
   <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
-  <script>window.location.href = './dist/pages/index.html'</script>
+  <script>
+    // 检查是否已登录
+    const currentUser = sessionStorage.getItem('currentUser')
+    if (currentUser) {
+      const user = JSON.parse(currentUser)
+      if (user.role === 'admin') {
+        window.location.href = './dist/index.html'
+      } else {
+        window.location.href = './dist/dashboard.html'
+      }
+    } else {
+      // 未登录，跳转到登录页面
+      window.location.href = './dist/examples/login.html'
+    }
+  </script>
 </body>
 </html>

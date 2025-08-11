@@ -261,23 +261,24 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
-                  src="../assets/img/user2-160x160.jpg"
+                  src="../assets/img/avatar.png"
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="../assets/img/user2-160x160.jpg"
+                    src="../assets/img/avatar.png"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2023</small>
+                    <span id="userName">未登录</span> -
+                    <span id="userRole"></span>
+                    <small>登录时间: <span id="loginTime"></span></small>
                   </p>
                 </li>
                 <!--end::User Image-->
@@ -286,13 +287,13 @@
                   <!--begin::Row-->
                   <div class="row">
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="followers">关注者</a>
+                      <a href="#" data-i18n="orders">订单</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="sales">销售</a>
+                      <a href="#" data-i18n="formulas">配方</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="friends">朋友</a>
+                      <a href="#" data-i18n="tasks">任务</a>
                     </div>
                   </div>
                   <!--end::Row-->
@@ -301,7 +302,11 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                   <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
-                  <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut"
+                  <a
+                    href="#"
+                    class="btn btn-default btn-flat float-end"
+                    onclick="logout()"
+                    data-i18n="signOut"
                     >退出登录</a
                   >
                 </li>
@@ -315,6 +320,51 @@
         <!--end::Container-->
       </nav>
       <!--end::Header-->
+
+      <script>
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          window.location.href = '/examples/login.html';
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+          const user = getCurrentUser();
+          if (user) {
+            const userNameElements = document.querySelectorAll('#userName, #userDisplayName');
+            const userRoleElement = document.getElementById('userRole');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            userNameElements.forEach((el) => {
+              if (el) el.textContent = user.name;
+            });
+
+            if (userRoleElement) {
+              userRoleElement.textContent =
+                user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师';
+            }
+
+            if (loginTimeElement) {
+              loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN');
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        }
+
+        // 页面加载时更新用户信息
+        document.addEventListener('DOMContentLoaded', function () {
+          updateUserInfo();
+        });
+
+        // 立即执行一次更新
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserInfo);
+        } else {
+          updateUserInfo();
+        }
+      </script>
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-primary shadow" data-bs-theme="dark">
         <!--begin::Sidebar Brand-->
@@ -700,8 +750,10 @@
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          Copyright &copy; 2025-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none"
+            >香知香遇科技（上海）有限责任公司</a
+          >.
         </strong>
         All rights reserved.
         <!--end::Copyright-->

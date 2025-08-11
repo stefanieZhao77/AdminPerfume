@@ -1,0 +1,202 @@
+---
+import { ORDER_STATUS, ORDER_STATUS_FLOW } from '../../../config/orders/orderStatus.js'
+import { getCurrentUserRole } from '../../../utils/auth.js'
+
+const userRole = getCurrentUserRole()
+const { path } = Astro.props
+
+// 模拟订单数据
+const mockOrders = [
+  {
+    id: 'SO-0001',
+    customer: '客户A',
+    product: '花香调香水',
+    currentStatus: 'perfumer_adjust',
+    progress: 60,
+    assignedTo: userRole === 'perfumer' ? '当前用户' : '张调香师',
+    estimatedCompletion: '2024-01-15',
+    priority: 'high'
+  },
+  {
+    id: 'SO-0002', 
+    customer: '客户B',
+    product: '木质调香水',
+    currentStatus: 'evaluation',
+    progress: 80,
+    assignedTo: userRole === 'evaluator' ? '当前用户' : '李评香师',
+    estimatedCompletion: '2024-01-12',
+    priority: 'medium'
+  },
+  {
+    id: 'SO-0003',
+    customer: '客户C', 
+    product: '果香调香水',
+    currentStatus: 'ai_formula',
+    progress: 30,
+    assignedTo: 'AI系统',
+    estimatedCompletion: '2024-01-20',
+    priority: 'low'
+  }
+]
+
+// 根据角色过滤订单
+const filteredOrders = userRole === 'admin' ? mockOrders : 
+  mockOrders.filter(order => {
+    if (userRole === 'perfumer') {
+      return ['perfumer_prep', 'perfumer_adjust'].includes(order.currentStatus)
+    }
+    if (userRole === 'evaluator') {
+      return ['evaluation', 'customer_feedback'].includes(order.currentStatus)
+    }
+    return true
+  })
+---
+
+<div class="row">
+  <!-- 订单进度概览 -->
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="bi bi-list-task me-2"></i>
+          订单进度管理
+        </h3>
+      </div>
+      <div class="card-body">
+        <!-- 流程状态指示器 -->
+        <div class="order-flow-indicator mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            {ORDER_STATUS_FLOW.map((statusId, index) => {
+              const status = ORDER_STATUS[statusId]
+              const isActive = index < 6 // 示例：前6个状态为活跃
+              return (
+                <div class={`flow-step ${isActive ? 'active' : ''}`}>
+                  <div class="flow-step-icon">
+                    <i class={`bi ${status.icon}`}></i>
+                  </div>
+                  <div class="flow-step-label">{status.label}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <!-- 订单列表 -->
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>订单号</th>
+                <th>客户</th>
+                <th>产品</th>
+                <th>当前状态</th>
+                <th>进度</th>
+                <th>负责人</th>
+                <th>预计完成</th>
+                <th>优先级</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredOrders.map(order => {
+                const status = ORDER_STATUS[order.currentStatus]
+                return (
+                  <tr>
+                    <td><strong>{order.id}</strong></td>
+                    <td>{order.customer}</td>
+                    <td>{order.product}</td>
+                    <td>
+                      <span class={`badge text-bg-${status.color}`}>
+                        <i class={`bi ${status.icon} me-1`}></i>
+                        {status.label}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="progress" style="height: 20px;">
+                        <div class="progress-bar" style={`width: ${order.progress}%`}>
+                          {order.progress}%
+                        </div>
+                      </div>
+                    </td>
+                    <td>{order.assignedTo}</td>
+                    <td>{order.estimatedCompletion}</td>
+                    <td>
+                      <span class={`badge text-bg-${
+                        order.priority === 'high' ? 'danger' : 
+                        order.priority === 'medium' ? 'warning' : 'secondary'
+                      }`}>
+                        {order.priority === 'high' ? '高' : 
+                         order.priority === 'medium' ? '中' : '低'}
+                      </span>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary">查看详情</button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .order-flow-indicator {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .flow-step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+  }
+  
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: #dee2e6;
+    z-index: 1;
+  }
+  
+  .flow-step.active:not(:last-child)::after {
+    background: #007bff;
+  }
+  
+  .flow-step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .flow-step.active .flow-step-icon {
+    background: #007bff;
+    color: white;
+  }
+  
+  .flow-step-label {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.2;
+  }
+  
+  .flow-step.active .flow-step-label {
+    color: #007bff;
+    font-weight: 500;
+  }
+</style>

@@ -10,6 +10,12 @@ const title = "订单管理"
 const path = "../../../dist"
 const mainPage = "orders"
 const page = "orders-list"
+
+// Smart path resolution: calculate relative path based on directory depth
+const pathname = Astro.url.pathname;
+const pathSegments = pathname.split('/').filter(segment => segment !== '');
+const depth = pathSegments.length > 0 ? pathSegments.length - 1 : 0;
+const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
 ---
 
 <!DOCTYPE html>
@@ -17,9 +23,25 @@ const page = "orders-list"
   <head>
     <Head title={title} path={path} />
     <style is:inline>
-      .table-sticky thead th { position: sticky; top: 0; z-index: 2; background: var(--bs-body-bg); }
-      .table thead th { white-space: nowrap; }
-      .qt-col-btn { white-space: nowrap; }
+      .table-sticky thead th { 
+        position: sticky; 
+        top: 0; 
+        z-index: 2; 
+        background: var(--bs-body-bg); 
+      }
+      .table thead th { 
+        white-space: nowrap; 
+      }
+      .qt-col-btn { 
+        white-space: nowrap; 
+      }
+      .badge {
+        font-size: 0.75em;
+        padding: 0.35em 0.65em;
+      }
+      .table-responsive {
+        overflow-x: auto;
+      }
     </style>
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -113,7 +135,10 @@ const page = "orders-list"
 
     <script is:inline>
       const statuses = ['待支付','已支付','已发货','已完成','已取消']
-      function randomDate(){ const t = Date.now() - Math.random()*180*24*3600*1000; return new Date(t).toISOString().slice(0,10) }
+      function randomDate(){ 
+        const t = Date.now() - Math.random()*180*24*3600*1000; 
+        return new Date(t).toISOString().slice(0,10) 
+      }
       const mockOrders = Array.from({length: 143}, (_,i)=>({
         id: `SO-${String(i+1).padStart(4,'0')}`,
         customer: `客户${(i%60)+1}`,
@@ -132,7 +157,16 @@ const page = "orders-list"
         })
       }
 
-      function badge(st){ const map = { '待支付':'secondary','已支付':'warning','已发货':'info','已完成':'success','已取消':'dark' }; return `<span class=\"badge text-bg-${map[st]||'secondary'}\">${st}</span>` }
+      function badge(st){ 
+        const map = { 
+          '待支付':'secondary',
+          '已支付':'warning',
+          '已发货':'info',
+          '已完成':'success',
+          '已取消':'dark' 
+        }; 
+        return `<span class="badge text-bg-${map[st]||'secondary'}">${st}</span>` 
+      }
 
       const qt = window.QueryTable.create({
         storageKey: 'orders',
@@ -180,7 +214,12 @@ const page = "orders-list"
           document.getElementById('orders-form').reset()
           state.kw=''; state.status=''; state.date=''; qt.state.page=1; qt.render()
         })
-        document.getElementById('kw').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('searchBtn').click() }})
+        document.getElementById('kw').addEventListener('keydown', e=>{ 
+          if(e.key==='Enter'){ 
+            e.preventDefault(); 
+            document.getElementById('searchBtn').click() 
+          }
+        })
       }
 
       bindEvents(); qt.render();

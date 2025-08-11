@@ -261,23 +261,24 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
-                  src="../assets/img/user2-160x160.jpg"
+                  src="../assets/img/avatar.png"
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="../assets/img/user2-160x160.jpg"
+                    src="../assets/img/avatar.png"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2023</small>
+                    <span id="userName">未登录</span> -
+                    <span id="userRole"></span>
+                    <small>登录时间: <span id="loginTime"></span></small>
                   </p>
                 </li>
                 <!--end::User Image-->
@@ -286,13 +287,13 @@
                   <!--begin::Row-->
                   <div class="row">
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="followers">关注者</a>
+                      <a href="#" data-i18n="orders">订单</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="sales">销售</a>
+                      <a href="#" data-i18n="formulas">配方</a>
                     </div>
                     <div class="col-4 text-center">
-                      <a href="#" data-i18n="friends">朋友</a>
+                      <a href="#" data-i18n="tasks">任务</a>
                     </div>
                   </div>
                   <!--end::Row-->
@@ -301,7 +302,11 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                   <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
-                  <a href="#" class="btn btn-default btn-flat float-end" data-i18n="signOut"
+                  <a
+                    href="#"
+                    class="btn btn-default btn-flat float-end"
+                    onclick="logout()"
+                    data-i18n="signOut"
                     >退出登录</a
                   >
                 </li>
@@ -315,6 +320,51 @@
         <!--end::Container-->
       </nav>
       <!--end::Header-->
+
+      <script>
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          window.location.href = '/examples/login.html';
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+          const user = getCurrentUser();
+          if (user) {
+            const userNameElements = document.querySelectorAll('#userName, #userDisplayName');
+            const userRoleElement = document.getElementById('userRole');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            userNameElements.forEach((el) => {
+              if (el) el.textContent = user.name;
+            });
+
+            if (userRoleElement) {
+              userRoleElement.textContent =
+                user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师';
+            }
+
+            if (loginTimeElement) {
+              loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN');
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        }
+
+        // 页面加载时更新用户信息
+        document.addEventListener('DOMContentLoaded', function () {
+          updateUserInfo();
+        });
+
+        // 立即执行一次更新
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserInfo);
+        } else {
+          updateUserInfo();
+        }
+      </script>
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <!--begin::Sidebar Brand-->
@@ -329,7 +379,7 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">Perfume AI</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -347,440 +397,7 @@
               data-accordion="false"
               id="navigation"
             >
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-speedometer"></i>
-                  <p>
-                    <span data-i18n="dashboard">仪表板</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../index.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../index2.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../index3.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p><span data-i18n="dashboard">仪表板</span> v3</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="../generate/theme.html" class="nav-link">
-                  <i class="nav-icon bi bi-palette"></i>
-                  <p data-i18n="themeGenerate">主题生成</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill"></i>
-                  <p>
-                    <span data-i18n="widgets">小部件</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../widgets/small-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="smallBox">小盒子</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../widgets/info-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="infoBox">信息盒子</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../widgets/cards.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="cards">卡片</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item menu-open">
-                <a href="#" class="nav-link active">
-                  <i class="nav-icon bi bi-clipboard-fill"></i>
-                  <p>
-                    <span data-i18n="layoutOptions">布局选项</span>
-                    <span class="nav-badge badge text-bg-secondary me-3">6</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../layout/unfixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="defaultSidebar">默认侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/fixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedSidebar">固定侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/fixed-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedHeader">固定头部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/fixed-footer.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedFooter">固定底部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/fixed-complete.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="fixedComplete">完全固定</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/layout-custom-area.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="layoutCustomArea">布局 <small>+ 自定义区域</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/sidebar-mini.html" class="nav-link active">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/collapsed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ 折叠</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/logo-switch.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="sidebarMini">迷你侧边栏 <small>+ Logo切换</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../layout/layout-rtl.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="layoutRtl">RTL布局</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-tree-fill"></i>
-                  <p>
-                    <span data-i18n="uiElements">UI元素</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../UI/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="general">通用</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../UI/icons.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="icons">图标</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../UI/timeline.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="timeline">时间线</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-pencil-square"></i>
-                  <p>
-                    <span data-i18n="forms">表单</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../forms/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="generalElements">通用元素</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-table"></i>
-                  <p>
-                    <span data-i18n="tables">表格</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../tables/simple.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="simpleTables">简单表格</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header" data-i18n="examples">示例</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                  <p>
-                    <span data-i18n="auth">认证</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        <span data-i18n="version1">版本1</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="../examples/login.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="login">登录</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="../examples/register.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="register">注册</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        <span data-i18n="version2">版本2</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="../examples/login-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="login">登录</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="../examples/register-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p data-i18n="register">注册</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/lockscreen.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="lockscreen">锁屏</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header" data-i18n="documentations">文档</li>
-              <li class="nav-item">
-                <a href="../docs/introduction.html" class="nav-link">
-                  <i class="nav-icon bi bi-download"></i>
-                  <p data-i18n="installation">安装</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/layout.html" class="nav-link">
-                  <i class="nav-icon bi bi-grip-horizontal"></i>
-                  <p data-i18n="layout">布局</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/color-mode.html" class="nav-link">
-                  <i class="nav-icon bi bi-star-half"></i>
-                  <p data-i18n="colorMode">颜色模式</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-ui-checks-grid"></i>
-                  <p>
-                    <span data-i18n="components">组件</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../docs/components/main-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="mainHeader">主头部</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../docs/components/main-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="mainSidebar">主侧边栏</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-filetype-js"></i>
-                  <p>
-                    <span data-i18n="javascript">JavaScript</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../docs/javascript/treeview.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="treeview">树形视图</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/browser-support.html" class="nav-link">
-                  <i class="nav-icon bi bi-browser-edge"></i>
-                  <p data-i18n="browserSupport">浏览器支持</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/how-to-contribute.html" class="nav-link">
-                  <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                  <p data-i18n="howToContribute">如何贡献</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/faq.html" class="nav-link">
-                  <i class="nav-icon bi bi-question-circle-fill"></i>
-                  <p data-i18n="faq">常见问题</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../docs/license.html" class="nav-link">
-                  <i class="nav-icon bi bi-patch-check-fill"></i>
-                  <p data-i18n="license">许可证</p>
-                </a>
-              </li>
-
-              <li class="nav-header" data-i18n="multiLevelExample">多级示例</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p data-i18n="level1">第1级</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>
-                    <span data-i18n="level1">第1级</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="level2">第2级</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>
-                        <span data-i18n="level2">第2级</span>
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p data-i18n="level3">第3级</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p data-i18n="level2">第2级</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p data-i18n="level1">第1级</p>
-                </a>
-              </li>
-
-              <li class="nav-header" data-i18n="labels">标签</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-danger"></i>
-                  <p class="text" data-i18n="important">重要</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-warning"></i>
-                  <p data-i18n="warning">警告</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-info"></i>
-                  <p data-i18n="informational">信息</p>
-                </a>
-              </li>
+              <!-- 动态菜单将根据角色生成 -->
             </ul>
             <!--end::Sidebar Menu-->
           </nav>
@@ -788,6 +405,160 @@
         <!--end::Sidebar Wrapper-->
       </aside>
       <!--end::Sidebar-->
+
+      <script>
+        // 菜单配置
+        const menuConfig = {
+          admin: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/index.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+            {
+              id: 'customers',
+              label: '客户管理',
+              icon: 'bi-people',
+              path: '/customers/index.html',
+            },
+            { id: 'settings', label: '系统设置', icon: 'bi-gear', path: '/settings/index.html' },
+          ],
+          perfumer: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+          evaluator: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+        };
+
+        // 生成菜单HTML
+        function generateMenu(userRole) {
+          const menuItems = menuConfig[userRole] || menuConfig.admin;
+          const navigation = document.getElementById('navigation');
+
+          if (!navigation) return;
+
+          let menuHTML = '';
+
+          menuItems.forEach((item) => {
+            const isActive = item.id === 'dashboard' || item.id === 'orders';
+            const hasChildren = item.children && item.children.length > 0;
+
+            if (hasChildren) {
+              menuHTML += `
+          <li class="nav-item ${isActive ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" onclick="toggleSubmenu(this)">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>
+                ${item.label}
+                <i class="nav-arrow bi bi-chevron-right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+        `;
+
+              item.children.forEach((child) => {
+                const childActive = child.id === 'ai-formulas' || child.id === 'ai-studio';
+                menuHTML += `
+            <li class="nav-item">
+              <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>${child.label}</p>
+              </a>
+            </li>
+          `;
+              });
+
+              menuHTML += `
+            </ul>
+          </li>
+        `;
+            } else {
+              menuHTML += `
+          <li class="nav-item">
+            <a href="${item.path}" class="nav-link ${isActive ? 'active' : ''}">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>${item.label}</p>
+            </a>
+          </li>
+        `;
+            }
+          });
+
+          navigation.innerHTML = menuHTML;
+        }
+
+        // 切换子菜单展开状态
+        function toggleSubmenu(element) {
+          const parentLi = element.closest('.nav-item');
+          const submenu = parentLi.querySelector('.nav-treeview');
+          const arrow = element.querySelector('.nav-arrow');
+
+          if (parentLi.classList.contains('menu-open')) {
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+          } else {
+            parentLi.classList.add('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(90deg)';
+          }
+
+          // 阻止默认行为
+          event.preventDefault();
+          return false;
+        }
+
+        // 获取当前用户角色
+        function getCurrentUserRole() {
+          const userStr = sessionStorage.getItem('currentUser');
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            return user.role;
+          }
+          return 'admin';
+        }
+
+        // 页面加载时生成菜单
+        document.addEventListener('DOMContentLoaded', function () {
+          const userRole = getCurrentUserRole();
+          if (userRole) {
+            generateMenu(userRole);
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            window.location.href = '/examples/login.html';
+          }
+        });
+      </script>
       <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -865,8 +636,10 @@
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          Copyright &copy; 2025-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none"
+            >香知香遇科技（上海）有限责任公司</a
+          >.
         </strong>
         All rights reserved.
         <!--end::Copyright-->

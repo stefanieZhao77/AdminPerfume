@@ -1,0 +1,535 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "AI智能用户和制香管理系统 - 仪表板"
+const path = "../dist"
+const mainPage = "dashboard"
+const page = "dashboard";
+
+// Smart path resolution: calculate relative path based on directory depth
+const pathname = Astro.url.pathname;
+const pathSegments = pathname.split('/').filter(segment => segment !== '');
+const depth = pathSegments.length > 0 ? pathSegments.length - 1 : 0;
+const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
+---
+
+<!doctype html>
+<html lang="en">
+  <!--begin::Head-->
+  <head>
+    <Head title={title} path={path} />
+    
+    <!-- 登录检查脚本 -->
+    <script is:inline>
+      // 页面加载时立即检查登录状态
+      (function() {
+        if (typeof globalThis.sessionStorage !== 'undefined') {
+          const currentUser = globalThis.sessionStorage.getItem('currentUser')
+          if (!currentUser) {
+            // 如果未登录，跳转到登录页面
+            globalThis.location.href = '/login.html'
+          }
+        }
+      })()
+    </script>
+    
+    <style is:inline>
+      .dashboard-widget {
+        transition: transform 0.2s;
+      }
+      .dashboard-widget:hover {
+        transform: translateY(-2px);
+      }
+      .role-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+      }
+      .role-admin { background: #dc3545; color: white; }
+      .role-perfumer { background: #0d6efd; color: white; }
+      .role-evaluator { background: #198754; color: white; }
+      
+      /* 订单进度卡片样式 */
+      .progress-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e3e6f0;
+        border-radius: 0.75rem;
+        overflow: hidden;
+      }
+      .progress-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+      .progress-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e3e6f0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .progress-body {
+        padding: 1.5rem;
+      }
+      .progress-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        margin: 0 auto 1rem;
+      }
+      .progress-info {
+        text-align: center;
+      }
+      .progress-steps {
+        margin-top: 1rem;
+      }
+      .progress-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .step-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+      }
+      .step-completed { background: #28a745; }
+      .step-current { background: #007bff; }
+      .step-pending { background: #6c757d; }
+      .step-text {
+        flex: 1;
+        color: #6c757d;
+      }
+      .step-text.completed { color: #28a745; font-weight: 500; }
+      .step-text.current { color: #007bff; font-weight: 500; }
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <!--end::Head-->
+  <!--begin::Body-->
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <!--begin::App Main-->
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6">
+                <h3 class="mb-0">工作台</h3>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">首页</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">工作台</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content Header-->
+        <!--begin::App Content-->
+        <div class="app-content">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!-- 用户信息卡片 -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div id="userAvatar" class="rounded-circle me-3 d-flex align-items-center justify-content-center text-white fw-bold" 
+                           style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 1.5rem;">
+                        A
+                      </div>
+                      <div class="flex-grow-1">
+                        <h5 class="mb-1" id="userName">欢迎回来</h5>
+                        <p class="mb-0 text-muted" id="userInfo">正在加载用户信息...</p>
+                      </div>
+                      <div class="text-end">
+                        <span id="roleBadge" class="role-badge role-admin">技术总监</span>
+                        <div class="mt-2">
+                          <small class="text-muted" id="loginTime"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 基于角色的内容 -->
+            <div id="roleContent">
+              <!-- 内容将根据角色动态加载 -->
+            </div>
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content-->
+      </main>
+      <!--end::App Main-->
+      <Footer />
+    </div>
+    <!--end::App Wrapper-->
+    <Scripts path={path} />
+
+    <script is:inline>
+      // 获取用户信息
+      function getCurrentUser() {
+        if (typeof globalThis.sessionStorage !== 'undefined') {
+          const userStr = globalThis.sessionStorage.getItem('currentUser')
+          return userStr ? JSON.parse(userStr) : null
+        }
+        return null
+      }
+      
+      // 更新用户信息显示
+      function updateUserInfo() {
+        const user = getCurrentUser()
+        if (!user) {
+          globalThis.location.href = '/login.html'
+          return
+        }
+        
+        // 更新用户信息
+        document.getElementById('userName').textContent = `欢迎回来，${user.name}`
+        document.getElementById('userInfo').textContent = `${user.username} | ${user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师'}`
+        
+        // 更新用户头像（使用用户名首字母）
+        const userAvatar = document.getElementById('userAvatar')
+        if (userAvatar) {
+          const firstLetter = user.username.charAt(0).toUpperCase()
+          userAvatar.textContent = firstLetter
+        }
+        
+        // 更新角色徽章
+        const roleBadge = document.getElementById('roleBadge')
+        roleBadge.textContent = user.role === 'admin' ? '技术总监' : 
+                               user.role === 'perfumer' ? '调香师' : '评香师'
+        roleBadge.className = `role-badge role-${user.role}`
+        
+        // 更新登录时间
+        const loginTime = new Date(user.loginTime).toLocaleString('zh-CN')
+        document.getElementById('loginTime').textContent = `登录时间: ${loginTime}`
+        
+        // 根据角色加载内容
+        loadRoleContent(user.role)
+      }
+      
+      // 根据角色加载内容
+      function loadRoleContent(role) {
+        const contentDiv = document.getElementById('roleContent')
+        
+        if (role === 'perfumer') {
+          contentDiv.innerHTML = `
+            <div class="row">
+              <!-- 调香师统计卡片 -->
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-primary dashboard-widget">
+                  <div class="inner">
+                    <h3 id="myOrders">12</h3>
+                    <p>我的订单</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-success dashboard-widget">
+                  <div class="inner">
+                    <h3 id="myFormulas">8</h3>
+                    <p>我的配方</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-warning dashboard-widget">
+                  <div class="inner">
+                    <h3 id="pendingTasks">5</h3>
+                    <p>待处理任务</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-info dashboard-widget">
+                  <div class="inner">
+                    <h3 id="completionRate">85%</h3>
+                    <p>完成率</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 订单进度管理 -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <h3 class="card-title mb-0">
+                        <i class="bi bi-list-task me-2"></i>
+                        我的订单进度
+                      </h3>
+                      <a href="/orders/index.html" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-arrow-right me-1"></i>
+                        查看全部
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="orderProgressCards">
+                      <!-- 订单进度卡片将动态生成 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+          
+          // 生成订单进度卡片
+          setTimeout(() => {
+            generateOrderProgressCards()
+          }, 100)
+        } else if (role === 'evaluator') {
+          contentDiv.innerHTML = `
+            <div class="row">
+              <!-- 评香师统计卡片 -->
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-primary dashboard-widget">
+                  <div class="inner">
+                    <h3 id="pendingEvaluations">6</h3>
+                    <p>待评价配方</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-success dashboard-widget">
+                  <div class="inner">
+                    <h3 id="completedEvaluations">24</h3>
+                    <p>已完成评价</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-warning dashboard-widget">
+                  <div class="inner">
+                    <h3 id="customerFeedbacks">3</h3>
+                    <p>客户反馈</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-info dashboard-widget">
+                  <div class="inner">
+                    <h3 id="avgRating">4.8</h3>
+                    <p>平均评分</p>
+                  </div>
+                  <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 评价任务 -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="bi bi-star me-2"></i>
+                      待评价配方
+                    </h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>订单号</th>
+                            <th>客户</th>
+                            <th>产品</th>
+                            <th>配方类型</th>
+                            <th>提交时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><strong>SO-0002</strong></td>
+                            <td>客户B</td>
+                            <td>木质调香水</td>
+                            <td>花香调</td>
+                            <td>2024-01-10</td>
+                            <td><span class="badge text-bg-warning">待评价</span></td>
+                            <td><button class="btn btn-sm btn-outline-primary">评价</button></td>
+                          </tr>
+                          <tr>
+                            <td><strong>SO-0004</strong></td>
+                            <td>客户D</td>
+                            <td>东方调香水</td>
+                            <td>东方调</td>
+                            <td>2024-01-11</td>
+                            <td><span class="badge text-bg-warning">待评价</span></td>
+                            <td><button class="btn btn-sm btn-outline-primary">评价</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      }
+      
+      // 页面加载时初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        updateUserInfo()
+      })
+      
+      // 生成订单进度卡片
+      function generateOrderProgressCards() {
+        const container = document.getElementById('orderProgressCards')
+        if (!container) return
+        
+        // 模拟订单数据
+        const orders = [
+          {
+            id: 'SO-0001',
+            customer: '客户A',
+            product: '花香调香水',
+            status: '调香师调整配方',
+            progress: 60,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: false, current: true },
+              { name: '配香员配香', completed: false },
+              { name: '评香师评价', completed: false },
+              { name: '客户确认', completed: false }
+            ],
+            expectedDate: '2024-01-15'
+          },
+          {
+            id: 'SO-0003',
+            customer: '客户C',
+            product: '果香调香水',
+            status: '配香员配香',
+            progress: 30,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: true },
+              { name: '配香员配香', completed: false, current: true },
+              { name: '评香师评价', completed: false },
+              { name: '客户确认', completed: false }
+            ],
+            expectedDate: '2024-01-20'
+          }
+        ]
+        
+        let cardsHTML = ''
+        
+        orders.forEach(order => {
+          const progressColor = order.progress >= 80 ? '#28a745' : 
+                               order.progress >= 60 ? '#17a2b8' : 
+                               order.progress >= 40 ? '#ffc107' : '#dc3545'
+          
+          let stepsHTML = ''
+          order.steps.forEach(step => {
+            let stepClass = 'step-pending'
+            let textClass = ''
+            
+            if (step.completed) {
+              stepClass = 'step-completed'
+              textClass = 'completed'
+            } else if (step.current) {
+              stepClass = 'step-current'
+              textClass = 'current'
+            }
+            
+            stepsHTML += `
+              <div class="progress-step">
+                <div class="step-indicator ${stepClass}"></div>
+                <div class="step-text ${textClass}">${step.name}</div>
+              </div>
+            `
+          })
+          
+          cardsHTML += `
+            <div class="col-lg-6 col-md-12 mb-4">
+              <div class="progress-card">
+                <div class="progress-header">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">${order.id}</h6>
+                    <span class="status-badge bg-light text-dark">${order.status}</span>
+                  </div>
+                  <small class="text-white-50">${order.customer} - ${order.product}</small>
+                </div>
+                <div class="progress-body">
+                  <div class="progress-circle" style="background: ${progressColor}">
+                    ${order.progress}%
+                  </div>
+                  <div class="progress-info">
+                    <h6 class="mb-2">${order.product}</h6>
+                    <p class="text-muted small mb-3">预计完成: ${order.expectedDate}</p>
+                    <div class="progress-steps">
+                      ${stepsHTML}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        })
+        
+        container.innerHTML = cardsHTML
+      }
+    </script>
+  </body>
+</html>

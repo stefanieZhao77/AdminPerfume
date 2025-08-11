@@ -1,0 +1,13 @@
+---
+import { hasPermission } from '../../../utils/permissions.js'
+
+const { userRole, requiredPermission, fallback } = Astro.props
+---
+
+{hasPermission(userRole, requiredPermission) ? (
+  <slot />
+) : fallback ? (
+  <div class="permission-denied">
+    <slot name="fallback">{fallback}</slot>
+  </div>
+) : null}

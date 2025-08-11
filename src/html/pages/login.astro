@@ -1,0 +1,209 @@
+---
+import Head from "@components/_head.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "AI智能制香管理系统 - 登录"
+const path = "../dist"
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+    <style is:inline>
+      .login-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-box {
+        width: 100%;
+        max-width: 400px;
+      }
+      .login-logo a {
+        color: white !important;
+        font-size: 2rem;
+        text-decoration: none;
+      }
+      .user-demo {
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        color: white;
+      }
+      .user-demo h6 {
+        color: white;
+        margin-bottom: 10px;
+      }
+      .demo-user {
+        background: rgba(255,255,255,0.2);
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin: 5px 0;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .demo-user:hover {
+        background: rgba(255,255,255,0.3);
+      }
+      .demo-user .role-badge {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 8px;
+      }
+      .role-admin { background: #dc3545; }
+      .role-perfumer { background: #0d6efd; }
+      .role-evaluator { background: #198754; }
+    </style>
+  </head>
+  <body class="login-page">
+    <div class="login-box">
+      <div class="login-logo text-center mb-4">
+        <a href="#"><b>Perfume</b>AI</a>
+      </div>
+      
+      <!-- 演示用户信息 -->
+      <div class="user-demo">
+        <h6><i class="bi bi-info-circle me-2"></i>演示用户</h6>
+        <div class="demo-user" onclick="fillDemoUser('admin', 'admin123')">
+          <strong>技术总监</strong>
+          <span class="role-badge role-admin">admin</span>
+          <small class="d-block text-white-50">admin / admin123</small>
+        </div>
+        <div class="demo-user" onclick="fillDemoUser('perfumer1', 'perfumer123')">
+          <strong>张调香师</strong>
+          <span class="role-badge role-perfumer">perfumer</span>
+          <small class="d-block text-white-50">perfumer1 / perfumer123</small>
+        </div>
+        <div class="demo-user" onclick="fillDemoUser('evaluator1', 'evaluator123')">
+          <strong>王评香师</strong>
+          <span class="role-badge role-evaluator">evaluator</span>
+          <small class="d-block text-white-50">evaluator1 / evaluator123</small>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-body login-card-body">
+          <p class="login-box-msg">登录到制香管理系统</p>
+
+          <form id="loginForm">
+            <div class="input-group mb-3">
+              <input type="text" id="username" class="form-control" placeholder="用户名" required />
+              <div class="input-group-text">
+                <span class="bi bi-person"></span>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" id="password" class="form-control" placeholder="密码" required />
+              <div class="input-group-text">
+                <span class="bi bi-lock-fill"></span>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="rememberMe" />
+                  <label class="form-check-label" for="rememberMe">
+                    记住我
+                  </label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="alert alert-danger mt-3" id="loginError" style="display: none;">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span id="errorMessage"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <Scripts path={path} />
+    
+    <script is:inline>
+      // 演示用户填充功能
+      function fillDemoUser(username, password) {
+        document.getElementById('username').value = username
+        document.getElementById('password').value = password
+      }
+      
+      // 登录处理
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault()
+        
+        const username = document.getElementById('username').value
+        const password = document.getElementById('password').value
+        
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password })
+          })
+          
+          const result = await response.json()
+          
+          if (result.success) {
+            // 登录成功，跳转到对应角色的主页
+            globalThis.location.href = '/dashboard.html'
+          } else {
+            showError(result.message || '登录失败')
+          }
+        } catch (error) {
+          // 如果API不可用，使用模拟登录
+          const mockUsers = [
+            { username: 'admin', password: 'admin123', role: 'admin' },
+            { username: 'perfumer1', password: 'perfumer123', role: 'perfumer' },
+            { username: 'perfumer2', password: 'perfumer123', role: 'perfumer' },
+            { username: 'evaluator1', password: 'evaluator123', role: 'evaluator' },
+            { username: 'evaluator2', password: 'evaluator123', role: 'evaluator' }
+          ]
+          
+          const user = mockUsers.find(u => u.username === username && u.password === password)
+          
+          if (user) {
+            // 模拟存储用户信息
+            const userInfo = {
+              username: user.username,
+              role: user.role,
+              name: user.username === 'admin' ? '技术总监' : 
+                    user.username.startsWith('perfumer') ? '调香师' : '评香师',
+              loginTime: new Date().toISOString()
+            }
+            
+            if (typeof globalThis.sessionStorage !== 'undefined') {
+              globalThis.sessionStorage.setItem('currentUser', JSON.stringify(userInfo))
+            }
+            
+            // 跳转到对应角色的主页
+            if (user.role === 'admin') {
+              globalThis.location.href = '/index.html'
+            } else {
+              globalThis.location.href = '/dashboard.html'
+            }
+          } else {
+            showError('用户名或密码错误')
+          }
+        }
+      })
+      
+      function showError(message) {
+        document.getElementById('errorMessage').textContent = message
+        document.getElementById('loginError').style.display = 'block'
+      }
+    </script>
+  </body>
+</html>

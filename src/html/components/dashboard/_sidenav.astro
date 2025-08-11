@@ -15,7 +15,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
   <!--begin::Sidebar Brand-->
   <div class="sidebar-brand">
     <!--begin::Brand Link-->
-    <a href={htmlPath + "/index.html"} class="brand-link">
+    <a href="#" class="brand-link" id="brandLink">
       <!--begin::Brand Image-->
       <img
         src={deploymentPath + "assets/img/AdminLTELogo.png"}
@@ -42,113 +42,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
         data-accordion="false"
         id="navigation"
       >
-        <!-- 主页 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/index.html"}
-            class:list={["nav-link", mainPage === "dashboard" && "active"]}
-          >
-            <i class="nav-icon bi bi-speedometer"></i>
-            <p>主页</p>
-          </a>
-        </li>
-
-        <!-- 原料 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/materials/index.html"}
-            class:list={["nav-link", mainPage === "materials" && "active"]}
-          >
-            <i class="nav-icon bi bi-box-seam"></i>
-            <p>原料</p>
-          </a>
-        </li>
-
-        <!-- GC-MS -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/gcms/index.html"}
-            class:list={["nav-link", mainPage === "gcms" && "active"]}
-          >
-            <i class="nav-icon bi bi-activity"></i>
-            <p>GC-MS</p>
-          </a>
-        </li>
-
-        <!-- AI配方（含子菜单） -->
-        <li class:list={["nav-item", mainPage === "ai" && "menu-open"]}>
-          <a href="#" class:list={["nav-link", mainPage === "ai" && "active"]}>
-            <i class="nav-icon bi bi-magic"></i>
-            <p>
-              AI配方
-              <i class="nav-arrow bi bi-chevron-right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a
-                href={htmlPath + "/ai/formulas.html"}
-                class:list={["nav-link", page === "ai-formulas" && "active"]}
-              >
-                <i class="nav-icon bi bi-circle"></i>
-                <p>配方查询</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href={htmlPath + "/ai/studio.html"}
-                class:list={["nav-link", page === "ai-studio" && "active"]}
-              >
-                <i class="nav-icon bi bi-circle"></i>
-                <p>AI创香</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- 订单管理 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/orders/index.html"}
-            class:list={["nav-link", mainPage === "orders" && "active"]}
-          >
-            <i class="nav-icon bi bi-receipt"></i>
-            <p>订单管理</p>
-          </a>
-        </li>
-
-        <!-- 客户管理 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/customers/index.html"}
-            class:list={["nav-link", mainPage === "customers" && "active"]}
-          >
-            <i class="nav-icon bi bi-people"></i>
-            <p>客户管理</p>
-          </a>
-        </li>
-
-        <!-- 系统设置 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/settings/index.html"}
-            class:list={["nav-link", mainPage === "settings" && "active"]}
-          >
-            <i class="nav-icon bi bi-gear"></i>
-            <p>系统设置</p>
-          </a>
-        </li>
-
-        <!-- 用户信息 -->
-        <li class="nav-item">
-          <a
-            href={htmlPath + "/account/profile.html"}
-            class:list={["nav-link", mainPage === "account" && "active"]}
-          >
-            <i class="nav-icon bi bi-person"></i>
-            <p>用户信息</p>
-          </a>
-        </li>
+        <!-- 动态菜单将根据角色生成 -->
       </ul>
       <!--end::Sidebar Menu-->
     </nav>
@@ -156,3 +50,197 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
   <!--end::Sidebar Wrapper-->
 </aside>
 <!--end::Sidebar-->
+
+<script is:inline>
+  // 菜单配置
+  const menuConfig = {
+    admin: [
+      { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/index.html' },
+      { id: 'materials', label: '原料管理', icon: 'bi-box-seam', path: '/materials/index.html' },
+      { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+      { 
+        id: 'ai', label: 'AI配方', icon: 'bi-magic', 
+        children: [
+          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' }
+        ]
+      },
+      { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+      { id: 'customers', label: '客户管理', icon: 'bi-people', path: '/customers/index.html' },
+      { id: 'settings', label: '系统设置', icon: 'bi-gear', path: '/settings/index.html' }
+    ],
+    perfumer: [
+      { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+      { id: 'materials', label: '原料管理', icon: 'bi-box-seam', path: '/materials/index.html' },
+      { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+      { 
+        id: 'ai', label: 'AI配方', icon: 'bi-magic', 
+        children: [
+          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
+          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' }
+        ]
+      },
+      { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' }
+    ],
+    evaluator: [
+      { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+      { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' }
+    ]
+  }
+  
+  // 获取当前页面路径
+  function getCurrentPath() {
+    return window.location.pathname
+  }
+  
+  // 保存菜单展开状态
+  function saveMenuState(menuId, isExpanded) {
+    if (typeof globalThis.sessionStorage !== 'undefined') {
+      const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}')
+      menuStates[menuId] = isExpanded
+      globalThis.sessionStorage.setItem('menuStates', JSON.stringify(menuStates))
+    }
+  }
+  
+  // 获取菜单展开状态
+  function getMenuState(menuId) {
+    if (typeof globalThis.sessionStorage !== 'undefined') {
+      const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}')
+      return menuStates[menuId] || false
+    }
+    return false
+  }
+  
+  // 检查菜单项是否应该被选中
+  function isMenuItemActive(item, currentPath) {
+    if (item.path === currentPath) {
+      return true
+    }
+    // 检查子菜单
+    if (item.children) {
+      return item.children.some(child => child.path === currentPath)
+    }
+    return false
+  }
+  
+  // 检查子菜单是否应该展开
+  function shouldExpandSubmenu(item, currentPath) {
+    if (!item.children) return false
+    // 如果当前页面在子菜单中，或者用户之前手动展开过，则保持展开
+    const hasActiveChild = item.children.some(child => child.path === currentPath)
+    const wasManuallyExpanded = getMenuState(item.id)
+    return hasActiveChild || wasManuallyExpanded
+  }
+  
+  // 生成菜单HTML
+  function generateMenu(userRole) {
+    const menuItems = menuConfig[userRole] || menuConfig.admin
+    const navigation = document.getElementById('navigation')
+    const currentPath = getCurrentPath()
+    
+    if (!navigation) return
+    
+    let menuHTML = ''
+    
+    menuItems.forEach(item => {
+      const isActive = isMenuItemActive(item, currentPath)
+      const hasChildren = item.children && item.children.length > 0
+      const shouldExpand = shouldExpandSubmenu(item, currentPath)
+      
+      if (hasChildren) {
+        menuHTML += `
+          <li class="nav-item ${shouldExpand ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" id="menu-${item.id}" onclick="toggleSubmenu(event, this)">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>
+                ${item.label}
+                <i class="nav-arrow bi bi-chevron-right" style="transform: ${shouldExpand ? 'rotate(90deg)' : 'rotate(0deg)'}; position: absolute; right: 10px; top: 50%; margin-top: -8px;"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview" style="display: ${shouldExpand ? 'block' : 'none'};">
+        `
+        
+        item.children.forEach(child => {
+          const childActive = child.path === currentPath
+          menuHTML += `
+            <li class="nav-item">
+              <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>${child.label}</p>
+              </a>
+            </li>
+          `
+        })
+        
+        menuHTML += `
+            </ul>
+          </li>
+        `
+      } else {
+        menuHTML += `
+          <li class="nav-item">
+            <a href="${item.path}" class="nav-link ${isActive ? 'active' : ''}">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>${item.label}</p>
+            </a>
+          </li>
+        `
+      }
+    })
+    
+    navigation.innerHTML = menuHTML
+  }
+  
+  // 切换子菜单展开状态
+  function toggleSubmenu(event, element) {
+    event.preventDefault()
+    event.stopPropagation()
+    
+    const parentLi = element.closest('.nav-item')
+    const submenu = parentLi.querySelector('.nav-treeview')
+    const arrow = element.querySelector('.nav-arrow')
+    const menuId = element.id.replace('menu-', '')
+    
+    // 切换显示状态
+    if (submenu.style.display === 'none' || submenu.style.display === '') {
+      submenu.style.display = 'block'
+      parentLi.classList.add('menu-open')
+      if (arrow) arrow.style.transform = 'rotate(90deg)'
+      saveMenuState(menuId, true) // 保存展开状态
+    } else {
+      submenu.style.display = 'none'
+      parentLi.classList.remove('menu-open')
+      if (arrow) arrow.style.transform = 'rotate(0deg)'
+      saveMenuState(menuId, false) // 保存折叠状态
+    }
+  }
+  
+  // 获取当前用户角色
+  function getCurrentUserRole() {
+    if (typeof globalThis.sessionStorage !== 'undefined') {
+      const userStr = globalThis.sessionStorage.getItem('currentUser')
+      if (userStr) {
+        const user = JSON.parse(userStr)
+        return user.role
+      }
+    }
+    return 'admin'
+  }
+  
+  // 页面加载时生成菜单
+  document.addEventListener('DOMContentLoaded', function() {
+    const userRole = getCurrentUserRole()
+    if (userRole) {
+      generateMenu(userRole)
+      
+      // 更新品牌链接
+      const brandLink = document.getElementById('brandLink')
+      if (brandLink) {
+        brandLink.href = userRole === 'admin' ? '/index.html' : '/dashboard.html'
+      }
+    } else {
+      // 如果没有用户信息，跳转到登录页面
+      globalThis.location.href = '/login.html'
+    }
+  })
+</script>
