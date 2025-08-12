@@ -77,6 +77,99 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+
+    <!-- 登录检查脚本 -->
+    <script>
+      // 页面加载时立即检查登录状态
+      (function () {
+        if (typeof globalThis.sessionStorage !== 'undefined') {
+          const currentUser = globalThis.sessionStorage.getItem('currentUser');
+          if (!currentUser) {
+            // 如果未登录，跳转到登录页面
+            globalThis.location.href = '/login.html';
+          }
+        }
+      })();
+    </script>
+    <style>
+      .progress-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e3e6f0;
+        border-radius: 0.75rem;
+        overflow: hidden;
+      }
+      .progress-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+      .progress-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e3e6f0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .progress-body {
+        padding: 1.5rem;
+      }
+      .progress-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        margin: 0 auto 1rem;
+      }
+      .progress-info {
+        text-align: center;
+      }
+      .progress-steps {
+        margin-top: 1rem;
+      }
+      .progress-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .step-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+      }
+      .step-completed {
+        background: #28a745;
+      }
+      .step-current {
+        background: #007bff;
+      }
+      .step-pending {
+        background: #6c757d;
+      }
+      .step-text {
+        flex: 1;
+        color: #6c757d;
+      }
+      .step-text.completed {
+        color: #28a745;
+        font-weight: 500;
+      }
+      .step-text.current {
+        color: #007bff;
+        font-weight: 500;
+      }
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -96,9 +189,6 @@
             </li>
             <li class="nav-item d-none d-md-block">
               <a href="#" class="nav-link" data-i18n="home">首页</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link" data-i18n="contact">联系</a>
             </li>
           </ul>
           <!--end::Start Navbar Links-->
@@ -208,7 +298,10 @@
             <!--begin::Notifications Dropdown Menu-->
             <li class="nav-item dropdown">
               <a class="nav-link" data-bs-toggle="dropdown" href="#">
-                <i class="bi bi-bell-fill"></i>
+                <i
+                  class="bi bi-bell-fill"
+                  style="font-size: 1rem; display: inline-block; color: #ffc107"
+                ></i>
                 <span class="navbar-badge badge text-bg-warning">15</span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -276,21 +369,35 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img
-                  src="./assets/img/avatar.png"
-                  class="user-image rounded-circle shadow"
-                  alt="User Image"
-                />
-                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
+                <div
+                  id="navUserAvatar"
+                  class="user-image rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold"
+                  style="
+                    width: 30px;
+                    height: 30px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-size: 0.75rem;
+                  "
+                >
+                  A
+                </div>
+                <span class="d-none d-md-inline ms-1" id="userDisplayName"> 未登录 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
-                  <img
-                    src="./assets/img/avatar.png"
-                    class="rounded-circle shadow"
-                    alt="User Image"
-                  />
+                  <div
+                    id="topbarUserAvatar"
+                    class="rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold mx-auto mb-2"
+                    style="
+                      width: 90px;
+                      height: 90px;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      font-size: 2rem;
+                    "
+                  >
+                    A
+                  </div>
                   <p>
                     <span id="userName">未登录</span> -
                     <span id="userRole"></span>
@@ -337,10 +444,68 @@
       </nav>
       <!--end::Header-->
 
+      <style>
+        /* 修复用户头像样式 */
+        .user-menu .nav-link {
+          display: flex !important;
+          align-items: center;
+        }
+
+        .user-menu .user-image {
+          margin-right: 0.5rem;
+          flex-shrink: 0;
+        }
+
+        .user-menu #userDisplayName {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 120px;
+        }
+
+        /* 确保通知图标可见 */
+        .bi-bell-fill {
+          display: inline-block !important;
+          font-size: 1rem;
+        }
+
+        /* 确保所有Bootstrap Icons可见 */
+        .bi {
+          display: inline-block !important;
+        }
+
+        /* 通知图标特殊样式 */
+        .nav-item.dropdown .bi-bell-fill {
+          font-size: 1.1rem !important;
+          color: #ffc107 !important;
+          margin-right: 0.25rem;
+        }
+
+        /* 确保通知徽章可见 */
+        .navbar-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      </style>
+
       <script>
+        // 获取当前用户信息
+        function getCurrentUser() {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            return userStr ? JSON.parse(userStr) : null;
+          }
+          return null;
+        }
+
         function logout() {
-          sessionStorage.removeItem('currentUser');
-          window.location.href = '/examples/login.html';
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            globalThis.sessionStorage.removeItem('currentUser');
+          }
+          globalThis.location.href = '/login.html';
         }
 
         // 更新用户信息显示
@@ -352,8 +517,22 @@
             const loginTimeElement = document.getElementById('loginTime');
 
             userNameElements.forEach((el) => {
-              if (el) el.textContent = user.name;
+              if (el) el.textContent = user.name || user.username;
             });
+
+            // 更新顶部导航栏用户头像（使用用户名首字母）
+            const topbarUserAvatar = document.getElementById('topbarUserAvatar');
+            if (topbarUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              topbarUserAvatar.textContent = firstLetter;
+            }
+
+            // 更新右上角导航栏用户头像
+            const navUserAvatar = document.getElementById('navUserAvatar');
+            if (navUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              navUserAvatar.textContent = firstLetter;
+            }
 
             if (userRoleElement) {
               userRoleElement.textContent =
@@ -365,7 +544,7 @@
             }
           } else {
             // 如果没有用户信息，跳转到登录页面
-            window.location.href = '/examples/login.html';
+            globalThis.location.href = '/login.html';
           }
         }
 
@@ -386,7 +565,7 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="./index.html" class="brand-link">
+          <a href="#" class="brand-link" id="brandLink">
             <!--begin::Brand Image-->
             <img
               src="./assets/img/AdminLTELogo.png"
@@ -478,34 +657,80 @@
           ],
         };
 
+        // 获取当前页面路径
+        function getCurrentPath() {
+          return window.location.pathname;
+        }
+
+        // 保存菜单展开状态
+        function saveMenuState(menuId, isExpanded) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            menuStates[menuId] = isExpanded;
+            globalThis.sessionStorage.setItem('menuStates', JSON.stringify(menuStates));
+          }
+        }
+
+        // 获取菜单展开状态
+        function getMenuState(menuId) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            return menuStates[menuId] || false;
+          }
+          return false;
+        }
+
+        // 检查菜单项是否应该被选中
+        function isMenuItemActive(item, currentPath) {
+          if (item.path === currentPath) {
+            return true;
+          }
+          // 检查子菜单
+          if (item.children) {
+            return item.children.some((child) => child.path === currentPath);
+          }
+          return false;
+        }
+
+        // 检查子菜单是否应该展开
+        function shouldExpandSubmenu(item, currentPath) {
+          if (!item.children) return false;
+          // 如果当前页面在子菜单中，或者用户之前手动展开过，则保持展开
+          const hasActiveChild = item.children.some((child) => child.path === currentPath);
+          const wasManuallyExpanded = getMenuState(item.id);
+          return hasActiveChild || wasManuallyExpanded;
+        }
+
         // 生成菜单HTML
         function generateMenu(userRole) {
           const menuItems = menuConfig[userRole] || menuConfig.admin;
           const navigation = document.getElementById('navigation');
+          const currentPath = getCurrentPath();
 
           if (!navigation) return;
 
           let menuHTML = '';
 
           menuItems.forEach((item) => {
-            const isActive = item.id === 'dashboard' || item.id === 'orders';
+            const isActive = isMenuItemActive(item, currentPath);
             const hasChildren = item.children && item.children.length > 0;
+            const shouldExpand = shouldExpandSubmenu(item, currentPath);
 
             if (hasChildren) {
               menuHTML += `
-          <li class="nav-item ${isActive ? 'menu-open' : ''}">
-            <a href="#" class="nav-link ${isActive ? 'active' : ''}" onclick="toggleSubmenu(this)">
+          <li class="nav-item ${shouldExpand ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" id="menu-${item.id}" onclick="toggleSubmenu(event, this)">
               <i class="nav-icon ${item.icon}"></i>
               <p>
                 ${item.label}
-                <i class="nav-arrow bi bi-chevron-right"></i>
+                <i class="nav-arrow bi bi-chevron-right" style="transform: ${shouldExpand ? 'rotate(90deg)' : 'rotate(0deg)'}; position: absolute; right: 10px; top: 50%; margin-top: -8px;"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" style="display: ${shouldExpand ? 'block' : 'none'};">
         `;
 
               item.children.forEach((child) => {
-                const childActive = child.id === 'ai-formulas' || child.id === 'ai-studio';
+                const childActive = child.path === currentPath;
                 menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
@@ -536,30 +761,37 @@
         }
 
         // 切换子菜单展开状态
-        function toggleSubmenu(element) {
+        function toggleSubmenu(event, element) {
+          event.preventDefault();
+          event.stopPropagation();
+
           const parentLi = element.closest('.nav-item');
           const submenu = parentLi.querySelector('.nav-treeview');
           const arrow = element.querySelector('.nav-arrow');
+          const menuId = element.id.replace('menu-', '');
 
-          if (parentLi.classList.contains('menu-open')) {
-            parentLi.classList.remove('menu-open');
-            if (arrow) arrow.style.transform = 'rotate(0deg)';
-          } else {
+          // 切换显示状态
+          if (submenu.style.display === 'none' || submenu.style.display === '') {
+            submenu.style.display = 'block';
             parentLi.classList.add('menu-open');
             if (arrow) arrow.style.transform = 'rotate(90deg)';
+            saveMenuState(menuId, true); // 保存展开状态
+          } else {
+            submenu.style.display = 'none';
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+            saveMenuState(menuId, false); // 保存折叠状态
           }
-
-          // 阻止默认行为
-          event.preventDefault();
-          return false;
         }
 
         // 获取当前用户角色
         function getCurrentUserRole() {
-          const userStr = sessionStorage.getItem('currentUser');
-          if (userStr) {
-            const user = JSON.parse(userStr);
-            return user.role;
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            if (userStr) {
+              const user = JSON.parse(userStr);
+              return user.role;
+            }
           }
           return 'admin';
         }
@@ -569,9 +801,15 @@
           const userRole = getCurrentUserRole();
           if (userRole) {
             generateMenu(userRole);
+
+            // 更新品牌链接
+            const brandLink = document.getElementById('brandLink');
+            if (brandLink) {
+              brandLink.href = userRole === 'admin' ? '/index.html' : '/dashboard.html';
+            }
           } else {
             // 如果没有用户信息，跳转到登录页面
-            window.location.href = '/examples/login.html';
+            globalThis.location.href = '/login.html';
           }
         });
       </script>
@@ -796,6 +1034,31 @@
               </div>
             </div>
             <!-- /.row (main row) -->
+
+            <!--begin::Row 第三行：订单进度管理 -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <h3 class="card-title mb-0">
+                        <i class="bi bi-list-task me-2"></i>
+                        订单进度概览
+                      </h3>
+                      <a href="/orders/index.html" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-arrow-right me-1"></i>
+                        查看全部
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="orderProgressCards">
+                      <!-- 订单进度卡片将动态生成 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!--end::Container-->
         </div>
@@ -1022,31 +1285,31 @@
         statusChart.setOption({
           tooltip: { trigger: 'item' },
           legend: {
-            bottom: 20,
+            bottom: 10,
             left: 'center',
-            itemGap: 15,
-            textStyle: { fontSize: 13 },
+            itemGap: 12,
+            textStyle: { fontSize: 12 },
             orient: 'horizontal',
           },
           series: [
             {
               type: 'pie',
-              radius: ['40%', '65%'],
-              center: ['50%', '50%'],
+              radius: ['35%', '60%'],
+              center: ['50%', '45%'],
               avoidLabelOverlap: true,
               itemStyle: { borderColor: '#fff', borderWidth: 2 },
               data: statusData,
               label: {
                 show: true,
                 formatter: '{b}\n{d}%',
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: 'normal',
                 position: 'outside',
               },
               labelLine: {
                 show: true,
-                length: 10,
-                length2: 8,
+                length: 8,
+                length2: 6,
                 smooth: false,
               },
             },
@@ -1210,10 +1473,133 @@
 
         // 响应式
         window.addEventListener('resize', () => {
-          const charts = [orderChart, formulaChart, statusChart, mapChart].filter(Boolean);
+          const charts = [orderChart, formulaChart].filter(Boolean);
           charts.forEach((chart) => chart.resize());
         });
+
+        // 生成订单进度卡片
+        generateOrderProgressCards();
       }); // 关闭 DOMContentLoaded 事件监听器
+
+      // 生成订单进度卡片
+      function generateOrderProgressCards() {
+        const container = document.getElementById('orderProgressCards');
+        if (!container) return;
+
+        // 模拟订单数据
+        const orders = [
+          {
+            id: 'SO-0001',
+            customer: '客户A',
+            product: '花香调香水',
+            status: '调香师调整配方',
+            progress: 60,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: false, current: true },
+              { name: '配香员配香', completed: false },
+              { name: '评香师评价', completed: false },
+              { name: '客户确认', completed: false },
+            ],
+            expectedDate: '2024-01-15',
+          },
+          {
+            id: 'SO-0002',
+            customer: '客户B',
+            product: '木质调香水',
+            status: '配香员配香',
+            progress: 30,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: true },
+              { name: '配香员配香', completed: false, current: true },
+              { name: '评香师评价', completed: false },
+              { name: '客户确认', completed: false },
+            ],
+            expectedDate: '2024-01-20',
+          },
+          {
+            id: 'SO-0003',
+            customer: '客户C',
+            product: '果香调香水',
+            status: '评香师评价',
+            progress: 80,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: true },
+              { name: '配香员配香', completed: true },
+              { name: '评香师评价', completed: false, current: true },
+              { name: '客户确认', completed: false },
+            ],
+            expectedDate: '2024-01-18',
+          },
+        ];
+
+        let cardsHTML = '';
+
+        orders.forEach((order) => {
+          const progressColor =
+            order.progress >= 80
+              ? '#28a745'
+              : order.progress >= 60
+                ? '#17a2b8'
+                : order.progress >= 40
+                  ? '#ffc107'
+                  : '#dc3545';
+
+          let stepsHTML = '';
+          order.steps.forEach((step) => {
+            let stepClass = 'step-pending';
+            let textClass = '';
+
+            if (step.completed) {
+              stepClass = 'step-completed';
+              textClass = 'completed';
+            } else if (step.current) {
+              stepClass = 'step-current';
+              textClass = 'current';
+            }
+
+            stepsHTML += `
+              <div class="progress-step">
+                <div class="step-indicator ${stepClass}"></div>
+                <div class="step-text ${textClass}">${step.name}</div>
+              </div>
+            `;
+          });
+
+          cardsHTML += `
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="progress-card">
+                <div class="progress-header">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">${order.id}</h6>
+                    <span class="status-badge bg-light text-dark">${order.status}</span>
+                  </div>
+                  <small class="text-white-50">${order.customer} - ${order.product}</small>
+                </div>
+                <div class="progress-body">
+                  <div class="progress-circle" style="background: ${progressColor}">
+                    ${order.progress}%
+                  </div>
+                  <div class="progress-info">
+                    <h6 class="mb-2">${order.product}</h6>
+                    <p class="text-muted small mb-3">预计完成: ${order.expectedDate}</p>
+                    <div class="progress-steps">
+                      ${stepsHTML}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = cardsHTML;
+      }
     </script>
     <!--end::Script-->
   </body>

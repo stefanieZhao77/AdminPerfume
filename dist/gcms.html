@@ -91,9 +91,6 @@
             <li class="nav-item d-none d-md-block">
               <a href="#" class="nav-link" data-i18n="home">首页</a>
             </li>
-            <li class="nav-item d-none d-md-block">
-              <a href="#" class="nav-link" data-i18n="contact">联系</a>
-            </li>
           </ul>
           <!--end::Start Navbar Links-->
 
@@ -202,7 +199,10 @@
             <!--begin::Notifications Dropdown Menu-->
             <li class="nav-item dropdown">
               <a class="nav-link" data-bs-toggle="dropdown" href="#">
-                <i class="bi bi-bell-fill"></i>
+                <i
+                  class="bi bi-bell-fill"
+                  style="font-size: 1rem; display: inline-block; color: #ffc107"
+                ></i>
                 <span class="navbar-badge badge text-bg-warning">15</span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -270,21 +270,35 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img
-                  src="./assets/img/avatar.png"
-                  class="user-image rounded-circle shadow"
-                  alt="User Image"
-                />
-                <span class="d-none d-md-inline" id="userDisplayName"> 未登录 </span>
+                <div
+                  id="navUserAvatar"
+                  class="user-image rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold"
+                  style="
+                    width: 30px;
+                    height: 30px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-size: 0.75rem;
+                  "
+                >
+                  A
+                </div>
+                <span class="d-none d-md-inline ms-1" id="userDisplayName"> 未登录 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
-                  <img
-                    src="./assets/img/avatar.png"
-                    class="rounded-circle shadow"
-                    alt="User Image"
-                  />
+                  <div
+                    id="topbarUserAvatar"
+                    class="rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold mx-auto mb-2"
+                    style="
+                      width: 90px;
+                      height: 90px;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      font-size: 2rem;
+                    "
+                  >
+                    A
+                  </div>
                   <p>
                     <span id="userName">未登录</span> -
                     <span id="userRole"></span>
@@ -331,10 +345,68 @@
       </nav>
       <!--end::Header-->
 
+      <style>
+        /* 修复用户头像样式 */
+        .user-menu .nav-link {
+          display: flex !important;
+          align-items: center;
+        }
+
+        .user-menu .user-image {
+          margin-right: 0.5rem;
+          flex-shrink: 0;
+        }
+
+        .user-menu #userDisplayName {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 120px;
+        }
+
+        /* 确保通知图标可见 */
+        .bi-bell-fill {
+          display: inline-block !important;
+          font-size: 1rem;
+        }
+
+        /* 确保所有Bootstrap Icons可见 */
+        .bi {
+          display: inline-block !important;
+        }
+
+        /* 通知图标特殊样式 */
+        .nav-item.dropdown .bi-bell-fill {
+          font-size: 1.1rem !important;
+          color: #ffc107 !important;
+          margin-right: 0.25rem;
+        }
+
+        /* 确保通知徽章可见 */
+        .navbar-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      </style>
+
       <script>
+        // 获取当前用户信息
+        function getCurrentUser() {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            return userStr ? JSON.parse(userStr) : null;
+          }
+          return null;
+        }
+
         function logout() {
-          sessionStorage.removeItem('currentUser');
-          window.location.href = '/examples/login.html';
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            globalThis.sessionStorage.removeItem('currentUser');
+          }
+          globalThis.location.href = '/login.html';
         }
 
         // 更新用户信息显示
@@ -346,8 +418,22 @@
             const loginTimeElement = document.getElementById('loginTime');
 
             userNameElements.forEach((el) => {
-              if (el) el.textContent = user.name;
+              if (el) el.textContent = user.name || user.username;
             });
+
+            // 更新顶部导航栏用户头像（使用用户名首字母）
+            const topbarUserAvatar = document.getElementById('topbarUserAvatar');
+            if (topbarUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              topbarUserAvatar.textContent = firstLetter;
+            }
+
+            // 更新右上角导航栏用户头像
+            const navUserAvatar = document.getElementById('navUserAvatar');
+            if (navUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              navUserAvatar.textContent = firstLetter;
+            }
 
             if (userRoleElement) {
               userRoleElement.textContent =
@@ -359,7 +445,7 @@
             }
           } else {
             // 如果没有用户信息，跳转到登录页面
-            window.location.href = '/examples/login.html';
+            globalThis.location.href = '/login.html';
           }
         }
 
@@ -380,7 +466,7 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="../index.html" class="brand-link">
+          <a href="#" class="brand-link" id="brandLink">
             <!--begin::Brand Image-->
             <img
               src="./assets/img/AdminLTELogo.png"
@@ -472,34 +558,80 @@
           ],
         };
 
+        // 获取当前页面路径
+        function getCurrentPath() {
+          return window.location.pathname;
+        }
+
+        // 保存菜单展开状态
+        function saveMenuState(menuId, isExpanded) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            menuStates[menuId] = isExpanded;
+            globalThis.sessionStorage.setItem('menuStates', JSON.stringify(menuStates));
+          }
+        }
+
+        // 获取菜单展开状态
+        function getMenuState(menuId) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            return menuStates[menuId] || false;
+          }
+          return false;
+        }
+
+        // 检查菜单项是否应该被选中
+        function isMenuItemActive(item, currentPath) {
+          if (item.path === currentPath) {
+            return true;
+          }
+          // 检查子菜单
+          if (item.children) {
+            return item.children.some((child) => child.path === currentPath);
+          }
+          return false;
+        }
+
+        // 检查子菜单是否应该展开
+        function shouldExpandSubmenu(item, currentPath) {
+          if (!item.children) return false;
+          // 如果当前页面在子菜单中，或者用户之前手动展开过，则保持展开
+          const hasActiveChild = item.children.some((child) => child.path === currentPath);
+          const wasManuallyExpanded = getMenuState(item.id);
+          return hasActiveChild || wasManuallyExpanded;
+        }
+
         // 生成菜单HTML
         function generateMenu(userRole) {
           const menuItems = menuConfig[userRole] || menuConfig.admin;
           const navigation = document.getElementById('navigation');
+          const currentPath = getCurrentPath();
 
           if (!navigation) return;
 
           let menuHTML = '';
 
           menuItems.forEach((item) => {
-            const isActive = item.id === 'dashboard' || item.id === 'orders';
+            const isActive = isMenuItemActive(item, currentPath);
             const hasChildren = item.children && item.children.length > 0;
+            const shouldExpand = shouldExpandSubmenu(item, currentPath);
 
             if (hasChildren) {
               menuHTML += `
-          <li class="nav-item ${isActive ? 'menu-open' : ''}">
-            <a href="#" class="nav-link ${isActive ? 'active' : ''}" onclick="toggleSubmenu(this)">
+          <li class="nav-item ${shouldExpand ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" id="menu-${item.id}" onclick="toggleSubmenu(event, this)">
               <i class="nav-icon ${item.icon}"></i>
               <p>
                 ${item.label}
-                <i class="nav-arrow bi bi-chevron-right"></i>
+                <i class="nav-arrow bi bi-chevron-right" style="transform: ${shouldExpand ? 'rotate(90deg)' : 'rotate(0deg)'}; position: absolute; right: 10px; top: 50%; margin-top: -8px;"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" style="display: ${shouldExpand ? 'block' : 'none'};">
         `;
 
               item.children.forEach((child) => {
-                const childActive = child.id === 'ai-formulas' || child.id === 'ai-studio';
+                const childActive = child.path === currentPath;
                 menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
@@ -530,30 +662,37 @@
         }
 
         // 切换子菜单展开状态
-        function toggleSubmenu(element) {
+        function toggleSubmenu(event, element) {
+          event.preventDefault();
+          event.stopPropagation();
+
           const parentLi = element.closest('.nav-item');
           const submenu = parentLi.querySelector('.nav-treeview');
           const arrow = element.querySelector('.nav-arrow');
+          const menuId = element.id.replace('menu-', '');
 
-          if (parentLi.classList.contains('menu-open')) {
-            parentLi.classList.remove('menu-open');
-            if (arrow) arrow.style.transform = 'rotate(0deg)';
-          } else {
+          // 切换显示状态
+          if (submenu.style.display === 'none' || submenu.style.display === '') {
+            submenu.style.display = 'block';
             parentLi.classList.add('menu-open');
             if (arrow) arrow.style.transform = 'rotate(90deg)';
+            saveMenuState(menuId, true); // 保存展开状态
+          } else {
+            submenu.style.display = 'none';
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+            saveMenuState(menuId, false); // 保存折叠状态
           }
-
-          // 阻止默认行为
-          event.preventDefault();
-          return false;
         }
 
         // 获取当前用户角色
         function getCurrentUserRole() {
-          const userStr = sessionStorage.getItem('currentUser');
-          if (userStr) {
-            const user = JSON.parse(userStr);
-            return user.role;
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            if (userStr) {
+              const user = JSON.parse(userStr);
+              return user.role;
+            }
           }
           return 'admin';
         }
@@ -563,9 +702,15 @@
           const userRole = getCurrentUserRole();
           if (userRole) {
             generateMenu(userRole);
+
+            // 更新品牌链接
+            const brandLink = document.getElementById('brandLink');
+            if (brandLink) {
+              brandLink.href = userRole === 'admin' ? '/index.html' : '/dashboard.html';
+            }
           } else {
             // 如果没有用户信息，跳转到登录页面
-            window.location.href = '/examples/login.html';
+            globalThis.location.href = '/login.html';
           }
         });
       </script>

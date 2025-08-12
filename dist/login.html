@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AI智能制香管理系统 - 登录</title>
+
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="AI智能制香管理系统 - 登录" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="description"
+      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
+    />
+    <meta
+      name="keywords"
+      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
+    />
+    <!--end::Primary Meta Tags-->
+
+    <!--begin::Accessibility Features-->
+    <!-- Skip links will be dynamically added by accessibility.js -->
+    <meta name="supported-color-schemes" content="light dark" />
+    <link rel="preload" href="./css/adminlte.css" as="style" />
+    <!--end::Accessibility Features-->
+
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!--end::Fonts-->
+
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    <!--end::Required Plugin(AdminLTE)-->
+    <style>
+      .login-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-box {
+        width: 100%;
+        max-width: 400px;
+      }
+      .login-logo a {
+        color: white !important;
+        font-size: 2rem;
+        text-decoration: none;
+      }
+      .user-demo {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        color: white;
+      }
+      .user-demo h6 {
+        color: white;
+        margin-bottom: 10px;
+      }
+      .demo-user {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin: 5px 0;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .demo-user:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .demo-user .role-badge {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 8px;
+      }
+      .role-admin {
+        background: #dc3545;
+      }
+      .role-perfumer {
+        background: #0d6efd;
+      }
+      .role-evaluator {
+        background: #198754;
+      }
+    </style>
+  </head>
+  <body class="login-page">
+    <div class="login-box">
+      <div class="login-logo text-center mb-4">
+        <a href="#"><b>Perfume</b>AI</a>
+      </div>
+
+      <!-- 演示用户信息 -->
+      <div class="user-demo">
+        <h6><i class="bi bi-info-circle me-2"></i>演示用户</h6>
+        <div class="demo-user" onclick="fillDemoUser('admin', 'admin123')">
+          <strong>技术总监</strong>
+          <span class="role-badge role-admin">admin</span>
+          <small class="d-block text-white-50">admin / admin123</small>
+        </div>
+        <div class="demo-user" onclick="fillDemoUser('perfumer1', 'perfumer123')">
+          <strong>张调香师</strong>
+          <span class="role-badge role-perfumer">perfumer</span>
+          <small class="d-block text-white-50">perfumer1 / perfumer123</small>
+        </div>
+        <div class="demo-user" onclick="fillDemoUser('evaluator1', 'evaluator123')">
+          <strong>王评香师</strong>
+          <span class="role-badge role-evaluator">evaluator</span>
+          <small class="d-block text-white-50">evaluator1 / evaluator123</small>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body login-card-body">
+          <p class="login-box-msg">登录到制香管理系统</p>
+
+          <form id="loginForm">
+            <div class="input-group mb-3">
+              <input type="text" id="username" class="form-control" placeholder="用户名" required />
+              <div class="input-group-text">
+                <span class="bi bi-person"></span>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="密码"
+                required
+              />
+              <div class="input-group-text">
+                <span class="bi bi-lock-fill"></span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="rememberMe" />
+                  <label class="form-check-label" for="rememberMe"> 记住我 </label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="alert alert-danger mt-3" id="loginError" style="display: none">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span id="errorMessage"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+    <script src="./js/adminlte.js"></script>
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+
+        // Disable OverlayScrollbars on mobile devices to prevent touch interference
+        const isMobile = window.innerWidth <= 992;
+
+        if (
+          sidebarWrapper &&
+          OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+          !isMobile
+        ) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
+    <!--end::OverlayScrollbars Configure-->
+
+    <script>
+      // 演示用户填充功能
+      function fillDemoUser(username, password) {
+        document.getElementById('username').value = username;
+        document.getElementById('password').value = password;
+      }
+
+      // 登录处理
+      document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            // 登录成功，跳转到对应角色的主页
+            globalThis.location.href = '/dashboard.html';
+          } else {
+            showError(result.message || '登录失败');
+          }
+        } catch (error) {
+          // 如果API不可用，使用模拟登录
+          const mockUsers = [
+            { username: 'admin', password: 'admin123', role: 'admin' },
+            { username: 'perfumer1', password: 'perfumer123', role: 'perfumer' },
+            { username: 'perfumer2', password: 'perfumer123', role: 'perfumer' },
+            { username: 'evaluator1', password: 'evaluator123', role: 'evaluator' },
+            { username: 'evaluator2', password: 'evaluator123', role: 'evaluator' },
+          ];
+
+          const user = mockUsers.find((u) => u.username === username && u.password === password);
+
+          if (user) {
+            // 模拟存储用户信息
+            const userInfo = {
+              username: user.username,
+              role: user.role,
+              name:
+                user.username === 'admin'
+                  ? '技术总监'
+                  : user.username.startsWith('perfumer')
+                    ? '调香师'
+                    : '评香师',
+              loginTime: new Date().toISOString(),
+            };
+
+            if (typeof globalThis.sessionStorage !== 'undefined') {
+              globalThis.sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+            }
+
+            // 跳转到对应角色的主页
+            if (user.role === 'admin') {
+              globalThis.location.href = '/index.html';
+            } else {
+              globalThis.location.href = '/dashboard.html';
+            }
+          } else {
+            showError('用户名或密码错误');
+          }
+        }
+      });
+
+      function showError(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('loginError').style.display = 'block';
+      }
+    </script>
+  </body>
+</html>

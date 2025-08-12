@@ -8,7 +8,7 @@
   "main": "dist/js/adminlte.min.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "npm-run-all --parallel watch docs-serve",
+    "dev": "npm-run-all --parallel api:dev docs-serve",
     "build": "npm-run-all clean compile",
     "css": "npm-run-all css-compile css-prefix css-rtl css-minify",
     "css-compile": "sass --style expanded --load-path=\"node_modules\" --source-map --embed-sources --no-error-css --quiet src/scss/:dist/css/",
@@ -39,7 +39,8 @@
     "watch-css-main": "nodemon --watch src/scss/ --ext scss --exec \"npm-run-all css-lint css-compile copy-assets\"",
     "watch-css-dist": "nodemon --watch dist/css/ --ext css --ignore \"dist/css/*.rtl.*\" --exec \"npm run css-rtl\"",
     "watch-js-main": "nodemon --watch src/ts/ --ext ts --exec \"npm-run-all js-lint js-compile copy-assets\"",
-    "watch-assets": "nodemon --watch src/assets/ --exec \"npm run assets\""
+    "watch-assets": "nodemon --watch src/assets/ --exec \"npm run assets\"",
+    "api:dev": "ts-node-dev --respawn --transpile-only backend/src/server.ts"
   },
   "keywords": [
     "css",
@@ -65,6 +66,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.0",
+    "@astrojs/react": "^4.3.0",
     "@rollup/plugin-typescript": "^12.1.3",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
@@ -81,6 +83,7 @@
     "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-unicorn": "^60.0.0",
+    "fastify": "^5.4.0",
     "fs-extra": "^11.3.0",
     "lockfile-lint": "^4.14.1",
     "nodemon": "^3.1.10",
@@ -89,6 +92,8 @@
     "postcss-cli": "^11.0.1",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.44.0",
     "rtlcss": "^4.3.0",
@@ -97,6 +102,7 @@
     "stylelint": "^16.21.0",
     "stylelint-config-twbs-bootstrap": "^16.1.0",
     "terser": "^5.43.1",
+    "ts-node-dev": "^2.0.0",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3"
   }

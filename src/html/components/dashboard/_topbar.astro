@@ -20,9 +20,6 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
       <li class="nav-item d-none d-md-block">
         <a href="#" class="nav-link" data-i18n="home">首页</a>
       </li>
-      <li class="nav-item d-none d-md-block">
-        <a href="#" class="nav-link" data-i18n="contact">联系</a>
-      </li>
     </ul>
     <!--end::Start Navbar Links-->
 
@@ -268,9 +265,14 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
     font-size: 1rem;
   }
   
-  /* 确保所有Bootstrap Icons可见 */
+  /* 确保所有Bootstrap Icons可见，但允许JavaScript控制显示/隐藏 */
   .bi {
-    display: inline-block !important;
+    display: inline-block;
+  }
+  
+  /* 允许JavaScript隐藏图标 */
+  .bi[style*="display: none"] {
+    display: none !important;
   }
   
   /* 通知图标特殊样式 */

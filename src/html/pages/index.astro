@@ -357,7 +357,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
                     <div class="d-flex align-items-center justify-content-between">
                       <h3 class="card-title mb-0">
                         <i class="bi bi-list-task me-2"></i>
-                        订单进度概览
+                        项目进度概览
                       </h3>
                       <a href="/orders/index.html" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-arrow-right me-1"></i>
@@ -506,30 +506,30 @@ const months = genMonths(12)
         statusChart.setOption({
           tooltip: { trigger: 'item' },
           legend: { 
-            bottom: 20,
+            bottom: 10,
             left: 'center',
-            itemGap: 15,
-            textStyle: { fontSize: 13 },
+            itemGap: 12,
+            textStyle: { fontSize: 12 },
             orient: 'horizontal'
           },
           series: [{
             type:'pie', 
-            radius:['40%','65%'], 
-            center: ['50%', '50%'],
+            radius:['35%','60%'], 
+            center: ['50%', '45%'],
             avoidLabelOverlap: true,
             itemStyle:{ borderColor: '#fff', borderWidth: 2 },
             data: statusData,
             label: { 
               show: true,
               formatter: '{b}\n{d}%',
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: 'normal',
               position: 'outside'
             },
             labelLine: {
               show: true,
-              length: 10,
-              length2: 8,
+              length: 8,
+              length2: 6,
               smooth: false
             }
           }]

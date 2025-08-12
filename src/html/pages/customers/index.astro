@@ -4,6 +4,7 @@ import Footer from "@components/dashboard/_footer.astro"
 import Topbar from "@components/dashboard/_topbar.astro"
 import Sidenav from "@components/dashboard/_sidenav.astro"
 import Scripts from "@components/_scripts.astro"
+import CustomersTable from "@components/react/CustomersTable.tsx"
 import QueryTable from "@components/QueryTable.astro"
 
 const title = "客户管理"
@@ -100,6 +101,13 @@ const page = "customers-list"
               <div class="card-footer d-flex align-items-center justify-content-between">
                 <div class="text-body-secondary small" id="customers-stats">共 0 条</div>
                 <ul class="pagination pagination-sm m-0" id="customers-pagination"></ul>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div class="card-header"><h3 class="card-title">React 数据绑定（客户 Mock）</h3></div>
+              <div class="card-body">
+                <CustomersTable client:load />
               </div>
             </div>
           </div>

@@ -39,8 +39,8 @@ class FullScreen {
   inFullScreen(): void {
     const event = new Event(EVENT_MAXIMIZED)
 
-    const iconMaximize = document.querySelector<HTMLElement>(SELECTOR_MAXIMIZE_ICON)
-    const iconMinimize = document.querySelector<HTMLElement>(SELECTOR_MINIMIZE_ICON)
+    const iconMaximize = this._element.querySelector<HTMLElement>(SELECTOR_MAXIMIZE_ICON)
+    const iconMinimize = this._element.querySelector<HTMLElement>(SELECTOR_MINIMIZE_ICON)
 
     void document.documentElement.requestFullscreen()
 
@@ -58,8 +58,8 @@ class FullScreen {
   outFullscreen(): void {
     const event = new Event(EVENT_MINIMIZED)
 
-    const iconMaximize = document.querySelector<HTMLElement>(SELECTOR_MAXIMIZE_ICON)
-    const iconMinimize = document.querySelector<HTMLElement>(SELECTOR_MINIMIZE_ICON)
+    const iconMaximize = this._element.querySelector<HTMLElement>(SELECTOR_MAXIMIZE_ICON)
+    const iconMinimize = this._element.querySelector<HTMLElement>(SELECTOR_MINIMIZE_ICON)
 
     void document.exitFullscreen()
 

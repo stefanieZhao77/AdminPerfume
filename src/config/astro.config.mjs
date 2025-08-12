@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 import mdx from '@astrojs/mdx'
+import react from '@astrojs/react'
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
       theme: 'dark-plus'
     }
   },
-  integrations: [mdx()],
+  integrations: [mdx(), react()],
   srcDir: './src/html',
   publicDir: './src/html/public',
   cacheDir: './dist/.astro',
@@ -26,6 +27,9 @@ export default defineConfig({
   vite: {
     server: {
       host: '0.0.0.0',
+      proxy: {
+        '/api': 'http://localhost:4000'
+      },
       watch: {
         ignored: ['!**/dist/**']
       }
