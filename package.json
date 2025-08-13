@@ -8,8 +8,14 @@
   "main": "dist/js/adminlte.min.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "npm-run-all --parallel api:dev docs-serve",
-    "build": "npm-run-all clean compile",
+    "dev": "npm run dev:web",
+    "dev:web": "npm-run-all --parallel api:dev docs-serve",
+    "dev:mobile": "cd src/mobile && npm start -- --port 8081",
+    "dev:expo": "cd src/mobile && npm run expo",
+    "dev:all": "concurrently \"npm run dev:web\" \"npm run dev:mobile\"",
+    "build": "npm run build:web",
+    "build:web": "npm-run-all clean compile",
+    "build:mobile": "cd src/mobile && npm run build",
     "css": "npm-run-all css-compile css-prefix css-rtl css-minify",
     "css-compile": "sass --style expanded --load-path=\"node_modules\" --source-map --embed-sources --no-error-css --quiet src/scss/:dist/css/",
     "css-rtl": "cross-env NODE_ENV=RTL postcss --config src/config/postcss.config.mjs --dir \"dist/css\" --ext \".rtl.css\" \"dist/css/*.css\" \"!dist/css/*.min.css\" \"!dist/css/*.rtl.css\"",
@@ -105,5 +111,8 @@
     "ts-node-dev": "^2.0.0",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "expo": "^53.0.20"
   }
 }

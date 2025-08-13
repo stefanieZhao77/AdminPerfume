@@ -15,12 +15,16 @@
     "strictPropertyInitialization": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/html/components/*"],
+      "@components/*": [
+        "src/html/components/*"
+      ]
     },
     "allowImportingTsExtensions": true,
-    /* Language and Environment */
     "target": "es2022",
-    "lib": ["es2022", "DOM"],
+    "lib": [
+      "es2022",
+      "DOM"
+    ]
   },
   "include": [
     "src/ts/**/*",
@@ -30,6 +34,7 @@
   ],
   "exclude": [
     "dist",
-    "node_modules",
-  ]
+    "node_modules"
+  ],
+  "extends": "expo/tsconfig.base"
 }
