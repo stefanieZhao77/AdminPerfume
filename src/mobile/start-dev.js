@@ -20,11 +20,12 @@ if (!fs.existsSync(packageJsonPath)) {
 console.log('✅ 找到 package.json:', packageJsonPath);
 
 // 启动 Expo 开发服务器
-console.log('🚀 启动 Expo 开发服务器...');
-const cleanProcess = spawn('npx', ['expo', 'start', '--clear'], {
+console.log('🚀 启动 Expo 开发服务器 (离线模式, LAN)...');
+const cleanProcess = spawn('npx', ['expo', 'start', '--clear', '--lan'], {
   stdio: 'inherit',
   shell: true,
-  cwd: mobileDir
+  cwd: mobileDir,
+  env: { ...process.env, EXPO_OFFLINE: '1', EXPO_NO_TELEMETRY: '1' }
 });
 
 cleanProcess.on('error', (error) => {

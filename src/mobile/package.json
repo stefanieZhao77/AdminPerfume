@@ -4,10 +4,10 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "expo start -c",
+    "start": "node quick-start.js",
     "start:dev": "node start-dev.js",
     "start:metro": "npx react-native start --reset-cache",
-    "start:expo": "expo start --clear",
+    "start:expo": "expo start --clear --lan",
     "start:quick": "node quick-start.js",
     "android": "expo start --android",
     "ios": "expo start --ios",

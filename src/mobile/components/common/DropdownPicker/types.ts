@@ -32,6 +32,9 @@ export interface DropdownPickerProps {
   errorStyle?: TextStyle;
   onDropdownOpen?: () => void;
   onDropdownClose?: () => void;
+  // 新增：用于协调多个下拉的打开/关闭
+  id?: string;
+  activeId?: string | null;
 }
 
 export interface DropdownPickerStyles {
@@ -41,6 +44,7 @@ export interface DropdownPickerStyles {
   selectedOptionText: TextStyle;
   placeholder: TextStyle;
   dropdownList: ViewStyle;
+  modalDropdownList: ViewStyle;
   option: ViewStyle;
   optionText: TextStyle;
   searchContainer: ViewStyle;

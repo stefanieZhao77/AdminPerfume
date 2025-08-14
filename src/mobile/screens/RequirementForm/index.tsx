@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { brandColors } from '../../styles/colors';
 import { container, card, typography, spacing, shadows, input } from '../../styles/design';
@@ -24,6 +25,11 @@ import {
   fragranceTypeOptions2,
   sampleSpecificationOptions,
 } from '../../config/formOptions';
+
+// 扩展全局类型
+declare global {
+  var setParentScrollEnabled: ((enabled: boolean) => void) | undefined;
+}
 
 interface RequirementFormData {
   theme: string;
@@ -78,14 +84,38 @@ const RequirementForm: React.FC = () => {
 
   const [generatedReport, setGeneratedReport] = useState<string>('');
   const [isReportGenerated, setIsReportGenerated] = useState<boolean>(false);
+  const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
+  const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  // 设置全局滚动控制函数
+  useEffect(() => {
+    global.setParentScrollEnabled = (enabled: boolean) => {
+      setScrollEnabled(enabled);
+      if (scrollViewRef.current) {
+        scrollViewRef.current.setNativeProps({ scrollEnabled: enabled });
+      }
+    };
+    return () => {
+      delete global.setParentScrollEnabled;
+    };
+  }, []);
+
+  // 监听触摸事件来关闭下拉框
+  const handleOutsideTouch = () => {
+    if (activeDropdownId) {
+      setActiveDropdownId(null);
+    }
+  };
 
   // 处理下拉栏打开/关闭
-  const handleDropdownOpen = () => {
-    // 这里可以添加关闭其他下拉栏的逻辑
+  const handleDropdownOpen = (id?: string) => {
+    // 关闭其他所有下拉栏，只保留当前打开的
+    setActiveDropdownId(id || null);
   };
 
   const handleDropdownClose = () => {
-    // 这里可以添加清理逻辑
+    setActiveDropdownId(null);
   };
 
   const handleSubmit = () => {
@@ -217,13 +247,22 @@ const RequirementForm: React.FC = () => {
     });
     setGeneratedReport('');
     setIsReportGenerated(false);
+    setActiveDropdownId(null);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={brandColors.background.primary} />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <TouchableWithoutFeedback onPress={handleOutsideTouch}>
+        <View style={{ flex: 1 }}>
+          <ScrollView 
+            ref={scrollViewRef}
+            style={styles.content} 
+            showsVerticalScrollIndicator={false} 
+            keyboardShouldPersistTaps="always"
+            scrollEnabled={scrollEnabled}
+          >
         {/* 头部区域 */}
         <View style={styles.header}>
           <Text style={styles.title}>需求报告</Text>
@@ -246,24 +285,30 @@ const RequirementForm: React.FC = () => {
               />
             </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>产品类别 *</Text>
-              <DropdownPicker
-                options={productCategoryOptions}
-                value={formData.productCategory}
-                onValueChange={(value) => {
-                  setFormData({
-                    ...formData, 
-                    productCategory: String(value),
-                    productSubCategory: '', // 重置子类别
-                    applicationScenario: '' // 重置应用场景
-                  });
-                }}
-                placeholder="请选择产品类别"
-                onDropdownOpen={handleDropdownOpen}
-                onDropdownClose={handleDropdownClose}
-              />
-            </View>
+            <TouchableWithoutFeedback>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>产品类别 *</Text>
+                <DropdownPicker
+                  options={productCategoryOptions}
+                  value={formData.productCategory}
+                  onValueChange={(value) => {
+                    setFormData({
+                      ...formData, 
+                      productCategory: String(value),
+                      productSubCategory: '', // 重置子类别
+                      applicationScenario: '' // 重置应用场景
+                    });
+                  }}
+                  placeholder="请选择产品类别"
+                  searchable={true}
+                  searchPlaceholder="搜索产品类别..."
+                  onDropdownOpen={() => handleDropdownOpen('productCategory')}
+                  onDropdownClose={handleDropdownClose}
+                  id="productCategory"
+                  activeId={activeDropdownId}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
             {/* 三级联动：子类别 */}
             {formData.productCategory && (
@@ -280,8 +325,12 @@ const RequirementForm: React.FC = () => {
                     });
                   }}
                   placeholder="请选择产品子类别"
-                  onDropdownOpen={handleDropdownOpen}
+                  searchable={true}
+                  searchPlaceholder="搜索产品子类别..."
+                  onDropdownOpen={() => handleDropdownOpen('productSubCategory')}
                   onDropdownClose={handleDropdownClose}
+                  id="productSubCategory"
+                  activeId={activeDropdownId}
                 />
               </View>
             )}
@@ -295,21 +344,27 @@ const RequirementForm: React.FC = () => {
                   value={formData.applicationScenario}
                   onValueChange={(value) => setFormData({...formData, applicationScenario: String(value)})}
                   placeholder="请选择应用场景"
-                  onDropdownOpen={handleDropdownOpen}
+                  searchable={true}
+                  searchPlaceholder="搜索应用场景..."
+                  onDropdownOpen={() => handleDropdownOpen('applicationScenario')}
                   onDropdownClose={handleDropdownClose}
+                  id="applicationScenario"
+                  activeId={activeDropdownId}
                 />
               </View>
             )}
 
             <View style={styles.inputGroup}>
               <Text style={styles.label}>香型 *</Text>
-                             <DropdownPicker
-                 options={fragranceTypeOptions}
-                 value={formData.fragranceType}
-                 onValueChange={(value) => setFormData({...formData, fragranceType: String(value)})}
+              <DropdownPicker
+                options={fragranceTypeOptions}
+                value={formData.fragranceType}
+                onValueChange={(value) => setFormData({...formData, fragranceType: String(value)})}
                 placeholder="请选择香型"
-                onDropdownOpen={handleDropdownOpen}
+                onDropdownOpen={() => handleDropdownOpen('fragranceType')}
                 onDropdownClose={handleDropdownClose}
+                id="fragranceType"
+                activeId={activeDropdownId}
               />
             </View>
 
@@ -354,7 +409,7 @@ const RequirementForm: React.FC = () => {
 
         {/* 产品要求 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>产品要求</Text>
+          <Text style={styles.sectionTitle}>香精要求</Text>
           
           <View style={styles.formCard}>
             <View style={styles.inputGroup}>
@@ -402,7 +457,7 @@ const RequirementForm: React.FC = () => {
 
             <View style={styles.inputGroup}>
               <Text style={styles.label}>法规要求</Text>
-                             <CheckboxGroup
+              <CheckboxGroup
                 options={regulatoryRequirementOptions}
                 value={formData.regulatoryRequirements}
                 onChange={(value) => setFormData({...formData, regulatoryRequirements: value.map(String)})}
@@ -416,8 +471,10 @@ const RequirementForm: React.FC = () => {
                 value={formData.fragranceType2}
                 onValueChange={(value) => setFormData({...formData, fragranceType2: String(value)})}
                 placeholder="请选择仿香或创香"
-                onDropdownOpen={handleDropdownOpen}
+                onDropdownOpen={() => handleDropdownOpen('fragranceType2')}
                 onDropdownClose={handleDropdownClose}
+                id="fragranceType2"
+                activeId={activeDropdownId}
               />
             </View>
           </View>
@@ -479,22 +536,38 @@ const RequirementForm: React.FC = () => {
                 </View>
                 <View style={styles.customerInput}>
                   <Text style={styles.customerLabel}>性别</Text>
-                  <TextInput
-                    style={styles.customerTextInput}
+                  <DropdownPicker
+                    options={[
+                      { label: '女性', value: '女性' },
+                      { label: '男性', value: '男性' },
+                      { label: '不限', value: '不限' },
+                    ]}
                     value={formData.targetGender}
-                    onChangeText={(text) => setFormData({...formData, targetGender: text})}
-                    placeholder="如：女性"
-                    placeholderTextColor={brandColors.text.secondary}
+                    onValueChange={(value) => setFormData({ ...formData, targetGender: String(value) })}  
+                    placeholder="请选择性别"
+                    onDropdownOpen={() => handleDropdownOpen('targetGender')}
+                    onDropdownClose={handleDropdownClose}
+                    id="targetGender"
+                    activeId={activeDropdownId}
                   />
                 </View>
                 <View style={styles.customerInput}>
                   <Text style={styles.customerLabel}>收入水平</Text>
-                  <TextInput
-                    style={styles.customerTextInput}
+                  <DropdownPicker
+                    options={[
+                      { label: '低收入', value: '低收入' },
+                      { label: '中等收入', value: '中等收入' },
+                      { label: '中高收入', value: '中高收入' },
+                      { label: '高收入', value: '高收入' },
+                      { label: '不限', value: '不限' },
+                    ]}
                     value={formData.targetIncome}
-                    onChangeText={(text) => setFormData({...formData, targetIncome: text})}
-                    placeholder="如：中高收入"
-                    placeholderTextColor={brandColors.text.secondary}
+                    onValueChange={(value) => setFormData({ ...formData, targetIncome: String(value) })}
+                    placeholder="请选择收入水平"
+                    onDropdownOpen={() => handleDropdownOpen('targetIncome')}
+                    onDropdownClose={handleDropdownClose}
+                    id="targetIncome"
+                    activeId={activeDropdownId}
                   />
                 </View>
                 <View style={styles.customerInput}>
@@ -558,12 +631,14 @@ const RequirementForm: React.FC = () => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
                   <Text style={styles.actionButtonText}>导出PDF</Text>
-          </TouchableOpacity>
-        </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}
-      </ScrollView>
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

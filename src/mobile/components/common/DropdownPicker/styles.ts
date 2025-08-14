@@ -8,11 +8,11 @@ export const createDropdownPickerStyles = (
   maxHeight: number = 200,
   isOpen: boolean = false
 ): DropdownPickerStyles => {
-  return StyleSheet.create({
+  return StyleSheet.create<DropdownPickerStyles>({
     container: {
       width: '100%',
       position: 'relative',
-      zIndex: isOpen ? 1000 : 1,
+      zIndex: isOpen ? 9999 : 1,
     },
     dropdown: {
       borderWidth: 1,
@@ -50,7 +50,7 @@ export const createDropdownPickerStyles = (
       borderColor: brandColors.gray[300],
       borderRadius: borderRadius.md,
       maxHeight,
-      zIndex: isOpen ? 1001 : 1,
+      zIndex: isOpen ? 10000 : 1,
       shadowColor: brandColors.dark,
       shadowOffset: {
         width: 0,
@@ -60,6 +60,23 @@ export const createDropdownPickerStyles = (
       shadowRadius: 4,
       elevation: 5,
       marginTop: 2,
+      overflow: 'hidden',
+    },
+    modalDropdownList: {
+      backgroundColor: brandColors.white,
+      borderWidth: 1,
+      borderColor: brandColors.gray[300],
+      borderRadius: borderRadius.md,
+      maxHeight,
+      shadowColor: brandColors.dark,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
+      elevation: 10,
+      overflow: 'hidden',
     },
     option: {
       paddingHorizontal: spacing.md,
@@ -103,6 +120,12 @@ export const createDropdownPickerStyles = (
     error: {
       fontSize: 12,
       color: brandColors.danger,
+      marginTop: spacing.xs,
+    },
+    loading: {
+      fontSize: 14,
+      color: brandColors.gray[500],
+      textAlign: 'center',
       marginTop: spacing.xs,
     },
     disabled: {

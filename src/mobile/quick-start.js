@@ -4,13 +4,14 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 console.log('🚀 快速启动 AdminPerfume Mobile...');
-console.log('📱 使用 Expo 开发服务器');
+console.log('📱 使用 Expo 开发服务器 (离线模式, LAN)');
 
 // 直接启动 Expo
-const expoProcess = spawn('npx', ['expo', 'start', '--clear'], {
+const expoProcess = spawn('npx', ['expo', 'start', '--clear', '--lan'], {
   stdio: 'inherit',
   shell: true,
-  cwd: __dirname
+  cwd: __dirname,
+  env: { ...process.env, EXPO_OFFLINE: '1', EXPO_NO_TELEMETRY: '1' }
 });
 
 expoProcess.on('error', (error) => {

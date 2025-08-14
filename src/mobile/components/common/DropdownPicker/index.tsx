@@ -7,9 +7,15 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Modal,
 } from 'react-native';
 import { DropdownPickerProps, DropdownOption } from './types';
 import { createDropdownPickerStyles } from './styles';
+
+// 扩展全局类型
+declare global {
+  var setParentScrollEnabled: ((enabled: boolean) => void) | undefined;
+}
 
 const DropdownPicker: React.FC<DropdownPickerProps> = ({
   options,
@@ -37,19 +43,45 @@ const DropdownPicker: React.FC<DropdownPickerProps> = ({
   errorStyle,
   onDropdownOpen,
   onDropdownClose,
+  id,
+  activeId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const dropdownRef = useRef<View>(null);
   const styles = createDropdownPickerStyles(disabled, maxHeight, isOpen);
+
+  // 监听 activeId 变化来关闭下拉框
+  useEffect(() => {
+    if (activeId !== id && isOpen) {
+      setIsOpen(false);
+      setSearchText('');
+      onDropdownClose?.();
+    }
+  }, [activeId, id, isOpen, onDropdownClose]);
 
   // 获取选中的选项
   const selectedOption = options.find(option => option.value === value);
 
-  // 过滤选项
+  // 过滤选项 - 支持中文搜索
   const filteredOptions = searchable
-    ? options.filter(option =>
-        option.label.toLowerCase().includes(searchText.toLowerCase())
-      )
+    ? options.filter(option => {
+        if (!searchText.trim()) return true;
+        
+        const label = option.label;
+        const search = searchText.trim();
+        
+        // 直接包含匹配
+        if (label.includes(search)) return true;
+        
+        // 忽略大小写匹配（仅对英文有效）
+        if (/[a-zA-Z]/.test(search) && label.toLowerCase().includes(search.toLowerCase())) {
+          return true;
+        }
+        
+        return false;
+      })
     : options;
 
   // 处理选项选择
@@ -71,18 +103,14 @@ const DropdownPicker: React.FC<DropdownPickerProps> = ({
       setSearchText('');
       onDropdownClose?.();
     } else {
-      // 通知父组件关闭其他下拉栏
-      onDropdownOpen?.();
-      setIsOpen(true);
-    }
-  };
-
-  // 处理外部点击
-  const handleOutsidePress = () => {
-    if (isOpen) {
-      setIsOpen(false);
-      setSearchText('');
-      onDropdownClose?.();
+      // 测量下拉框位置
+      if (dropdownRef.current) {
+        dropdownRef.current.measureInWindow((x, y, width, height) => {
+          setDropdownLayout({ x, y, width, height });
+          onDropdownOpen?.();
+          setIsOpen(true);
+        });
+      }
     }
   };
 
@@ -111,9 +139,10 @@ const DropdownPicker: React.FC<DropdownPickerProps> = ({
   );
 
   return (
-    <TouchableWithoutFeedback onPress={handleOutsidePress}>
+    <>
       <View style={[styles.container, containerStyle]}>
         <TouchableOpacity
+          ref={dropdownRef}
           style={[
             styles.dropdown,
             dropdownStyle,
@@ -143,37 +172,91 @@ const DropdownPicker: React.FC<DropdownPickerProps> = ({
         {error && (
           <Text style={[styles.error, errorStyle]}>{error}</Text>
         )}
-
-        {isOpen && (
-          <View style={styles.dropdownList}>
-            {searchable && (
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={[styles.searchInput, searchInputStyle]}
-                  placeholder={searchPlaceholder}
-                  value={searchText}
-                  onChangeText={setSearchText}
-                  autoFocus
-                />
-              </View>
-            )}
-
-            <ScrollView style={{ maxHeight }} showsVerticalScrollIndicator={false}>
-              {loading ? (
-                <View style={{ padding: 20, alignItems: 'center' }}>
-                  <ActivityIndicator size="small" color="#007AFF" />
-                  <Text style={styles.loading}>{loadingText}</Text>
-                </View>
-              ) : filteredOptions.length > 0 ? (
-                filteredOptions.map(renderOption)
-              ) : (
-                <Text style={styles.noData}>{noDataText}</Text>
-              )}
-            </ScrollView>
-          </View>
-        )}
       </View>
-    </TouchableWithoutFeedback>
+
+      <Modal
+        visible={isOpen}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => {
+          setIsOpen(false);
+          setSearchText('');
+          onDropdownClose?.();
+        }}
+      >
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setIsOpen(false);
+            setSearchText('');
+            onDropdownClose?.();
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <TouchableWithoutFeedback>
+              <View
+                style={[
+                  {
+                    backgroundColor: '#fff',
+                    borderWidth: 1,
+                    borderColor: '#ddd',
+                    borderRadius: 8,
+                    maxHeight: maxHeight,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    elevation: 10,
+                    overflow: 'hidden',
+                  },
+                  {
+                    position: 'absolute',
+                    top: dropdownLayout.y + dropdownLayout.height + 2,
+                    left: dropdownLayout.x,
+                    width: dropdownLayout.width,
+                  }
+                ]}
+              >
+                {searchable && (
+                  <View style={styles.searchContainer}>
+                    <TextInput
+                      style={[styles.searchInput, searchInputStyle]}
+                      placeholder={searchPlaceholder}
+                      value={searchText}
+                      onChangeText={setSearchText}
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      returnKeyType="search"
+                      clearButtonMode="while-editing"
+                      keyboardType="default"
+                    />
+                  </View>
+                )}
+
+                {loading ? (
+                  <View style={{ padding: 20, alignItems: 'center' }}>
+                    <ActivityIndicator size="small" color="#007AFF" />
+                    <Text style={styles.loading}>{loadingText}</Text>
+                  </View>
+                ) : filteredOptions.length > 0 ? (
+                  <ScrollView 
+                    style={{ maxHeight }}
+                    showsVerticalScrollIndicator={true}
+                    keyboardShouldPersistTaps="handled"
+                    nestedScrollEnabled={true}
+                    bounces={false}
+                    scrollEnabled={true}
+                  >
+                    {filteredOptions.map(renderOption)}
+                  </ScrollView>
+                ) : (
+                  <Text style={styles.noData}>{noDataText}</Text>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 };
 
