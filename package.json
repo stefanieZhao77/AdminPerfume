@@ -10,7 +10,7 @@
     "start": "npm run dev",
     "dev": "npm run dev:web",
     "dev:web": "npm-run-all --parallel api:dev docs-serve",
-    "dev:mobile": "cd src/mobile && npm start -- --port 8081",
+    "dev:mobile": "cd src/mobile && npm start",
     "dev:expo": "cd src/mobile && npm run expo",
     "dev:all": "concurrently \"npm run dev:web\" \"npm run dev:mobile\"",
     "build": "npm run build:web",

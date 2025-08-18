@@ -96,6 +96,7 @@ const page = "materials-list"
                       <tr>
                         <th data-qt-key="id" style="width: 140px">编号</th>
                         <th data-qt-key="name">名称</th>
+                        <th data-qt-key="label">英文名</th>
                         <th data-qt-key="cas">CAS</th>
                         <th data-qt-key="category">分类</th>
                         <th data-qt-key="stock">库存</th>
@@ -125,37 +126,352 @@ const page = "materials-list"
       <Footer />
     </div>
     <Scripts path={path} />
+
     <QueryTable />
 
     <script is:inline>
+      // IFRA Standards Data
+      window.ifraStandards = [
+        {
+          "cas_number": "144020-22-4 28371-99-5",
+          "title": "Acetic acid, anhydride, reaction products with 1,5,10-Trimethyl-1,5,9-cyclododecatriene",
+          "chinese_name": "乙酸酐与1,5,10-三甲基-1,5,9-环十二碳三烯的反应产物",
+          "type": "R"
+        },
+        {
+          "cas_number": "84082-84-8 68917-34-0 73246-97-6 62563-80-8",
+          "title": "Acetylated Vetiver oil",
+          "chinese_name": "乙酰化香根草油",
+          "type": "R"
+        },
+        {
+          "cas_number": "7493-74-5 863306-60-9",
+          "title": "Allyl phenoxyacetate",
+          "chinese_name": "烯丙基苯氧乙酸酯",
+          "type": ""
+        },
+        {
+          "cas_number": "101-85-9",
+          "title": "alpha-Amyl cinnamic alcohol",
+          "chinese_name": "α-戊基桂醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "122-40-7",
+          "title": "alpha-Amyl cinnamic aldehyde",
+          "chinese_name": "α-戊基桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "105-13-5 1331-81-3",
+          "title": "Anisyl alcohol",
+          "chinese_name": "茴香醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "100-52-7",
+          "title": "Benzaldehyde",
+          "chinese_name": "苯甲醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "100-51-6",
+          "title": "Benzyl alcohol",
+          "chinese_name": "苯甲醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "120-51-4",
+          "title": "Benzyl benzoate",
+          "chinese_name": "苯甲酸苄酯",
+          "type": "R"
+        },
+        {
+          "cas_number": "103-41-3",
+          "title": "Benzyl cinnamate",
+          "chinese_name": "桂酸苄酯",
+          "type": "R"
+        },
+        {
+          "cas_number": "118-58-1",
+          "title": "Benzyl salicylate",
+          "chinese_name": "水杨酸苄酯",
+          "type": "R"
+        },
+        {
+          "cas_number": "7492-44-6",
+          "title": "alpha-Butylcinnamaldehyde",
+          "chinese_name": "α-丁基桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "62518-65-4",
+          "title": "3-(m-tert-Butylphenyl)-2-methylpropionaldehyde (m-BMHCA)",
+          "chinese_name": "3-(间-叔丁基苯基)-2-甲基丙醛 (m-BMHCA)",
+          "type": "R"
+        },
+        {
+          "cas_number": "18127-01-0",
+          "title": "p-tert-Butyldihydrocinnamaldehyde",
+          "chinese_name": "对-叔丁基二氢桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "80-54-6",
+          "title": "p-tert-Butyl-α-methylhydrocinnamic aldehyde (p-BMHCA)",
+          "chinese_name": "对-叔丁基-α-甲基氢化桂醛 (p-BMHCA)",
+          "type": ""
+        },
+        {
+          "cas_number": "99-49-0 2244-16-8 6485-40-1",
+          "title": "Carvone",
+          "chinese_name": "香芹酮",
+          "type": "R"
+        },
+        {
+          "cas_number": "104-54-1",
+          "title": "Cinnamic alcohol",
+          "chinese_name": "桂醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "104-55-2",
+          "title": "Cinnamic aldehyde",
+          "chinese_name": "桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "4364-06-1",
+          "title": "Cinnamic aldehyde dimethyl acetal",
+          "chinese_name": "桂醛二甲基缩醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "1885-38-7 4360-47-8",
+          "title": "Cinnamyl nitrile",
+          "chinese_name": "桂腈",
+          "type": "R"
+        },
+        {
+          "cas_number": "5392-40-5 141-27-5 106-26-3",
+          "title": "Citral",
+          "chinese_name": "柠檬醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "106-22-9 1117-61-9 26489-01-0 6812-78-8 141-25-3 7540-51-4",
+          "title": "Citronellol",
+          "chinese_name": "香茅醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "91-64-5",
+          "title": "Coumarin",
+          "chinese_name": "香豆素",
+          "type": "R"
+        },
+        {
+          "cas_number": "122-03-2",
+          "title": "Cuminaldehyde",
+          "chinese_name": "异丙苯醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "103-95-7",
+          "title": "Cyclamen aldehyde",
+          "chinese_name": "仙客来醛",
+          "type": ""
+        },
+        {
+          "cas_number": "106-02-5",
+          "title": "Cyclopentadecanolide",
+          "chinese_name": "环十五内酯",
+          "type": "R"
+        },
+        {
+          "cas_number": "103-50-4",
+          "title": "Dibenzyl ether",
+          "chinese_name": "二苄醚",
+          "type": "R"
+        },
+        {
+          "cas_number": "33704-61-9",
+          "title": "6,7-Dihydro-1,1,2,3,3-pentamethyl-4(5H)-indanone (DPMI)",
+          "chinese_name": "6,7-二氢-1,1,2,3,3-五甲基-4(5H)-茚酮 (DPMI)",
+          "type": "R"
+        },
+        {
+          "cas_number": "119-84-6",
+          "title": "Dihydrocoumarin",
+          "chinese_name": "二氢香豆素",
+          "type": "R"
+        },
+        {
+          "cas_number": "68737-61-1 (mixed isomers) 68039-49-6 68039-48-5 27939-60-2 67801-65-4 36635-35-5 68084-52-6 35145-02-9",
+          "title": "Dimethylcyclohex-3-ene-1-carbaldehyde (mixed isomers)",
+          "chinese_name": "二甲基环己-3-烯-1-甲醛 (混合异构体)",
+          "type": "R"
+        },
+        {
+          "cas_number": "56973-85-4",
+          "title": "1-(5,5-Dimethyl-1-cyclohexen-1-yl)pent-4-en-1-one",
+          "chinese_name": "1-(5,5-二甲基-1-环己烯-1-基)戊-4-烯-1-酮",
+          "type": "R"
+        },
+        {
+          "cas_number": "103694-68-4",
+          "title": "2,2-Dimethyl-3-(3-tolyl)propan-1-ol",
+          "chinese_name": "2,2-二甲基-3-(3-甲苯基)丙-1-醇",
+          "type": ""
+        },
+        {
+          "cas_number": "2563-07-7",
+          "title": "2-Ethoxy-4-methylphenol",
+          "chinese_name": "2-乙氧基-4-甲基苯酚",
+          "type": "R"
+        },
+        {
+          "cas_number": "4748-78-1",
+          "title": "p-Ethylbenzaldehyde",
+          "chinese_name": "对-乙基苯甲醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "97-53-0",
+          "title": "Eugenol",
+          "chinese_name": "丁香酚",
+          "type": "R"
+        },
+        {
+          "cas_number": "4602-84-0",
+          "title": "Farnesol",
+          "chinese_name": "法尼醇",
+          "type": ""
+        },
+        {
+          "cas_number": "106-24-1",
+          "title": "Geraniol",
+          "chinese_name": "香叶醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "39189-74-7",
+          "title": "2-Heptylidene cyclopentan-1-one",
+          "chinese_name": "2-庚叉环戊-1-酮",
+          "type": "R"
+        },
+        {
+          "cas_number": "6728-26-3 505-57-7 16635-54-4",
+          "title": "2-Hexenal",
+          "chinese_name": "2-己烯醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "101-86-0",
+          "title": "alpha-Hexyl cinnamic aldehyde",
+          "chinese_name": "α-己基桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "17373-89-6",
+          "title": "alpha-Hexylidene cyclopentanone",
+          "chinese_name": "α-己叉环戊酮",
+          "type": "R"
+        },
+        {
+          "cas_number": "6259-76-3",
+          "title": "Hexyl salicylate",
+          "chinese_name": "己基水杨酸酯",
+          "type": "R"
+        },
+        {
+          "cas_number": "107-75-5",
+          "title": "Hydroxycitronellal",
+          "chinese_name": "羟基香茅醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "31906-04-4 51414-25-6",
+          "title": "3 and 4-(4-Hydroxy-4-methylpentyl)-3-cyclohexene-1-carboxaldehyde (HMPCC)",
+          "chinese_name": "3和4-(4-羟基-4-甲基戊基)-3-环己烯-1-甲醛 (HMPCC)",
+          "type": "R"
+        },
+        {
+          "cas_number": "6658-48-6",
+          "title": "p-Isobutyl-alpha-methyl hydrocinnamaldehyde",
+          "chinese_name": "对-异丁基-α-甲基氢化桂醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "1335-66-6 1423-46-7 67634-07-5",
+          "title": "Isocyclocitral",
+          "chinese_name": "异环柠檬醛",
+          "type": "R"
+        },
+        {
+          "cas_number": "68527-77-5",
+          "title": "Isocyclogeraniol",
+          "chinese_name": "异环香叶醇",
+          "type": "R"
+        },
+        {
+          "cas_number": "97-54-1 5932-68-3",
+          "title": "Isoeugenol",
+          "chinese_name": "异丁香酚",
+          "type": "R"
+        },
+        {
+          "cas_number": "8022-96-6 8024-43-9 90045-94-6 84776-64-7",
+          "title": "Jasmine absolute (grandiflorum)",
+          "chinese_name": "茉莉净油 (大花茉莉)",
+          "type": "R"
+        },
+        {
+          "cas_number": "91770-14-8 1034798-23-6",
+          "title": "Jasmine absolute (sambac)",
+          "chinese_name": "茉莉净油 (桑巴茉莉)",
+          "type": "R"
+        },
+        {
+          "cas_number": "5989-27-5 138-86-3 7705-14-8",
+          "title": "Limonene",
+          "chinese_name": "柠烯",
+          "type": "S"
+        },
+        {
+          "cas_number": "78-70-6 126-90-9 126-91-0",
+          "title": "Linalool",
+          "chinese_name": "沉香醇",
+          "type": "S"
+        }
+      ];
+
       const categories = ['精油','合成香料','树脂','溶剂']
       const statuses = ['在库','低库存','缺货']
-      function randomCAS() {
-        const a = Math.floor(10 + Math.random()*89)
-        const b = Math.floor(10 + Math.random()*89)
-        const c = Math.floor(1 + Math.random()*9)
-        return `${a}${b}-${Math.floor(10+Math.random()*89)}-${c}`
-      }
-      const mockMaterials = Array.from({length: 120}, (_,i)=>{
+      
+      // Generate materials from IFRA standards data
+      const mockMaterials = window.ifraStandards ? window.ifraStandards.map((item, i) => {
         const cat = categories[i % categories.length]
         const st = statuses[(i*7) % statuses.length]
         const stock = st==='缺货'?0: (st==='低库存'? Math.floor(1+Math.random()*20): Math.floor(50+Math.random()*400))
+        
         return {
           id: `MAT-${String(i+1).padStart(4,'0')}`,
-          name: `${cat}示例原料${i+1}`,
-          cas: randomCAS(),
+          name: item.chinese_name,
+          label: item.title,
+          cas: item.cas_number,
           category: cat,
           stock,
           status: st,
           updatedAt: new Date(Date.now()-Math.random()*60*24*3600*1000).toISOString().slice(0,16).replace('T',' ')
         }
-      })
+      }) : []
 
       const state = { page: 1, pageSize: 10, kw: '', category: '', status: '' }
 
       function filterData() {
         return mockMaterials.filter(m => {
-          const hitKw = state.kw === '' || [m.id,m.name,m.cas].some(v => v.toLowerCase().includes(state.kw.toLowerCase()))
+          const hitKw = state.kw === '' || [m.id,m.name,m.label,m.cas].some(v => v.toLowerCase().includes(state.kw.toLowerCase()))
           const hitCat = state.category === '' || m.category === state.category
           const hitSt = state.status === '' || m.status === state.status
           return hitKw && hitCat && hitSt
@@ -175,6 +491,7 @@ const page = "materials-list"
         columns: [
           { key: 'id', label: '编号', visible: true, width: '140px' },
           { key: 'name', label: '名称', visible: true },
+          { key: 'label', label: '英文名', visible: true },
           { key: 'cas', label: 'CAS', visible: true },
           { key: 'category', label: '分类', visible: true },
           { key: 'stock', label: '库存', visible: true },
@@ -186,6 +503,7 @@ const page = "materials-list"
           <tr class="align-middle">
             <td><span class="fw-medium">${m.id}</span></td>
             <td>${m.name}</td>
+            <td>${m.label}</td>
             <td>${m.cas}</td>
             <td>${m.category}</td>
             <td>${m.stock}</td>
