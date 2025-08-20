@@ -35,6 +35,13 @@ declare global {
   var setParentScrollEnabled: ((enabled: boolean) => void) | undefined;
 }
 
+interface CreativeCard {
+  id: string;
+  name: string;
+  ratio: number;
+  body: string;
+}
+
 interface RequirementFormData {
   theme: string;
   productCategory: string;
@@ -58,6 +65,7 @@ interface RequirementFormData {
   targetIncome: string;
   targetOther: string;
   productConcept: string;
+  creativeCards: CreativeCard[];
 }
 
 interface ChatMessage {
@@ -154,6 +162,17 @@ const MarkdownPreview: React.FC<{ content: string }> = ({ content }) => {
 };
 
 const RequirementForm: React.FC = () => {
+  // Default creative cards
+  const defaultCreativeCards: CreativeCard[] = [
+    { id: '1', name: '水感清新', ratio: 10, body: '功能：唤起"露珠"的意象。提供清冽多汁的感受，如刚切开的新鲜水果，瞬间提升香气的年轻感与水润感、洗去沉闷。' },
+    { id: '2', name: '绿叶清新', ratio: 10, body: '功能：塑造"枝叶"的轮廓。带来鲜嫩绿叶或花茎被折断时的青涩气息，为整体香气注入生命力与清透感，构建自然的呼吸空间。' },
+    { id: '3', name: '果香清新', ratio: 10, body: '功能：注入"阳光"的活力。它不是幼稚的甜，而是一种明快、闪亮、略带微酸的高级质感，让玫瑰的开场充满光芒，显得更加现代与自信。' },
+    { id: '4', name: '花香清新', ratio: 30, body: '功能：(香气主角) 描绘"玫瑰"的质感。这是玫瑰的灵魂，但以一种极其清雅细腻的方式呈现。它让人联想到含苞待放的花蕾和轻盈的、半透明的花瓣，纯粹、温柔且富有女性魅力。' },
+    { id: '5', name: '花香甜香', ratio: 20, body: '功能：赋予"花心"的深度。为了避免香气过于单薄，我们需要这一部分来提供更丰富的果香和天然蜜感。它模拟了玫瑰在盛放时散发的、更加柔和甜美的核心香气，增加了层次与温度。' },
+    { id: '6', name: '木质香调', ratio: 10, body: '功能：建立"风骨"与支撑。为香水提供一个稳定、干爽的基底，增强香水的骨架感和穿着者的知性气质。木质的线性、沉静感能完美平衡花香的柔美，避免甜腻。' },
+    { id: '7', name: '琥珀/麝香调', ratio: 10, body: '功能：营造"体温"与余韵。这是香气的"第二层肌肤"，为了解供一种温暖、洁净、柔软的贴肤感。它不追求强烈的存在感，而是为了极大提升持香度和高级感，留下安心且难忘的温暖尾声。' },
+  ];
+
   const [formData, setFormData] = useState<RequirementFormData>({
     theme: '',
     productCategory: '',
@@ -177,6 +196,7 @@ const RequirementForm: React.FC = () => {
     targetIncome: '',
     targetOther: '',
     productConcept: '',
+    creativeCards: defaultCreativeCards,
   });
 
   // Markdown 报告已废弃
@@ -205,10 +225,32 @@ const RequirementForm: React.FC = () => {
     };
   }, []);
 
+  // Calculate total percentage and remaining
+  const getTotalPercentage = (): number => {
+    return formData.creativeCards.reduce((sum, card) => sum + card.ratio, 0);
+  };
+
+  const getRemainingPercentage = (): number => {
+    return Math.max(0, 100 - getTotalPercentage());
+  };
+
+  const isPercentageValid = (): boolean => {
+    return getTotalPercentage() === 100;
+  };
+
+
+
   // 初始化 HTML 内容（创意解读与香调构思 → 折叠式卡片）
   useEffect(() => {
     setHtmlContent(buildCreativeHtml());
   }, []);
+
+  // Update HTML content when creative cards change
+  useEffect(() => {
+    if (isReportGenerated) {
+      setHtmlContent(buildFullReportHtml(formData));
+    }
+  }, [isReportGenerated]); // 移除 creativeCards 依赖，避免添加卡片时重新生成HTML
 
   // 监听触摸事件来关闭下拉框
   const handleOutsideTouch = () => {
@@ -257,6 +299,12 @@ const RequirementForm: React.FC = () => {
       Alert.alert('错误', '请填写必填字段');
       return;
     }
+    
+    if (!isPercentageValid()) {
+      Alert.alert('错误', `创意香调总比例必须为100%，当前为${getTotalPercentage()}%`);
+      return;
+    }
+    
     // 预览提交数据
     const preview = buildReportDetailData(formData);
     console.log('提交数据', JSON.stringify(preview));
@@ -331,11 +379,16 @@ const RequirementForm: React.FC = () => {
   const buildFullReportHtml = (data: RequirementFormData): string => {
     const htmlHeader = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>
     <style>
-      :root{--bg:#f8fafc;--card:#ffffff;--txt:#1e293b;--muted:#64748b;--primary:#FF6B35;--border:#e2e8f0;--focus-bg:#fff8f6}
+      :root{--bg:#f8fafc;--card:#ffffff;--txt:#1e293b;--muted:#64748b;--primary:#FF6B35;--border:#e2e8f0;--focus-bg:#fff8f6;--success:#4CAF50;--error:#F44336}
       html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
       .wrap{padding:16px}
       .h1{font-size:24px;font-weight:700;margin:0 0 16px;color:var(--txt)}
       .section{background:var(--card);border:1px solid var(--border);border-radius:12px;margin:12px 0;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+      .section-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--border)}
+      .section-header h3{margin:0;font-size:18px;font-weight:600;color:var(--txt)}
+      .percentage-tracker{background:#f1f5f9;padding:8px 16px;border-radius:20px;font-size:14px;font-weight:600}
+      .percentage-tracker.valid{background:#e8f5e8;color:var(--success)}
+      .percentage-tracker.invalid{background:#ffebee;color:var(--error)}
       .section h3{margin:0;padding:16px;border-bottom:1px solid var(--border);font-size:18px;font-weight:600;color:var(--txt)}
       .section .body{padding:16px}
       .section .body p{margin:0 0 12px;line-height:1.6}
@@ -345,16 +398,24 @@ const RequirementForm: React.FC = () => {
       summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--card);transition:background-color 0.2s}
       summary:hover{background-color:#f1f5f9}
       summary::-webkit-details-marker{display:none}
+      .card-controls{display:flex;align-items:center;gap:8px}
       .badge{background:var(--primary)!important;color:white!important;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:text;transition:all 0.2s}
       .badge[contenteditable=\"true\"]:hover{background-color:#e55a2b!important;color:white!important}
       .badge[contenteditable=\"true\"]:focus{outline:2px solid #FF8C69!important;background-color:var(--primary)!important;color:white!important;box-shadow:0 0 0 1px white inset}
-      .card-title{font-weight:600;font-size:16px;color:var(--txt);cursor:text;transition:all 0.2s}
+      .delete-card-btn{background:var(--error);color:white;border:none;width:24px;height:24px;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+      .delete-card-btn:hover{background:#d32f2f;transform:scale(1.1)}
+      .delete-card-btn:active{transform:scale(0.95)}
+      .card-title{font-weight:600;font-size:16px;color:var(--txt);cursor:text;transition:all 0.2s;flex:1}
       .card-title[contenteditable=\"true\"]:hover{background-color:#f1f5f9;border-radius:4px}
       .card-title[contenteditable=\"true\"]:focus{outline:2px solid var(--primary);background-color:var(--focus-bg);border-radius:4px}
       .content{padding:16px;border-top:1px solid var(--border);line-height:1.6}
       .content[contenteditable=\"true\"]{cursor:text;transition:all 0.2s}
       .content[contenteditable=\"true\"]:hover{background-color:#f8fafc}
       .content[contenteditable=\"true\"]:focus{outline:2px solid var(--primary);background-color:var(--focus-bg);border-radius:8px}
+      .add-card-container{margin:16px 0;text-align:center}
+      .add-card-btn{background:#f1f5f9;border:2px dashed var(--border);color:var(--primary);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;width:100%;pointer-events:auto;z-index:1000}
+      .add-card-btn:hover{background:#e3f2fd;border-color:var(--primary)}
+      .add-card-btn:active{background:#bbdefb;transform:scale(0.98)}
       .muted{color:var(--muted);font-size:14px;margin-top:12px;font-style:italic}
       .journey{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
       .journey[contenteditable=\"true\"]{cursor:text;transition:all 0.2s}
@@ -383,25 +444,37 @@ const RequirementForm: React.FC = () => {
     </div></section>`
 
     const creative = (() => {
+      const totalPercentage = data.creativeCards.reduce((sum, card) => sum + card.ratio, 0);
+      const remainingPercentage = Math.max(0, 100 - totalPercentage);
+      const isValidPercentage = totalPercentage === 100;
+      
       return `
-      <section class=\"section\"><h3>创意解读与香调构思</h3><div class=\"body\">
-        ${[
-          { name: '水感清新', ratio: '10%', body: '功能：唤起“露珠”的意象。提供清冽多汁的感受，如刚切开的新鲜水果，瞬间提升香气的年轻感与水润感、洗去沉闷。' },
-          { name: '绿叶清新', ratio: '10%', body: '功能：塑造“枝叶”的轮廓。带来鲜嫩绿叶或花茎被折断时的青涩气息，为整体香气注入生命力与清透感，构建自然的呼吸空间。' },
-          { name: '果香清新', ratio: '10%', body: '功能：注入“阳光”的活力。它不是幼稚的甜，而是一种明快、闪亮、略带微酸的高级质感，让玫瑰的开场充满光芒，显得更加现代与自信。' },
-          { name: '花香清新', ratio: '30%', body: '功能：(香气主角) 描绘“玫瑰”的质感。这是玫瑰的灵魂，但以一种极其清雅细腻的方式呈现。它让人联想到含苞待放的花蕾和轻盈的、半透明的花瓣，纯粹、温柔且富有女性魅力。' },
-          { name: '花香甜香', ratio: '20%', body: '功能：赋予“花心”的深度。为了避免香气过于单薄，我们需要这一部分来提供更丰富的果香和天然蜜感。它模拟了玫瑰在盛放时散发的、更加柔和甜美的核心香气，增加了层次与温度。' },
-          { name: '木质香调', ratio: '10%', body: '功能：建立“风骨”与支撑。为香水提供一个稳定、干爽的基底，增强香水的骨架感和穿着者的知性气质。木质的线性、沉静感能完美平衡花香的柔美，避免甜腻。' },
-          { name: '琥珀/麝香调', ratio: '10%', body: '功能：营造“体温”与余韵。这是香气的“第二层肌肤”，为了解供一种温暖、洁净、柔软的贴肤感。它不追求强烈的存在感，而是为了极大提升持香度和高级感，留下安心且难忘的温暖尾声。' },
-        ].map((m,i)=>`
-          <details class=\"card\" ${i<2?'open':''}>
+      <section class=\"section\">
+        <div class="section-header">
+          <h3>创意解读与香调构思</h3>
+          <div class="percentage-tracker ${isValidPercentage ? 'valid' : 'invalid'}">
+            总计: ${totalPercentage}%}
+          </div>
+        </div>
+        <div class=\"body\">
+        ${data.creativeCards.map((m,i)=>`
+          <details class=\"card\" ${i<2?'open':''} data-card-id="${m.id}">
             <summary>
-              <span class=\"card-title\" contenteditable=\"true\">${m.name}</span>
-              <span class=\"badge\" contenteditable=\"true\">占比 ${m.ratio}</span>
+              <span class=\"card-title\" contenteditable=\"true\" onblur="updateCardName('${m.id}', this.textContent)">${m.name}</span>
+              <div class="card-controls">
+                <span class=\"badge\" contenteditable=\"true\" onblur="updateCardRatio('${m.id}', this.textContent)">${m.ratio}%</span>
+                <button class="delete-card-btn" onclick="handleDeleteCard('${m.id}')" title="删除此卡片">✕</button>
+              </div>
             </summary>
-            <div class=\"content\" contenteditable=\"true\">${m.body}</div>
+            <div class=\"content\" contenteditable=\"true\" onblur="updateCardBody('${m.id}', this.textContent)">${m.body}</div>
           </details>
         `).join('')}
+        
+        <div class="add-card-container">
+          <button class="add-card-btn" onclick="handleAddCard()">
+            + 添加香调 (剩余: ${remainingPercentage}%)
+          </button>
+        </div>
 
         <div class=\"journey\" contenteditable=\"true\">
           <h3>香气演变旅程 (Scent Journey)</h3>
@@ -415,100 +488,312 @@ const RequirementForm: React.FC = () => {
       </div></section>`;
     })();
 
-    return `${htmlHeader}<div class=\"wrap\"><div class=\"h1\">香水需求报告</div>${overview}${creative}<p class=\"muted\">本报告由AI生成，可根据实际需求进行调整。点击任意内容区域即可编辑。</p></div><script>
-      (function(){
-        // 防止链接跳转和处理可编辑元素点击
-        document.addEventListener('click',function(e){
-          var t=e.target;
-          if(t&&t.closest('a')){
-            e.preventDefault();
+    return `${htmlHeader}<div class=\"wrap\"><div class=\"h1\">香水需求报告</div>${overview}${creative}<p class=\"muted\">本报告由AI生成，可根据实际需求进行调整。点击任意内容区域即可编辑。</p></div>
+    <script>
+      console.log('=== HTML生成时的卡片数据 (时间戳: ${Date.now()}) ===');
+      console.log('传入buildFullReportHtml的卡片数量:', ${data.creativeCards.length});
+      console.log('传入buildFullReportHtml的卡片IDs:', ${JSON.stringify(data.creativeCards.map((c: any) => c.id))});
+      
+      var creativeCards = ${JSON.stringify(data.creativeCards)};
+      
+      console.log('JavaScript变量creativeCards已设置，长度:', creativeCards.length);
+      console.log('WebView HTML生成完成，时间戳: ${Date.now()}');
+      
+      // 计算总百分比
+      function getTotalPercentage() {
+        return creativeCards.reduce(function(sum, card) {
+          return sum + card.ratio;
+        }, 0);
+      }
+      
+      // 更新百分比显示
+      function updatePercentageTracker() {
+        var total = getTotalPercentage();
+        var remaining = Math.max(0, 100 - total);
+        var isValid = total === 100;
+        var tracker = document.querySelector('.percentage-tracker');
+        
+        if (tracker) {
+          tracker.textContent = '总计: ' + total + '%' + (isValid ? ' ✓' : ' (还需分配: ' + remaining + '%)');
+          tracker.className = 'percentage-tracker ' + (isValid ? 'valid' : 'invalid');
+        }
+        
+        // 更新添加按钮状态
+        var addBtn = document.querySelector('.add-card-btn');
+        if (addBtn) {
+          addBtn.disabled = remaining <= 0;
+          addBtn.textContent = '+ 添加香调 (剩余: ' + remaining + '%)';
+        }
+      }
+      
+      // 直接在DOM中添加新卡片
+      function addCardToDOM(card) {
+        var addContainer = document.querySelector('.add-card-container');
+        if (!addContainer) return;
+        
+        // 创建新的details元素
+        var details = document.createElement('details');
+        details.className = 'card';
+        details.setAttribute('data-card-id', card.id);
+        details.open = true; // 新卡片默认展开
+        
+        console.log('创建新DOM卡片，ID:', card.id, '类型:', typeof card.id);
+        
+        // 创建summary
+        var summary = document.createElement('summary');
+        
+        // 创建标题span
+        var titleSpan = document.createElement('span');
+        titleSpan.className = 'card-title';
+        titleSpan.contentEditable = 'true';
+        titleSpan.textContent = card.name;
+        titleSpan.onblur = function() { updateCardName(card.id, this.textContent); };
+        
+        // 创建控制区域div
+        var controlsDiv = document.createElement('div');
+        controlsDiv.className = 'card-controls';
+        
+        // 创建百分比badge
+        var badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.contentEditable = 'true';
+        badge.textContent = card.ratio + '%';
+        badge.onblur = function() { updateCardRatio(card.id, this.textContent); };
+        
+        // 创建删除按钮
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-card-btn';
+        deleteBtn.textContent = '✕';
+        deleteBtn.title = '删除此卡片';
+        deleteBtn.onclick = function() { 
+          console.log('删除按钮点击，卡片ID:', card.id);
+          handleDeleteCard(card.id); 
+        };
+        
+        // 组装控制区域
+        controlsDiv.appendChild(badge);
+        controlsDiv.appendChild(deleteBtn);
+        
+        // 组装summary
+        summary.appendChild(titleSpan);
+        summary.appendChild(controlsDiv);
+        
+        // 创建内容div
+        var contentDiv = document.createElement('div');
+        contentDiv.className = 'content';
+        contentDiv.contentEditable = 'true';
+        contentDiv.textContent = card.body;
+        contentDiv.onblur = function() { updateCardBody(card.id, this.textContent); };
+        
+        // 组装details
+        details.appendChild(summary);
+        details.appendChild(contentDiv);
+        
+        // 插入到添加按钮前面
+        addContainer.parentNode.insertBefore(details, addContainer);
+        
+        console.log('Card added to DOM:', card.id);
+      }
+      
+      function handleAddCard() {
+        console.log('handleAddCard called');
+        
+        var remaining = Math.max(0, 100 - getTotalPercentage());
+        if (remaining <= 0) {
+          alert('已达到100%，无法添加更多香调');
+          return;
+        }
+        
+        var newCard = {
+          id: Date.now().toString(),
+          name: '新香调',
+          ratio: Math.min(remaining, 10),
+          body: '请描述此香调的功能和特点...'
+        };
+        
+        creativeCards.push(newCard);
+        console.log('Added card:', newCard);
+        
+        // 直接在DOM中添加新卡片，避免页面重新加载
+        addCardToDOM(newCard);
+        
+        // 更新百分比显示
+        updatePercentageTracker();
+        
+        // 通知React Native更新状态（不重新生成HTML）
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'cardsUpdated',
+            cards: creativeCards
+          }));
+        }
+        
+        // 滚动到新卡片
+        setTimeout(function() {
+          var newCardElement = document.querySelector('[data-card-id="' + newCard.id + '"]');
+          if (newCardElement) {
+            newCardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
-          // 防止点击可编辑的标题和占比时触发折叠/展开
-          if(t && (t.classList.contains('card-title') || t.classList.contains('badge'))) {
-            e.stopPropagation();
-          }
+        }, 100);
+      }
+      
+      function handleDeleteCard(cardId) {
+        console.log('=== handleDeleteCard 被调用 ===');
+        console.log('传入的卡片ID:', cardId);
+        console.log('ID类型:', typeof cardId);
+        console.log('当前creativeCards数组中的所有ID:', creativeCards.map(function(c) { return c.id + ' (类型:' + typeof c.id + ')'; }));
+        
+        if (creativeCards.length <= 1) {
+          alert('至少需要保留一个香调卡片');
+          return;
+        }
+        
+        // 找到要删除的卡片信息
+        var cardToDelete = creativeCards.find(function(card) {
+          return card.id === cardId;
         });
         
-        // 初始化编辑功能
-        function initEditing() {
-          var editableElements = document.querySelectorAll('.content, .journey, .card-title, .badge');
-          editableElements.forEach(function(el) {
-            el.contentEditable = true;
-            el.style.cursor = 'text';
-            el.style.minHeight = '1em';
-            
-            // 添加视觉反馈
-            el.addEventListener('mouseenter', function() {
-              if (this !== document.activeElement) {
-                if (this.classList.contains('badge')) {
-                  this.style.backgroundColor = '#e55a2b';
-                } else {
-                  this.style.backgroundColor = '#f8fafc';
-                }
-              }
-            });
-            
-            el.addEventListener('mouseleave', function() {
-              if (this !== document.activeElement) {
-                if (this.classList.contains('badge')) {
-                  this.style.backgroundColor = '#FF6B35';
-                } else {
-                  this.style.backgroundColor = 'transparent';
-                }
-              }
-            });
-            
-            el.addEventListener('focus', function() {
-              if (this.classList.contains('badge')) {
-                this.style.outline = '2px solid #FF8C69';
-                this.style.backgroundColor = '#FF6B35';
-                this.style.color = 'white';
-                this.style.boxShadow = '0 0 0 1px white inset';
-              } else {
-                this.style.outline = '2px solid #FF6B35';
-                this.style.backgroundColor = '#fff8f6';
-                this.style.borderRadius = '8px';
-              }
-            });
-            
-            el.addEventListener('blur', function() {
-              this.style.outline = 'none';
-              this.style.boxShadow = 'none';
-              if (this.classList.contains('badge')) {
-                this.style.backgroundColor = '#FF6B35';
-                this.style.color = 'white';
-              } else {
-                this.style.backgroundColor = 'transparent';
-              }
-            });
-            
-            // 防止富文本粘贴
-            el.addEventListener('paste', function(e) {
-              e.preventDefault();
-              var text = (e.clipboardData || window.clipboardData).getData('text/plain');
-              document.execCommand('insertText', false, text);
-            });
-            
-            // 防止拖拽
-            el.addEventListener('drop', function(e) {
-              e.preventDefault();
-            });
-          });
+        var cardName = cardToDelete ? cardToDelete.name : '此香调';
+        
+        // 确认删除
+        if (!confirm('确定要删除 "' + cardName + '" 吗？此操作无法撤销。')) {
+          return;
         }
         
-        // DOM加载完成后初始化
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initEditing);
+        // 记录滚动位置
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // 从数组中移除卡片
+        var originalLength = creativeCards.length;
+        var originalIds = creativeCards.map(function(c) { return c.id; });
+        
+        console.log('=== 删除操作开始 ===');
+        console.log('要删除的卡片ID:', cardId);
+        console.log('删除前卡片数量:', originalLength);
+        console.log('删除前所有卡片IDs:', originalIds);
+        
+        var cardsBeforeFilter = creativeCards.slice(); // 复制数组用于调试
+        creativeCards = creativeCards.filter(function(card) {
+          var keep = card.id !== cardId;
+          if (!keep) {
+            console.log('找到并删除卡片:', card.id, card.name);
+          } else {
+            console.log('保留卡片:', card.id, card.name);
+          }
+          return keep;
+        });
+        
+        console.log('过滤前数组:', cardsBeforeFilter.map(function(c) { return c.id + ':' + c.name; }));
+        console.log('过滤后数组:', creativeCards.map(function(c) { return c.id + ':' + c.name; }));
+        console.log('数组引用是否改变:', cardsBeforeFilter === creativeCards);
+        
+        console.log('删除后卡片数量:', creativeCards.length);
+        console.log('删除后剩余卡片IDs:', creativeCards.map(function(c) { return c.id; }));
+        console.log('=== 删除操作完成 ===');
+        
+        // 直接从DOM中删除卡片元素，避免整页重新加载
+        var cardElement = document.querySelector('[data-card-id="' + cardId + '"]');
+        if (cardElement) {
+          cardElement.remove();
+          console.log('DOM元素已删除');
         } else {
-          initEditing();
+          console.log('未找到要删除的DOM元素，ID:', cardId);
         }
-      })();
-    </script></body></html>`;
-  };
-
-  const handleResetHtml = () => {
-    const html = buildCreativeHtml();
-    setHtmlContent(html);
+        
+        // 更新百分比显示
+        updatePercentageTracker();
+        
+        // 通知React Native更新状态（不重新生成HTML）
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'cardsUpdated',
+            cards: creativeCards
+          }));
+        }
+      }
+      
+      // 更新卡片数据的函数
+      function updateCardName(cardId, newName) {
+        var card = creativeCards.find(function(c) { return c.id === cardId; });
+        if (card) {
+          card.name = newName;
+          notifyCardUpdate();
+        }
+      }
+      
+      function updateCardRatio(cardId, newRatio) {
+        var ratio = parseInt(newRatio.replace('%', '')) || 0;
+        var card = creativeCards.find(function(c) { return c.id === cardId; });
+        if (card) {
+          card.ratio = ratio;
+          updatePercentageTracker();
+          notifyCardUpdate();
+        }
+      }
+      
+      function updateCardBody(cardId, newBody) {
+        var card = creativeCards.find(function(c) { return c.id === cardId; });
+        if (card) {
+          card.body = newBody;
+          notifyCardUpdate();
+        }
+      }
+      
+      function notifyCardUpdate() {
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'cardsUpdated',
+            cards: creativeCards
+          }));
+        }
+      }
+      
+      // 初始化编辑功能
+      function initEditing() {
+        var editableElements = document.querySelectorAll('.content, .journey, .card-title, .badge');
+        editableElements.forEach(function(el) {
+          el.contentEditable = true;
+          el.style.cursor = 'text';
+          el.style.minHeight = '1em';
+          
+          // 防止富文本粘贴
+          el.addEventListener('paste', function(e) {
+            e.preventDefault();
+            var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+            document.execCommand('insertText', false, text);
+          });
+        });
+      }
+      
+      // 防止点击可编辑元素时触发折叠
+      document.addEventListener('click', function(e) {
+        var t = e.target;
+        if (t && (t.classList.contains('card-title') || t.classList.contains('badge'))) {
+          e.stopPropagation();
+        }
+      });
+      
+      // 初始化
+      console.log('=== WebView JavaScript 初始化 ===');
+      console.log('creativeCards数组长度:', creativeCards.length);
+      console.log('creativeCards IDs:', creativeCards.map(function(c) { return c.id; }));
+      console.log('DOM中实际的卡片数量:', document.querySelectorAll('.card').length);
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          initEditing();
+          updatePercentageTracker();
+          console.log('DOM loaded, functions initialized');
+          console.log('DOM加载后卡片数量:', document.querySelectorAll('.card').length);
+        });
+      } else {
+        initEditing();
+        updatePercentageTracker();
+        console.log('Functions initialized immediately');
+        console.log('立即初始化后卡片数量:', document.querySelectorAll('.card').length);
+      }
+    </script>
+    </body></html>`;
   };
 
   const handleSaveHtml = () => {
@@ -519,63 +804,34 @@ const RequirementForm: React.FC = () => {
   };
 
   const onWebViewMessage = (event: any) => {
-    const html = String(event?.nativeEvent?.data || '');
-    if (html) {
-      setHtmlContent(html);
-      Alert.alert('已保存', '已同步HTML内容');
+    const data = String(event?.nativeEvent?.data || '');
+    
+    try {
+      const message = JSON.parse(data);
+      
+      if (message.type === 'cardAdded' || message.type === 'cardDeleted' || message.type === 'cardsUpdated') {
+        
+        
+        // 现在删除操作也发送cardsUpdated消息，统一处理
+        // 只更新React状态，不重新生成HTML
+        setFormData(prev => ({
+          ...prev,
+          creativeCards: message.cards
+        }));
+        
+        console.log('更新React Native状态，不重新生成HTML');
+        // 对于cardAdded和cardsUpdated，不做额外处理，避免页面跳转
+      }
+    } catch (error) {
+      // 如果不是JSON，则认为是HTML内容
+      if (data && data.includes('<!DOCTYPE html>')) {
+        setHtmlContent(data);
+        Alert.alert('已保存', '已同步HTML内容');
+      }
     }
   };
 
  
-
-
-
-  const getProductCategoryLabel = (value: string): string => {
-    const option = productCategoryOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getProductSubCategoryLabel = (category: string, value: string): string => {
-    const options = productSubCategoryOptions[category as keyof typeof productSubCategoryOptions] || [];
-    const option = options.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getApplicationScenarioLabel = (subCategory: string, value: string): string => {
-    const options = applicationScenarioOptions[subCategory as keyof typeof applicationScenarioOptions] || [];
-    const option = options.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getFragranceTypeLabel = (value: string): string => {
-    const option = fragranceTypeOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getColorRequirementLabel = (value: string): string => {
-    const option = colorRequirementOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getRawMaterialRequirementLabel = (value: string): string => {
-    const option = rawMaterialRequirementOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getRegulatoryRequirementLabel = (value: string): string => {
-    const option = regulatoryRequirementOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getFragranceType2Label = (value: string): string => {
-    const option = fragranceTypeOptions2.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
-
-  const getSampleSpecificationLabel = (value: string): string => {
-    const option = sampleSpecificationOptions.find((opt: any) => opt.value === value);
-    return option ? option.label : '未选择';
-  };
 
   const handleReset = () => {
     setFormData({
@@ -601,6 +857,7 @@ const RequirementForm: React.FC = () => {
       targetIncome: '',
       targetOther: '',
       productConcept: '',
+      creativeCards: defaultCreativeCards,
     });
     setHtmlContent('');
     setIsReportGenerated(false);
@@ -761,6 +1018,8 @@ const RequirementForm: React.FC = () => {
                 </View>
               </View>
             </View>
+
+
           </View>
         </View>
 
@@ -955,20 +1214,8 @@ const RequirementForm: React.FC = () => {
             </View>
           </View>
         </View>
-
-        {/* 操作按钮 */}
-        <View style={styles.buttonSection}>
-          <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-            <Text style={styles.resetButtonText}>重置</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>生成报告</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* AI生成报告内容展示 */}
-        {isReportGenerated && (
+         {/* AI生成报告内容展示 */}
+         {isReportGenerated && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>AI生成报告</Text>
             <View style={styles.formCard}>
@@ -998,6 +1245,19 @@ const RequirementForm: React.FC = () => {
             </View>
           </View>
         )}
+        
+        {/* 操作按钮 */}
+        <View style={styles.buttonSection}>
+          <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
+            <Text style={styles.resetButtonText}>重置</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitButtonText}>生成报告</Text>
+          </TouchableOpacity>
+        </View>
+
+       
           </ScrollView>
 
       {/* 报告全屏编辑/预览弹窗 */}
@@ -1024,72 +1284,7 @@ const RequirementForm: React.FC = () => {
             domStorageEnabled={true}
             startInLoadingState={true}
             onLoadEnd={() => {
-              // 页面加载完成后启用编辑功能
-              const jsCode = `
-                (function() {
-                  // 处理点击事件，防止编辑时触发折叠
-                  document.addEventListener('click', function(e) {
-                    var t = e.target;
-                    if (t && (t.classList.contains('card-title') || t.classList.contains('badge'))) {
-                      e.stopPropagation();
-                    }
-                  });
-                  
-                  // 等待DOM完全加载
-                  if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initEditing);
-                  } else {
-                    initEditing();
-                  }
-                  
-                  function initEditing() {
-                    // 让所有内容可编辑
-                    const editableElements = document.querySelectorAll('.content, .journey, .card-title, .badge');
-                    editableElements.forEach(el => {
-                      el.contentEditable = true;
-                      el.style.cursor = 'text';
-                      el.style.minHeight = '1em';
-                      
-                      // 添加编辑状态样式
-                      el.addEventListener('focus', function() {
-                        if (this.classList.contains('badge')) {
-                          this.style.outline = '2px solid #FF8C69';
-                          this.style.backgroundColor = '#FF6B35';
-                          this.style.color = 'white';
-                          this.style.boxShadow = '0 0 0 1px white inset';
-                        } else {
-                          this.style.outline = '2px solid #FF6B35';
-                          this.style.backgroundColor = '#FFF8F6';
-                          this.style.borderRadius = '8px';
-                        }
-                      });
-                      
-                      el.addEventListener('blur', function() {
-                        this.style.outline = 'none';
-                        this.style.boxShadow = 'none';
-                        if (this.classList.contains('badge')) {
-                          this.style.backgroundColor = '#FF6B35';
-                          this.style.color = 'white';
-                        } else {
-                          this.style.backgroundColor = 'transparent';
-                        }
-                      });
-                      
-                      // 防止富文本粘贴
-                      el.addEventListener('paste', function(e) {
-                        e.preventDefault();
-                        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-                        document.execCommand('insertText', false, text);
-                      });
-                    });
-                    
-                    // 显示编辑提示
-                    console.log('编辑功能已启用');
-                  }
-                })();
-                true;
-              `;
-              htmlWebViewRef.current?.injectJavaScript(jsCode);
+              console.log('WebView loaded successfully');
             }}
           />
           <View style={styles.modalBottomActions}>
@@ -1520,6 +1715,7 @@ const styles = StyleSheet.create({
     ...typography.bodyMedium,
     color: brandColors.white,
   },
+
   // Markdown typography
   mdH1: {
     ...typography.h1,
