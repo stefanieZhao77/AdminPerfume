@@ -1,0 +1,1422 @@
+---
+import Head from "@components/_head.astro"
+import Footer from "@components/dashboard/_footer.astro"
+import Topbar from "@components/dashboard/_topbar.astro"
+import Sidenav from "@components/dashboard/_sidenav.astro"
+import Scripts from "@components/_scripts.astro"
+
+const title = "配方详情"
+const path = "../../../../dist"
+const mainPage = "ai"
+const page = "ai-formulas"
+
+// Mock data - 示例配方数据
+const formulaData = {
+  id: "F-0001",
+  name: "春日花香",
+  version: "v2",
+  tags: ["花香", "清新", "日用"],
+  createdAt: "2024-12-01T09:00:00Z",
+  updatedAt: "2025-01-02T10:20:00Z",
+  author: "调香师 A",
+  status: "在用",
+  batch: { defaultTotal: 1000, unit: "g", precision: 2 },
+  cost: { currency: "CNY", perKg: 123.45, topMaterials: [
+    { name: "玫瑰精油", cost: 45.20 },
+    { name: "茉莉精油", cost: 32.15 },
+    { name: "檀香精油", cost: 28.90 }
+  ]},
+  noteRatio: { top: 35, heart: 45, base: 20 },
+  // 添加香调标签
+  noteTags: {
+    top: ["柑橘", "清新", "明亮"],
+    heart: ["花香", "优雅", "栀子花"],
+    base: ["温暖", "持久", "麝香"]
+  },
+  ifra: { category: "Cat 4", status: "通过", messages: [] },
+  summary: "清新花果调，前调柑橘明亮，主体栀子花优雅，基调麝香温暖持久。适合春夏季节日常使用。",
+  materials: [
+    { name: "柠檬烯", cas: "138-86-3", role: "top", percent: 2.5, pricePerKg: 120.0, risk: "allergen" },
+    { name: "芳樟醇", cas: "78-70-6", role: "heart", percent: 1.8, pricePerKg: 150.0, risk: "" },
+    { name: "玫瑰精油", cas: "8007-01-0", role: "heart", percent: 0.8, pricePerKg: 2800.0, risk: "" },
+    { name: "茉莉精油", cas: "8022-96-6", role: "heart", percent: 0.6, pricePerKg: 3200.0, risk: "" },
+    { name: "檀香精油", cas: "8006-87-9", role: "base", percent: 1.2, pricePerKg: 1800.0, risk: "" },
+    { name: "麝香酮", cas: "81-14-1", role: "base", percent: 0.3, pricePerKg: 450.0, risk: "" },
+    { name: "乙醇", cas: "64-17-5", role: "solvent", percent: 92.8, pricePerKg: 25.0, risk: "" }
+  ],
+  versions: [
+    { version: "v1", updatedAt: "2024-12-01T09:00:00Z", summary: "初版配方" },
+    { version: "v2", updatedAt: "2025-01-02T10:20:00Z", summary: "调整留香时间，增加基调比例" }
+  ]
+}
+
+// 获取URL参数 (暂时使用默认数据)
+// const urlParams = new URLSearchParams(Astro.url.search)
+// const formulaId = urlParams.get('id') || 'F-0001'
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <Head title={title} path={path} />
+    <!-- ECharts -->
+    <script src="https://unpkg.com/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- jsPDF with Chinese font support -->
+    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.plugin.autotable.min.js"></script>
+    <!-- html2canvas -->
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <Topbar path={path} />
+      <Sidenav path={path} mainPage={mainPage} page={page} />
+      <main class="app-main">
+        <!-- 页面头部 -->
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-sm-8">
+                <div class="d-flex align-items-center mb-2">
+                  <a href="../../ai/formulas.html" class="btn btn-outline-secondary btn-sm me-3">
+                    <i class="fas fa-arrow-left me-1"></i>返回配方查询
+                  </a>
+                  <h3 class="mb-0 me-3">{formulaData.id} · {formulaData.name} · {formulaData.version}</h3>
+                  {formulaData.tags.map(tag => (
+                    <span class="badge text-bg-secondary me-1">{tag}</span>
+                  ))}
+                  <span class={`badge ms-2 ${formulaData.status === '在用' ? 'text-bg-success' : 'text-bg-warning'}`}>
+                    {formulaData.status}
+                  </span>
+                </div>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="#">首页</a></li>
+                    <li class="breadcrumb-item"><a href="#">AI配方</a></li>
+                    <li class="breadcrumb-item"><a href="../../ai/formulas.html">配方查询</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{formulaData.id}</li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="col-sm-4 text-end">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.printFormula()">
+                    <i class="fas fa-print me-1"></i>打印
+                  </button>
+                  <button type="button" class="btn btn-outline-success btn-sm" onclick="window.exportPDF()">
+                    <i class="fas fa-download me-1"></i>导出PDF
+                  </button>
+                  <button type="button" class="btn btn-outline-info btn-sm" onclick="window.exportCSV()">
+                    <i class="fas fa-file-csv me-1"></i>导出CSV
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-content">
+          <div class="container-fluid">
+            <!-- 打印专用标题 -->
+            <div class="print-only print-title">
+              {formulaData.id} - {formulaData.name} ({formulaData.version})
+              <br>
+              <small style="font-size: 14px; color: #666;">
+                导出时间: {new Date().toLocaleString('zh-CN')}
+              </small>
+            </div>
+            <!-- 上半区：信息卡片 + 可视化 -->
+            <div class="row mb-4">
+              <!-- 左侧信息卡片 -->
+              <div class="col-lg-6">
+                <div class="row">
+                  <!-- 基本信息 -->
+                  <div class="col-12 mb-3">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">基本信息</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <p class="mb-2"><strong>配方ID：</strong>{formulaData.id}</p>
+                            <p class="mb-2"><strong>版本：</strong>{formulaData.version}</p>
+                            <p class="mb-2"><strong>创建时间：</strong>{new Date(formulaData.createdAt).toLocaleDateString('zh-CN')}</p>
+                          </div>
+                          <div class="col-6">
+                            <p class="mb-2"><strong>作者：</strong>{formulaData.author}</p>
+                            <p class="mb-2"><strong>更新时间：</strong>{new Date(formulaData.updatedAt).toLocaleDateString('zh-CN')}</p>
+                            <p class="mb-2"><strong>香调标签：</strong>
+                              {formulaData.tags.map(tag => (
+                                <span class="badge text-bg-light text-dark me-1">{tag}</span>
+                              ))}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 成本信息 -->
+                  <div class="col-12 mb-3">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">成本信息</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="mb-3"><strong>总成本：</strong>¥{formulaData.cost.perKg}/kg</p>
+                        <p class="mb-2"><strong>主要原料成本Top3：</strong></p>
+                        <div class="table-responsive">
+                          <table class="table table-sm">
+                            <tbody>
+                              {formulaData.cost.topMaterials.map(material => (
+                                <tr>
+                                  <td>{material.name}</td>
+                                  <td class="text-end">¥{material.cost}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 香调标签信息 -->
+                  <div class="col-12 mb-3">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">香调标签</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="text-primary mb-2">
+                              <i class="fas fa-leaf me-1"></i>
+                              <strong>前调</strong>
+                            </div>
+                            <div>
+                              {formulaData.noteTags.top.map(tag => (
+                                <span class="badge text-bg-primary me-1 mb-1">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="text-success mb-2">
+                              <i class="fas fa-flower me-1"></i>
+                              <strong>中调</strong>
+                            </div>
+                            <div>
+                              {formulaData.noteTags.heart.map(tag => (
+                                <span class="badge text-bg-success me-1 mb-1">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="text-warning mb-2">
+                              <i class="fas fa-tree me-1"></i>
+                              <strong>后调</strong>
+                            </div>
+                            <div>
+                              {formulaData.noteTags.base.map(tag => (
+                                <span class="badge text-bg-warning me-1 mb-1">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 合规信息 -->
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">合规信息</h5>
+                      </div>
+                      <div class="card-body">
+                        <p class="mb-2"><strong>IFRA类别：</strong>{formulaData.ifra.category}</p>
+                        <p class="mb-2">
+                          <strong>合规状态：</strong>
+                          <span class={`badge ${formulaData.ifra.status === '通过' ? 'text-bg-success' : 'text-bg-warning'}`}>
+                            {formulaData.ifra.status}
+                          </span>
+                        </p>
+                        {formulaData.ifra.messages.length > 0 && (
+                          <div class="alert alert-warning">
+                            {formulaData.ifra.messages.map(msg => (
+                              <div>{msg}</div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 右侧可视化 -->
+              <div class="col-lg-6">
+                <div class="card h-100">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">配方结构图</h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <input type="radio" class="btn-check" name="chartType" id="networkChart" autocomplete="off" checked>
+                      <label class="btn btn-outline-primary" for="networkChart">网状图</label>
+                      <input type="radio" class="btn-check" name="chartType" id="radarChart" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="radarChart">雷达图</label>
+                    </div>
+                  </div>
+                  <div class="card-body d-flex align-items-center justify-content-center" style="min-height: 500px;">
+                    <div id="formulaChart" style="width: 100%; height: 480px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 下半区：内容分区 -->
+            <div class="card">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="formulaTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+                      概览
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">
+                      配方明细
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="compliance-tab" data-bs-toggle="tab" data-bs-target="#compliance" type="button" role="tab">
+                      合规与安全
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="versions-tab" data-bs-toggle="tab" data-bs-target="#versions" type="button" role="tab">
+                      版本历史
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="formulaTabsContent">
+                  <!-- 概览标签页 -->
+                  <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                    <div class="row">
+                      <div class="col-12">
+                        <h6>配方描述</h6>
+                        <p class="text-muted">{formulaData.summary}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 配方明细标签页 -->
+                  <div class="tab-pane fade" id="materials" role="tabpanel">
+                    <div class="row mb-3">
+                      <div class="col-md-3">
+                        <label class="form-label">目标总量</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="totalAmount" value={formulaData.batch.defaultTotal}>
+                          <span class="input-group-text">{formulaData.batch.unit}</span>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">小数精度</label>
+                        <select class="form-select" id="precision">
+                          <option value="1">1位</option>
+                          <option value="2" selected>2位</option>
+                          <option value="3">3位</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">显示单位</label>
+                        <select class="form-select" id="displayUnit">
+                          <option value="g">克(g)</option>
+                          <option value="kg">千克(kg)</option>
+                          <option value="percent">百分比(%)</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 align-self-end">
+                        <button class="btn btn-primary" onclick="window.updateCalculation()">重新计算</button>
+                      </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                      <table class="table table-hover" id="materialsTable">
+                        <thead>
+                          <tr>
+                            <th>原料名称</th>
+                            <th>CAS号</th>
+                            <th>角色</th>
+                            <th>百分比(%)</th>
+                            <th>用量(g)</th>
+                            <th>单价(¥/kg)</th>
+                            <th>成本(¥)</th>
+                            <th>风险</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {formulaData.materials.map(material => (
+                            <tr>
+                              <td>{material.name}</td>
+                              <td class="text-muted">{material.cas}</td>
+                              <td>
+                                <span class={`badge ${
+                                  material.role === 'top' ? 'text-bg-primary' :
+                                  material.role === 'heart' ? 'text-bg-success' :
+                                  material.role === 'base' ? 'text-bg-warning' :
+                                  'text-bg-secondary'
+                                }`}>
+                                  {material.role === 'top' ? '前调' :
+                                   material.role === 'heart' ? '中调' :
+                                   material.role === 'base' ? '后调' :
+                                   '溶剂'}
+                                </span>
+                              </td>
+                              <td>{material.percent}%</td>
+                              <td>{(material.percent * formulaData.batch.defaultTotal / 100).toFixed(formulaData.batch.precision)}</td>
+                              <td>¥{material.pricePerKg.toFixed(2)}</td>
+                              <td>¥{(material.percent * formulaData.batch.defaultTotal / 100 * material.pricePerKg / 1000).toFixed(2)}</td>
+                              <td>
+                                {material.risk === 'allergen' && (
+                                  <span class="badge text-bg-danger">过敏原</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- 合规与安全标签页 -->
+                  <div class="tab-pane fade" id="compliance" role="tabpanel">
+                    <div class="row">
+                      <div class="col-12">
+                        <h6>IFRA合规检查</h6>
+                        <div class="alert alert-success">
+                          <i class="fas fa-check-circle me-2"></i>
+                          当前配方符合IFRA {formulaData.ifra.category} 类别的所有限量要求
+                        </div>
+                        
+                        <h6 class="mt-4">过敏原提示</h6>
+                        <div class="table-responsive">
+                          <table class="table table-sm">
+                            <thead>
+                              <tr>
+                                <th>原料名称</th>
+                                <th>风险类型</th>
+                                <th>含量</th>
+                                <th>建议</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {formulaData.materials.filter(m => m.risk).map(material => (
+                                <tr>
+                                  <td>{material.name}</td>
+                                  <td><span class="badge text-bg-warning">过敏原</span></td>
+                                  <td>{material.percent}%</td>
+                                  <td>需在包装上标注</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 版本历史标签页 -->
+                  <div class="tab-pane fade" id="versions" role="tabpanel">
+                    <div class="timeline">
+                      {formulaData.versions.reverse().map((version) => (
+                        <div class="timeline-item">
+                          <div class="timeline-marker bg-primary"></div>
+                          <div class="timeline-content">
+                            <h6 class="timeline-title">版本 {version.version}</h6>
+                            <p class="timeline-text">{version.summary}</p>
+                            <small class="text-muted">{new Date(version.updatedAt).toLocaleString('zh-CN')}</small>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+    <Scripts path={path} />
+
+    <script define:vars={{ formulaData }}>
+      // 图表数据准备 - 使用Astro的define:vars传递数据
+      const clientFormulaData = formulaData;
+      
+      console.log('配方数据:', clientFormulaData);
+      
+      // 初始化ECharts
+      let myChart = null;
+      
+      function initChart() {
+        console.log('开始初始化图表...');
+        
+        // 检查ECharts是否加载
+        if (typeof echarts === 'undefined') {
+          console.error('ECharts未加载');
+          document.getElementById('formulaChart').innerHTML = '<div class="text-center text-muted p-4">图表库加载失败，请刷新页面重试</div>';
+          return;
+        }
+        
+        const chartDom = document.getElementById('formulaChart');
+        if (!chartDom) {
+          console.error('图表容器未找到');
+          return;
+        }
+        
+        try {
+          myChart = echarts.init(chartDom);
+          console.log('ECharts初始化成功');
+          
+          // 显示网状图
+          showNetworkChart();
+        } catch (error) {
+          console.error('ECharts初始化失败:', error);
+          chartDom.innerHTML = '<div class="text-center text-muted p-4">图表初始化失败</div>';
+        }
+      }
+      
+      function showNetworkChart() {
+        console.log('显示网状图...');
+        
+        if (!myChart) {
+          console.error('图表实例未初始化');
+          return;
+        }
+        
+        // 清空图表，防止叠加
+        myChart.clear();
+        
+        // 简化的节点数据 - 调整位置以适应更大的空间
+        const nodes = [
+          // 主节点 - 扩大间距
+          {id: 'top', name: '前调', category: 0, symbolSize: 80, x: 0, y: -180},
+          {id: 'heart', name: '中调', category: 1, symbolSize: 80, x: -180, y: 120},
+          {id: 'base', name: '后调', category: 2, symbolSize: 80, x: 180, y: 120}
+        ];
+        
+        const links = [];
+        
+        // 添加原料节点和连线
+        console.log('开始处理原料数据:', clientFormulaData.materials);
+        
+        if (clientFormulaData.materials && Array.isArray(clientFormulaData.materials)) {
+          clientFormulaData.materials.forEach((material, index) => {
+            console.log('处理原料:', material);
+            
+            if (material.role && material.role !== 'solvent') {
+              const nodeId = 'material_' + index;
+              
+              const nodeConfig = {
+                id: nodeId,
+                name: material.name + '\n' + material.percent + '%',
+                category: material.role === 'top' ? 0 : material.role === 'heart' ? 1 : 2,
+                symbolSize: Math.max(30, material.percent * 12),
+                x: Math.random() * 400 - 200,
+                y: Math.random() * 400 - 200
+              };
+              
+              if (material.risk === 'allergen') {
+                nodeConfig.itemStyle = { color: '#ff6b6b' };
+              }
+              
+              nodes.push(nodeConfig);
+              
+              links.push({
+                source: material.role,
+                target: nodeId,
+                lineStyle: {
+                  width: Math.max(2, material.percent)
+                }
+              });
+            }
+          });
+        }
+        
+        // 如果没有原料数据，添加示例节点 - 调整到更大的空间
+        if (nodes.length <= 3) {
+          console.log('没有原料数据，添加示例节点');
+          nodes.push(
+            {id: 'sample1', name: '柠檬烯\n2.5%', category: 0, symbolSize: 40, x: 80, y: -120},
+            {id: 'sample2', name: '芳樟醇\n1.8%', category: 1, symbolSize: 35, x: -120, y: 80},
+            {id: 'sample3', name: '檀香\n1.2%', category: 2, symbolSize: 30, x: 120, y: 80}
+          );
+          links.push(
+            {source: 'top', target: 'sample1'},
+            {source: 'heart', target: 'sample2'},
+            {source: 'base', target: 'sample3'}
+          );
+        }
+        
+        console.log('最终节点数据:', nodes);
+        console.log('最终连线数据:', links);
+        
+        const option = {
+          tooltip: {
+            formatter: function(params) {
+              if (params.dataType === 'node') {
+                return params.data.name;
+              } else if (params.dataType === 'edge') {
+                return params.data.source + ' → ' + params.data.target;
+              }
+              return '';
+            }
+          },
+          legend: {
+            data: ['前调', '中调', '后调'],
+            orient: 'horizontal',
+            bottom: 10
+          },
+          series: [{
+            type: 'graph',
+            layout: 'none',
+            data: nodes,
+            links: links,
+            categories: [
+              {name: '前调', itemStyle: {color: '#5470c6'}},
+              {name: '中调', itemStyle: {color: '#91cc75'}},
+              {name: '后调', itemStyle: {color: '#fac858'}}
+            ],
+            roam: true,
+            label: {
+              show: true,
+              position: 'inside',
+              formatter: '{b}',
+              fontSize: 10
+            },
+            labelLayout: {
+              hideOverlap: true
+            },
+            lineStyle: {
+              color: 'source',
+              curveness: 0.1
+            },
+            emphasis: {
+              focus: 'adjacency',
+              lineStyle: {
+                width: 10
+              }
+            }
+          }]
+        };
+        
+        try {
+          myChart.setOption(option);
+          console.log('网状图配置成功');
+        } catch (error) {
+          console.error('设置图表配置失败:', error);
+        }
+      }
+      
+      function showRadarChart() {
+        console.log('显示雷达图...');
+        
+        if (!myChart) {
+          console.error('图表实例未初始化');
+          return;
+        }
+        
+        // 清空图表，防止叠加
+        myChart.clear();
+        
+        // 收集所有标签作为雷达图的维度
+        console.log('雷达图数据检查:', clientFormulaData.noteTags);
+        const allTags = [];
+        const tagValues = [];
+        
+        // 收集前调标签
+        if (clientFormulaData.noteTags?.top) {
+          clientFormulaData.noteTags.top.forEach(tag => {
+            if (!allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+          });
+        }
+        
+        // 收集中调标签
+        if (clientFormulaData.noteTags?.heart) {
+          clientFormulaData.noteTags.heart.forEach(tag => {
+            if (!allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+          });
+        }
+        
+        // 收集后调标签
+        if (clientFormulaData.noteTags?.base) {
+          clientFormulaData.noteTags.base.forEach(tag => {
+            if (!allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+          });
+        }
+        
+        console.log('所有标签:', allTags);
+        
+        // 为每个标签计算值（存在为1，不存在为0）
+        // 随机比例（0.2~1.0，保留两位小数）
+        allTags.forEach(tag => {
+          const value = +(Math.random() * 0.8 + 0.2).toFixed(2);
+          tagValues.push(value);
+        });
+        
+        console.log('标签值:', tagValues);
+        
+        // 构建雷达图指示器
+        const indicators = allTags.map(tag => ({
+          name: tag,
+          max: 1
+        }));
+        
+        const option = {
+          title: {
+            text: '香调标签特征',
+            left: 'center',
+            top: 20,
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'bold'
+            }
+          },
+          radar: {
+            center: ['50%', '55%'],
+            radius: '65%',
+            indicator: indicators,
+            shape: 'polygon',
+            splitNumber: 1,
+            name: {
+              textStyle: {
+                color: '#333',
+                fontSize: 12,
+                fontWeight: 'bold'
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#ddd',
+                width: 1
+              }
+            },
+            splitArea: {
+              show: true,
+              areaStyle: {
+                color: ['rgba(250, 250, 250, 0.3)', 'rgba(200, 200, 200, 0.3)']
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#999'
+              }
+            }
+          },
+          series: [{
+            type: 'radar',
+            data: [{
+              value: tagValues,
+              name: '香调特征',
+              areaStyle: {
+                color: 'rgba(91, 204, 117, 0.2)'
+              },
+              lineStyle: {
+                color: '#5bcc75',
+                width: 2
+              },
+              symbol: 'circle',
+              symbolSize: 6
+            }]
+          }],
+          tooltip: {
+            formatter: function(params) {
+              if (params.dataType === 'radar') {
+                let tooltip = '香调特征:<br/>';
+                allTags.forEach((tag, index) => {
+                  if (tagValues[index] === 1) {
+                    // 判断标签属于哪个香调
+                    let noteType = '';
+                    if (clientFormulaData.noteTags?.top?.includes(tag)) noteType = '前调';
+                    else if (clientFormulaData.noteTags?.heart?.includes(tag)) noteType = '中调';
+                    else if (clientFormulaData.noteTags?.base?.includes(tag)) noteType = '后调';
+                    tooltip += `${tag} (${noteType})<br/>`;
+                  }
+                });
+                return tooltip;
+              }
+              return '';
+            }
+          }
+        };
+        
+        try {
+          myChart.setOption(option);
+          console.log('雷达图配置成功');
+        } catch (error) {
+          console.error('设置雷达图配置失败:', error);
+        }
+      }
+      
+      // 图表类型切换
+      document.addEventListener('change', function(e) {
+        const target = e.target;
+        if (target && target.name === 'chartType') {
+          if (target.id === 'networkChart') {
+            showNetworkChart();
+          } else if (target.id === 'radarChart') {
+            showRadarChart();
+          }
+        }
+      });
+      
+      // 重新计算用量
+      function updateCalculation() {
+        const totalAmountEl = document.getElementById('totalAmount');
+        const precisionEl = document.getElementById('precision'); 
+        const unitEl = document.getElementById('displayUnit');
+        
+        if (!totalAmountEl || !precisionEl || !unitEl) return;
+        
+        const totalAmount = parseFloat(totalAmountEl.value);
+        const precision = parseInt(precisionEl.value);
+        const unit = unitEl.value;
+        
+        const tbody = document.querySelector('#materialsTable tbody');
+        if (!tbody) return;
+        
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach((row, index) => {
+          const material = clientFormulaData.materials[index];
+          const amountCell = row.cells[4];
+          const costCell = row.cells[6];
+          
+          let amount = material.percent * totalAmount / 100;
+          let cost = amount * material.pricePerKg / 1000;
+          
+          if (unit === 'kg') {
+            amount = amount / 1000;
+            amountCell.textContent = amount.toFixed(precision + 3) + ' kg';
+          } else if (unit === 'percent') {
+            amountCell.textContent = material.percent + '%';
+          } else {
+            amountCell.textContent = amount.toFixed(precision) + ' g';
+          }
+          
+          costCell.textContent = '¥' + cost.toFixed(2);
+        });
+      }
+      
+      // 导出功能 - 暴露到全局作用域
+      window.exportPDF = async function() {
+        console.log('开始导出PDF...');
+        
+        // 添加密码保护
+        const password = prompt('请输入导出密码（用于版权保护）:', '');
+        if (!password) {
+          alert('未输入密码，导出已取消');
+          return;
+        }
+        
+        if (password !== 'xiangzhi2025') {
+          alert('密码错误，导出已取消');
+          return;
+        }
+        
+        try {
+          // 使用html2canvas + jsPDF的方式支持中文
+          if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+            alert('PDF导出库未加载完成，请刷新页面重试');
+            return;
+          }
+
+          // 创建一个用于PDF的临时容器
+          const pdfContent = document.createElement('div');
+          pdfContent.style.cssText = `
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 794px;
+            background: white;
+            padding: 40px;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+          `;
+          
+          // 添加水印背景
+          const watermarkStyle = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            background-image: repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 100px,
+              rgba(0,0,0,0.03) 100px,
+              rgba(0,0,0,0.03) 200px
+            );
+            overflow: hidden;
+          `;
+          
+          const watermarkDiv = document.createElement('div');
+          watermarkDiv.style.cssText = watermarkStyle;
+          
+          // 添加多个水印文字
+          for (let i = 0; i < 20; i++) {
+            const watermarkText = document.createElement('div');
+            watermarkText.style.cssText = `
+              position: absolute;
+              color: rgba(0, 0, 0, 0.08);
+              font-size: 24px;
+              font-weight: bold;
+              transform: rotate(-45deg);
+              white-space: nowrap;
+              user-select: none;
+              pointer-events: none;
+              top: ${(i % 5) * 150 + 50}px;
+              left: ${Math.floor(i / 5) * 200 - 50}px;
+            `;
+            watermarkText.textContent = '香知香遇科技（上海）有限责任公司';
+            watermarkDiv.appendChild(watermarkText);
+          }
+          
+          pdfContent.appendChild(watermarkDiv);
+          
+          // 创建内容容器
+          const contentDiv = document.createElement('div');
+          contentDiv.style.cssText = `
+            position: relative;
+            z-index: 2;
+            background: transparent;
+          `;
+          
+          contentDiv.innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px; padding: 15px; border: 2px solid #dc3545; background: #f8d7da; border-radius: 5px;">
+              <h1 style="color: #721c24; margin: 0; font-size: 16px;">⚠️ 版权保护文件 - CONFIDENTIAL DOCUMENT ⚠️</h1>
+              <p style="color: #721c24; margin: 5px 0; font-size: 12px;">本文件受版权保护，仅供授权人员使用 - For authorized personnel only</p>
+              <p style="color: #721c24; margin: 0; font-size: 11px;">文件标识: ${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}</p>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #333; margin: 0; font-size: 24px;">配方详情报告</h1>
+              <h2 style="color: #666; margin: 10px 0; font-size: 18px;">${clientFormulaData.id} - ${clientFormulaData.name} (${clientFormulaData.version})</h2>
+              <p style="color: #999; margin: 0;">导出时间: ${new Date().toLocaleString()}</p>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 5px;">基本信息</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div>
+                  <p><strong>配方ID：</strong>${clientFormulaData.id}</p>
+                  <p><strong>配方名称：</strong>${clientFormulaData.name}</p>
+                  <p><strong>版本：</strong>${clientFormulaData.version}</p>
+                </div>
+                <div>
+                  <p><strong>作者：</strong>${clientFormulaData.author}</p>
+                  <p><strong>成本：</strong>¥${clientFormulaData.cost.perKg}/kg</p>
+                  <p><strong>批次大小：</strong>${clientFormulaData.batch.defaultTotal}g</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #28a745; padding-bottom: 5px;">香调标签</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #1976d2;">前调</h4>
+                  <div>${clientFormulaData.noteTags?.top?.map(tag => `<span style="display: inline-block; background: #1976d2; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #388e3c;">中调</h4>
+                  <div>${clientFormulaData.noteTags?.heart?.map(tag => `<span style="display: inline-block; background: #388e3c; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+                <div style="background: #fff3e0; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #f57c00;">后调</h4>
+                  <div>${clientFormulaData.noteTags?.base?.map(tag => `<span style="display: inline-block; background: #f57c00; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #dc3545; padding-bottom: 5px;">配方明细</h3>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead>
+                  <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">原料名称</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">角色</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">百分比</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">用量(g)</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">成本(¥)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${clientFormulaData.materials.map(material => {
+                    const amount = (material.percent * clientFormulaData.batch.defaultTotal / 100).toFixed(2);
+                    const cost = (material.percent * clientFormulaData.batch.defaultTotal / 100 * material.pricePerKg / 1000).toFixed(2);
+                    const roleText = material.role === 'top' ? '前调' : 
+                                   material.role === 'heart' ? '中调' : 
+                                   material.role === 'base' ? '后调' : '溶剂';
+                    const riskStyle = material.risk === 'allergen' ? 'color: red; font-weight: bold;' : '';
+                    
+                    return `
+                      <tr>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; ${riskStyle}">${material.name}${material.risk === 'allergen' ? ' ⚠️' : ''}</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${roleText}</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${material.percent}%</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${amount}g</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">¥${cost}</td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #6f42c1; padding-bottom: 5px;">配方描述</h3>
+              <p style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 5px;">${clientFormulaData.summary}</p>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #20c997; padding-bottom: 5px;">合规信息</h3>
+              <div style="margin-top: 15px;">
+                <p><strong>IFRA类别：</strong>Category 4 (Fine Fragrance)</p>
+                <p><strong>合规状态：</strong><span style="color: green; font-weight: bold;">✓ 通过</span></p>
+                <p><strong>过敏原提示：</strong>含过敏原成分，需在包装上标注</p>
+              </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid #dc3545; background: #f8f9fa; border-radius: 5px;">
+              <p style="margin: 0; color: #dc3545; font-weight: bold;">© 香知香遇科技（上海）有限责任公司 - 版权所有</p>
+              <p style="margin: 5px 0; font-size: 12px; color: #666;">Xiangzhi Xiangyu Technology (Shanghai) Co., Ltd. - All Rights Reserved</p>
+              <p style="margin: 5px 0 0 0; font-size: 11px; color: #999;">本文件包含商业机密信息，受法律保护 - Contains confidential information protected by law</p>
+              <p style="margin: 5px 0 0 0; font-size: 10px; color: #999;">严禁未经授权传播或使用 - Unauthorized distribution or use is strictly prohibited</p>
+            </div>
+          `;
+          
+          pdfContent.appendChild(contentDiv);
+          document.body.appendChild(pdfContent);
+          
+          // 使用html2canvas转换为图片，然后生成PDF
+          const canvas = await html2canvas(pdfContent, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff'
+          });
+          
+          document.body.removeChild(pdfContent);
+          
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          
+          const imgData = canvas.toDataURL('image/png');
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          
+          let position = 0;
+          
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+          
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+          
+          pdf.save(`${clientFormulaData.id}_${clientFormulaData.name}_配方详情.pdf`);
+          
+        } catch (error) {
+          console.error('PDF导出失败:', error);
+          alert('PDF导出失败：' + error.message);
+        }
+      };
+      
+      window.exportCSV = function() {
+        console.log('开始导出CSV...');
+        
+        // 添加密码保护
+        const password = prompt('请输入导出密码（用于版权保护）:', '');
+        if (!password) {
+          alert('未输入密码，导出已取消');
+          return;
+        }
+        
+        if (password !== 'xiangzhi2025') {
+          alert('密码错误，导出已取消');
+          return;
+        }
+        
+        try {
+          // 使用UTF-8 BOM解决中文乱码问题
+          const BOM = '\uFEFF';
+          let csv = BOM;
+          
+          // 添加版权声明和水印（在文件开头）
+          csv += '=== 版权声明 / COPYRIGHT NOTICE ===\n';
+          csv += '本文件受版权保护，仅供授权人员使用\n';
+          csv += 'This file is protected by copyright and is for authorized personnel only\n';
+          csv += '© 香知香遇科技（上海）有限责任公司 / Xiangzhi Xiangyu Technology (Shanghai) Co., Ltd.\n';
+          csv += `导出人员: ${navigator.userAgent.includes('Windows') ? 'Windows用户' : '系统用户'}\n`;
+          csv += `导出时间: ${new Date().toLocaleString()}\n`;
+          csv += `文件标识: ${Date.now().toString(36).toUpperCase()}\n`;
+          csv += '严禁未经授权传播或使用 / Unauthorized distribution or use is strictly prohibited\n';
+          csv += '\n'.repeat(3);
+          
+          // 添加配方基本信息
+          csv += '=== 配方基本信息 ===\n';
+          csv += `配方ID,${clientFormulaData.id}\n`;
+          csv += `配方名称,${clientFormulaData.name}\n`;
+          csv += `版本,${clientFormulaData.version}\n`;
+          csv += `作者,${clientFormulaData.author}\n`;
+          csv += `成本,¥${clientFormulaData.cost.perKg}/kg\n`;
+          csv += `批次大小,${clientFormulaData.batch.defaultTotal}g\n`;
+          csv += `导出时间,${new Date().toLocaleString()}\n`;
+          
+          // 添加香调标签
+          csv += '\n=== 香调标签 ===\n';
+          csv += `前调标签,"${clientFormulaData.noteTags?.top?.join('、') || '无标签'}"\n`;
+          csv += `中调标签,"${clientFormulaData.noteTags?.heart?.join('、') || '无标签'}"\n`;
+          csv += `后调标签,"${clientFormulaData.noteTags?.base?.join('、') || '无标签'}"\n`;
+          
+          // 添加配方描述
+          csv += '\n=== 配方描述 ===\n';
+          csv += `${clientFormulaData.summary}\n`;
+          
+          // 添加原料明细
+          csv += '\n=== 原料明细 ===\n';
+          csv += '# 以下数据为商业机密，受版权保护 - Commercial confidential data protected by copyright\n';
+          csv += '原料名称,CAS号,角色,百分比,用量(g),单价(¥/kg),成本(¥),风险\n';
+          
+          let totalCost = 0;
+          const materials = clientFormulaData.materials || [];
+          
+          materials.forEach((material) => {
+            try {
+              const amount = (material.percent * clientFormulaData.batch.defaultTotal / 100).toFixed(2);
+              const itemCost = (material.percent * clientFormulaData.batch.defaultTotal / 100 * material.pricePerKg / 1000);
+              totalCost += itemCost;
+              
+              const roleText = material.role === 'top' ? '前调' : 
+                              material.role === 'heart' ? '中调' : 
+                              material.role === 'base' ? '后调' : '溶剂';
+              
+              const riskText = material.risk === 'allergen' ? '过敏原' : '';
+              
+              csv += `"${material.name}","${material.cas}","${roleText}","${material.percent}%","${amount}g","¥${material.pricePerKg}","¥${itemCost.toFixed(2)}","${riskText}"\n`;
+            } catch (e) {
+              console.error('处理原料数据失败:', material, e);
+            }
+          });
+          
+          // 添加汇总信息
+          csv += '\n=== 成本汇总 ===\n';
+          csv += `总成本,¥${totalCost.toFixed(2)}\n`;
+          csv += `每公斤成本,¥${(totalCost * 1000 / clientFormulaData.batch.defaultTotal).toFixed(2)}\n`;
+          csv += `批次大小,${clientFormulaData.batch.defaultTotal}g\n`;
+          
+          // 添加合规信息
+          csv += '\n=== 合规信息 ===\n';
+          csv += 'IFRA类别,Category 4 (Fine Fragrance)\n';
+          csv += '合规状态,通过\n';
+          csv += '过敏原提示,含过敏原成分需标注\n';
+          
+          // 添加版权保护信息
+          csv += '\n=== 版权保护信息 ===\n';
+          csv += '公司名称,香知香遇科技（上海）有限责任公司\n';
+          csv += '英文名称,Xiangzhi Xiangyu Technology (Shanghai) Co. Ltd.\n';
+          csv += `导出时间,${new Date().toLocaleString()}\n`;
+          csv += `文件唯一标识,${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}\n`;
+          csv += '版权声明,本文件包含商业机密信息受法律保护\n';
+          csv += 'Copyright Notice,This file contains confidential business information protected by law\n';
+          csv += '使用限制,仅限授权人员内部使用严禁外传\n';
+          csv += 'Usage Restrictions,For authorized personnel only - distribution prohibited\n';
+          
+          // 在文件中间和末尾添加水印行
+          csv += '\n=== 水印标识 ===\n';
+          for (let i = 0; i < 5; i++) {
+            csv += `# 香知香遇科技（上海）有限责任公司 - 版权所有 - ${new Date().getFullYear()}\n`;
+            csv += `# Xiangzhi Xiangyu Technology (Shanghai) Co. Ltd. - All Rights Reserved - ${new Date().getFullYear()}\n`;
+          }
+        
+          // 使用Blob方式创建CSV文件，确保编码正确
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          
+          if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${clientFormulaData.id}_${clientFormulaData.name}_Formula_Details.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }
+          
+        } catch (error) {
+          console.error('CSV导出失败:', error);
+          alert('CSV导出失败，请稍后重试');
+        }
+      };
+      
+      window.printFormula = function() {
+        console.log('开始打印...');
+        // 添加打印前的准备
+        const printButton = document.querySelector('button[onclick="window.printFormula()"]');
+        if (printButton) {
+          const originalText = printButton.innerHTML;
+          printButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>准备打印...';
+          printButton.disabled = true;
+          
+          setTimeout(() => {
+            window.print();
+            printButton.innerHTML = originalText;
+            printButton.disabled = false;
+          }, 500);
+        } else {
+          window.print();
+        }
+      };
+      
+      // 暴露更新计算函数到全局作用域
+      window.updateCalculation = updateCalculation;
+      
+      // 页面加载完成后初始化图表
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM加载完成，开始初始化...');
+        console.log('配方数据检查:', clientFormulaData);
+        console.log('香调标签检查:', clientFormulaData.noteTags);
+        
+        // 检查所有依赖
+        console.log('ECharts可用:', typeof echarts !== 'undefined');
+        console.log('jsPDF可用:', typeof window.jspdf !== 'undefined');
+        
+        // 延迟初始化，确保所有库都已加载
+        setTimeout(() => {
+          initChart();
+        }, 500); // 增加延迟时间
+      });
+      
+      // 添加窗口大小变化时的图表重绘
+      window.addEventListener('resize', function() {
+        if (myChart) {
+          myChart.resize();
+        }
+      });
+    </script>
+
+    <style>
+      /* 时间线样式 */
+      .timeline {
+        position: relative;
+        padding: 20px 0;
+      }
+      
+      .timeline-item {
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 30px;
+      }
+      
+      .timeline-marker {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 3px #dee2e6;
+      }
+      
+      .timeline-item:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: 9px;
+        top: 20px;
+        bottom: -30px;
+        width: 2px;
+        background-color: #dee2e6;
+      }
+      
+      .timeline-title {
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+      
+      .timeline-text {
+        margin-bottom: 5px;
+        color: #6c757d;
+      }
+      
+      /* 打印样式 */
+      @media print {
+        /* 隐藏不需要的元素 */
+        .btn, .nav-tabs, .app-content-header .btn-group,
+        .app-sidebar, .app-topbar, .app-footer,
+        .breadcrumb, .pagination {
+          display: none !important;
+        }
+        
+        /* 调整布局 */
+        .app-wrapper {
+          margin: 0 !important;
+        }
+        
+        .app-main {
+          margin-left: 0 !important;
+        }
+        
+        .app-content-header {
+          padding: 10px 0 !important;
+        }
+        
+        .app-content-header h3 {
+          font-size: 18px !important;
+          margin-bottom: 5px !important;
+        }
+        
+        .card {
+          border: 1px solid #ddd !important;
+          box-shadow: none !important;
+          margin-bottom: 15px !important;
+        }
+        
+        .card-header {
+          background-color: #f8f9fa !important;
+          border-bottom: 1px solid #ddd !important;
+          padding: 8px 15px !important;
+        }
+        
+        .card-body {
+          padding: 10px 15px !important;
+        }
+        
+        /* 表格样式 */
+        .table {
+          font-size: 12px !important;
+        }
+        
+        .table th, .table td {
+          padding: 5px !important;
+          border: 1px solid #ddd !important;
+        }
+        
+        /* 分页控制 */
+        .page-break {
+          page-break-before: always;
+        }
+        
+        .no-break {
+          page-break-inside: avoid;
+        }
+        
+        /* 图表区域 */
+        #formulaChart {
+          height: 300px !important;
+          page-break-inside: avoid;
+        }
+        
+        /* Tab内容显示 */
+        .tab-content .tab-pane {
+          display: block !important;
+          opacity: 1 !important;
+        }
+        
+        .tab-content .tab-pane:not(.active) {
+          display: none !important;
+        }
+        
+        /* 确保活动tab内容可见 */
+        .tab-content .tab-pane.show.active {
+          display: block !important;
+        }
+        
+        /* 添加页眉页脚 */
+        @page {
+          margin: 2cm;
+          @top-left {
+            content: "配方详情 - " attr(data-formula-id);
+          }
+          @top-right {
+            content: "第" counter(page) "页";
+          }
+          @bottom-center {
+            content: "© 香知香遇科技（上海）有限责任公司";
+            font-size: 10px;
+            color: #666;
+          }
+        }
+        
+        /* 添加水印 */
+        body::before {
+          content: "香知香遇科技（上海）有限责任公司";
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+          font-size: 60px;
+          color: rgba(0, 0, 0, 0.08);
+          z-index: -1;
+          pointer-events: none;
+          font-weight: bold;
+        }
+        
+        /* 标题样式 */
+        .print-title {
+          text-align: center;
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #333;
+          padding-bottom: 10px;
+        }
+        
+        /* 徽章在打印时的样式 */
+        .badge {
+          border: 1px solid #666 !important;
+          color: #333 !important;
+          background-color: #f8f9fa !important;
+        }
+        
+        /* 图标在打印时隐藏 */
+        .fas, .fab, .far {
+          display: none !important;
+        }
+      }
+      
+      /* 打印专用类 */
+      .print-only {
+        display: none;
+      }
+      
+      @media print {
+        .print-only {
+          display: block !important;
+        }
+      }
+    </style>
+  </body>
+</html>

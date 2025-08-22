@@ -1,8 +1,4 @@
 ---
-import { convertPathToHtml } from "../../../utils/index.js"
-const { path, mainPage, page } = Astro.props
-const htmlPath = convertPathToHtml(path);
-
 // Smart path resolution: calculate relative path based on directory depth
 const pathname = Astro.url.pathname;
 const pathSegments = pathname.split('/').filter(segment => segment !== '');
@@ -61,8 +57,8 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
       { 
         id: 'ai', label: 'AI配方', icon: 'bi-magic', 
         children: [
-          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' }
+          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html', icon: 'bi-search' },
+          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' }
         ]
       },
       { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -76,8 +72,8 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
       { 
         id: 'ai', label: 'AI配方', icon: 'bi-magic', 
         children: [
-          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' }
+          { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html', icon: 'bi-search' },
+          { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' }
         ]
       },
       { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' }
@@ -165,7 +161,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
           menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
-                <i class="nav-icon bi bi-circle"></i>
+                <i class="nav-icon ${child.icon || 'bi-dot'}"></i>
                 <p>${child.label}</p>
               </a>
             </li>

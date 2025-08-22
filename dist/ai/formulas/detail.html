@@ -1,0 +1,2494 @@
+<!doctype html>
+<html lang="zh-CN" data-astro-cid-vydqtb4g>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>配方详情</title>
+
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="配方详情" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="description"
+      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
+    />
+    <meta
+      name="keywords"
+      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
+    />
+    <!--end::Primary Meta Tags-->
+
+    <!--begin::Accessibility Features-->
+    <!-- Skip links will be dynamically added by accessibility.js -->
+    <meta name="supported-color-schemes" content="light dark" />
+    <link rel="preload" href="../../css/adminlte.css" as="style" />
+    <!--end::Accessibility Features-->
+
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!--end::Fonts-->
+
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="../../css/adminlte.css" />
+    <!--end::Required Plugin(AdminLTE)-->
+    <!-- ECharts -->
+    <script
+      type="module"
+      src="/_astro/detail.astro_astro_type_script_index_0_lang.DRqxPGId.js"
+    ></script>
+    <!-- jsPDF with Chinese font support -->
+    <script
+      type="module"
+      src="/_astro/detail.astro_astro_type_script_index_1_lang.Ccz7k29o.js"
+    ></script>
+    <script
+      type="module"
+      src="/_astro/detail.astro_astro_type_script_index_2_lang.BgWVfb_v.js"
+    ></script>
+    <!-- html2canvas -->
+    <script
+      type="module"
+      src="/_astro/detail.astro_astro_type_script_index_3_lang.Bh3h7eN2.js"
+    ></script>
+    <style>
+      .timeline[data-astro-cid-vydqtb4g] {
+        position: relative;
+        padding: 20px 0;
+      }
+      .timeline-item[data-astro-cid-vydqtb4g] {
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 30px;
+      }
+      .timeline-marker[data-astro-cid-vydqtb4g] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 3px #dee2e6;
+      }
+      .timeline-item[data-astro-cid-vydqtb4g]:not(:last-child):before {
+        content: '';
+        position: absolute;
+        left: 9px;
+        top: 20px;
+        bottom: -30px;
+        width: 2px;
+        background-color: #dee2e6;
+      }
+      .timeline-title[data-astro-cid-vydqtb4g] {
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+      .timeline-text[data-astro-cid-vydqtb4g] {
+        margin-bottom: 5px;
+        color: #6c757d;
+      }
+      @media print {
+        .btn[data-astro-cid-vydqtb4g],
+        .nav-tabs[data-astro-cid-vydqtb4g],
+        .app-content-header[data-astro-cid-vydqtb4g] .btn-group[data-astro-cid-vydqtb4g],
+        .app-sidebar[data-astro-cid-vydqtb4g],
+        .app-topbar[data-astro-cid-vydqtb4g],
+        .app-footer[data-astro-cid-vydqtb4g],
+        .breadcrumb[data-astro-cid-vydqtb4g],
+        .pagination[data-astro-cid-vydqtb4g] {
+          display: none !important;
+        }
+        .app-wrapper[data-astro-cid-vydqtb4g] {
+          margin: 0 !important;
+        }
+        .app-main[data-astro-cid-vydqtb4g] {
+          margin-left: 0 !important;
+        }
+        .app-content-header[data-astro-cid-vydqtb4g] {
+          padding: 10px 0 !important;
+        }
+        .app-content-header[data-astro-cid-vydqtb4g] h3[data-astro-cid-vydqtb4g] {
+          font-size: 18px !important;
+          margin-bottom: 5px !important;
+        }
+        .card[data-astro-cid-vydqtb4g] {
+          border: 1px solid #ddd !important;
+          box-shadow: none !important;
+          margin-bottom: 15px !important;
+        }
+        .card-header[data-astro-cid-vydqtb4g] {
+          background-color: #f8f9fa !important;
+          border-bottom: 1px solid #ddd !important;
+          padding: 8px 15px !important;
+        }
+        .card-body[data-astro-cid-vydqtb4g] {
+          padding: 10px 15px !important;
+        }
+        .table[data-astro-cid-vydqtb4g] {
+          font-size: 12px !important;
+        }
+        .table[data-astro-cid-vydqtb4g] th[data-astro-cid-vydqtb4g],
+        .table[data-astro-cid-vydqtb4g] td[data-astro-cid-vydqtb4g] {
+          padding: 5px !important;
+          border: 1px solid #ddd !important;
+        }
+        .page-break[data-astro-cid-vydqtb4g] {
+          page-break-before: always;
+        }
+        .no-break[data-astro-cid-vydqtb4g] {
+          page-break-inside: avoid;
+        }
+        #formulaChart[data-astro-cid-vydqtb4g] {
+          height: 300px !important;
+          page-break-inside: avoid;
+        }
+        .tab-content[data-astro-cid-vydqtb4g] .tab-pane[data-astro-cid-vydqtb4g] {
+          display: block !important;
+          opacity: 1 !important;
+        }
+        .tab-content[data-astro-cid-vydqtb4g] .tab-pane[data-astro-cid-vydqtb4g]:not(.active) {
+          display: none !important;
+        }
+        .tab-content[data-astro-cid-vydqtb4g] .tab-pane[data-astro-cid-vydqtb4g].show.active {
+          display: block !important;
+        }
+        @page {
+          margin: 2cm;
+          @top-left {
+            content: '配方详情 - ' attr(data-formula-id);
+          }
+          @top-right {
+            content: '第' counter(page) '页';
+          }
+          @bottom-center {
+            content: '© 香知香遇科技（上海）有限责任公司';
+            font-size: 10px;
+            color: #666;
+          }
+        }
+        body:before {
+          content: '香知香遇科技（上海）有限责任公司';
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+          font-size: 60px;
+          color: #00000014;
+          z-index: -1;
+          pointer-events: none;
+          font-weight: 700;
+        }
+        .print-title[data-astro-cid-vydqtb4g] {
+          text-align: center;
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #333;
+          padding-bottom: 10px;
+        }
+        .badge[data-astro-cid-vydqtb4g] {
+          border: 1px solid #666 !important;
+          color: #333 !important;
+          background-color: #f8f9fa !important;
+        }
+        .fas[data-astro-cid-vydqtb4g],
+        .fab[data-astro-cid-vydqtb4g],
+        .far[data-astro-cid-vydqtb4g] {
+          display: none !important;
+        }
+      }
+      .print-only[data-astro-cid-vydqtb4g] {
+        display: none;
+      }
+      @media print {
+        .print-only[data-astro-cid-vydqtb4g] {
+          display: block !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary" data-astro-cid-vydqtb4g>
+    <div class="app-wrapper" data-astro-cid-vydqtb4g>
+      <!--begin::Header-->
+      <nav class="app-header navbar navbar-expand bg-body">
+        <!--begin::Container-->
+        <div class="container-fluid">
+          <!--begin::Start Navbar Links-->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="#" class="nav-link" data-i18n="home">首页</a>
+            </li>
+          </ul>
+          <!--end::Start Navbar Links-->
+
+          <!--begin::End Navbar Links-->
+          <ul class="navbar-nav ms-auto">
+            <!--begin::Navbar Search-->
+            <li class="nav-item">
+              <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                <i class="bi bi-search"></i>
+              </a>
+            </li>
+            <!--end::Navbar Search-->
+
+            <!--begin::Messages Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-chat-text"></i>
+                <span class="navbar-badge badge text-bg-danger">3</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="../../assets/img/user1-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Brad Diesel
+                        <span class="float-end fs-7 text-danger"
+                          ><i class="bi bi-star-fill"></i
+                        ></span>
+                      </h3>
+                      <p class="fs-7">Call me whenever you can...</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="../../assets/img/user8-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        John Pierce
+                        <span class="float-end fs-7 text-secondary">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">I got your message bro</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <!--begin::Message-->
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="../../assets/img/user3-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Nora Silvester
+                        <span class="float-end fs-7 text-warning">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">The subject goes here</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Message-->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllMessages"
+                  >查看所有消息</a
+                >
+              </div>
+            </li>
+            <!--end::Messages Dropdown Menu-->
+
+            <!--begin::Notifications Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i
+                  class="bi bi-bell-fill"
+                  style="font-size: 1rem; display: inline-block; color: #ffc107"
+                ></i>
+                <span class="navbar-badge badge text-bg-warning">15</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header" data-i18n="notifications">15 通知</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-envelope me-2"></i>
+                  <span data-i18n="newMessagesCount">4 条新消息</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="mins">3 分钟</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-people-fill me-2"></i>
+                  <span data-i18n="friendRequestsCount">8 个好友请求</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="hoursCount">12 小时</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-file-earmark-fill me-2"></i>
+                  <span data-i18n="newReportsCount">3 个新报告</span>
+                  <span class="float-end text-secondary fs-7" data-i18n="daysCount">2 天</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer" data-i18n="seeAllNotifications">
+                  查看所有通知
+                </a>
+              </div>
+            </li>
+            <!--end::Notifications Dropdown Menu-->
+
+            <!--begin::Language Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+              >
+                <i class="bi bi-translate"></i>
+                <span id="current-language-flag" class="ms-1">🇨🇳</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <h6 class="dropdown-header">选择语言 / Select Language</h6>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item language-option" data-lang="zh">
+                  <span class="me-2">🇨🇳</span> 中文
+                </a>
+                <a href="#" class="dropdown-item language-option" data-lang="en">
+                  <span class="me-2">🇺🇸</span> English
+                </a>
+              </div>
+            </li>
+            <!--end::Language Dropdown Menu-->
+
+            <!--begin::Fullscreen Toggle-->
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+              </a>
+            </li>
+            <!--end::Fullscreen Toggle-->
+
+            <!--begin::User Menu Dropdown-->
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <div
+                  id="navUserAvatar"
+                  class="user-image rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold"
+                  style="
+                    width: 30px;
+                    height: 30px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-size: 0.75rem;
+                  "
+                >
+                  A
+                </div>
+                <span class="d-none d-md-inline ms-1" id="userDisplayName"> 未登录 </span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <!--begin::User Image-->
+                <li class="user-header text-bg-primary">
+                  <div
+                    id="topbarUserAvatar"
+                    class="rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold mx-auto mb-2"
+                    style="
+                      width: 90px;
+                      height: 90px;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      font-size: 2rem;
+                    "
+                  >
+                    A
+                  </div>
+                  <p>
+                    <span id="userName">未登录</span> -
+                    <span id="userRole"></span>
+                    <small>登录时间: <span id="loginTime"></span></small>
+                  </p>
+                </li>
+                <!--end::User Image-->
+                <!--begin::Menu Body-->
+                <li class="user-body">
+                  <!--begin::Row-->
+                  <div class="row">
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="orders">订单</a>
+                    </div>
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="formulas">配方</a>
+                    </div>
+                    <div class="col-4 text-center">
+                      <a href="#" data-i18n="tasks">任务</a>
+                    </div>
+                  </div>
+                  <!--end::Row-->
+                </li>
+                <!--end::Menu Body-->
+                <!--begin::Menu Footer-->
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat" data-i18n="profile">个人资料</a>
+                  <a
+                    href="#"
+                    class="btn btn-default btn-flat float-end"
+                    onclick="logout()"
+                    data-i18n="signOut"
+                    >退出登录</a
+                  >
+                </li>
+                <!--end::Menu Footer-->
+              </ul>
+            </li>
+            <!--end::User Menu Dropdown-->
+          </ul>
+          <!--end::End Navbar Links-->
+        </div>
+        <!--end::Container-->
+      </nav>
+      <!--end::Header-->
+
+      <style>
+        /* 修复用户头像样式 */
+        .user-menu .nav-link {
+          display: flex !important;
+          align-items: center;
+        }
+
+        .user-menu .user-image {
+          margin-right: 0.5rem;
+          flex-shrink: 0;
+        }
+
+        .user-menu #userDisplayName {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 120px;
+        }
+
+        /* 确保通知图标可见 */
+        .bi-bell-fill {
+          display: inline-block !important;
+          font-size: 1rem;
+        }
+
+        /* 确保所有Bootstrap Icons可见，但允许JavaScript控制显示/隐藏 */
+        .bi {
+          display: inline-block;
+        }
+
+        /* 允许JavaScript隐藏图标 */
+        .bi[style*='display: none'] {
+          display: none !important;
+        }
+
+        /* 通知图标特殊样式 */
+        .nav-item.dropdown .bi-bell-fill {
+          font-size: 1.1rem !important;
+          color: #ffc107 !important;
+          margin-right: 0.25rem;
+        }
+
+        /* 确保通知徽章可见 */
+        .navbar-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      </style>
+
+      <script>
+        // 获取当前用户信息
+        function getCurrentUser() {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            return userStr ? JSON.parse(userStr) : null;
+          }
+          return null;
+        }
+
+        function logout() {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            globalThis.sessionStorage.removeItem('currentUser');
+          }
+          globalThis.location.href = '/login.html';
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+          const user = getCurrentUser();
+          if (user) {
+            const userNameElements = document.querySelectorAll('#userName, #userDisplayName');
+            const userRoleElement = document.getElementById('userRole');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            userNameElements.forEach((el) => {
+              if (el) el.textContent = user.name || user.username;
+            });
+
+            // 更新顶部导航栏用户头像（使用用户名首字母）
+            const topbarUserAvatar = document.getElementById('topbarUserAvatar');
+            if (topbarUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              topbarUserAvatar.textContent = firstLetter;
+            }
+
+            // 更新右上角导航栏用户头像
+            const navUserAvatar = document.getElementById('navUserAvatar');
+            if (navUserAvatar) {
+              const firstLetter = user.username.charAt(0).toUpperCase();
+              navUserAvatar.textContent = firstLetter;
+            }
+
+            if (userRoleElement) {
+              userRoleElement.textContent =
+                user.role === 'admin' ? '技术总监' : user.role === 'perfumer' ? '调香师' : '评香师';
+            }
+
+            if (loginTimeElement) {
+              loginTimeElement.textContent = new Date(user.loginTime).toLocaleString('zh-CN');
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            globalThis.location.href = '/login.html';
+          }
+        }
+
+        // 页面加载时更新用户信息
+        document.addEventListener('DOMContentLoaded', function () {
+          updateUserInfo();
+        });
+
+        // 立即执行一次更新
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateUserInfo);
+        } else {
+          updateUserInfo();
+        }
+      </script>
+      <!--begin::Sidebar-->
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <!--begin::Sidebar Brand-->
+        <div class="sidebar-brand">
+          <!--begin::Brand Link-->
+          <a href="#" class="brand-link" id="brandLink">
+            <!--begin::Brand Image-->
+            <img
+              src="../../assets/img/AdminLTELogo.png"
+              alt="AdminLTE Logo"
+              class="brand-image opacity-75 shadow"
+            />
+            <!--end::Brand Image-->
+            <!--begin::Brand Text-->
+            <span class="brand-text fw-light">Perfume AI</span>
+            <!--end::Brand Text-->
+          </a>
+          <!--end::Brand Link-->
+        </div>
+        <!--end::Sidebar Brand-->
+        <!--begin::Sidebar Wrapper-->
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <!--begin::Sidebar Menu-->
+            <ul
+              class="nav sidebar-menu flex-column"
+              data-lte-toggle="treeview"
+              role="navigation"
+              aria-label="Main navigation"
+              data-accordion="false"
+              id="navigation"
+            >
+              <!-- 动态菜单将根据角色生成 -->
+            </ul>
+            <!--end::Sidebar Menu-->
+          </nav>
+        </div>
+        <!--end::Sidebar Wrapper-->
+      </aside>
+      <!--end::Sidebar-->
+
+      <script>
+        // 菜单配置
+        const menuConfig = {
+          admin: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/index.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+            {
+              id: 'customers',
+              label: '客户管理',
+              icon: 'bi-people',
+              path: '/customers/index.html',
+            },
+            { id: 'settings', label: '系统设置', icon: 'bi-gear', path: '/settings/index.html' },
+          ],
+          perfumer: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            {
+              id: 'materials',
+              label: '原料管理',
+              icon: 'bi-box-seam',
+              path: '/materials/index.html',
+            },
+            { id: 'gcms', label: 'GC-MS', icon: 'bi-activity', path: '/gcms/index.html' },
+            {
+              id: 'ai',
+              label: 'AI配方',
+              icon: 'bi-magic',
+              children: [
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
+              ],
+            },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+          evaluator: [
+            { id: 'dashboard', label: '主页', icon: 'bi-speedometer', path: '/dashboard.html' },
+            { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
+          ],
+        };
+
+        // 获取当前页面路径
+        function getCurrentPath() {
+          return window.location.pathname;
+        }
+
+        // 保存菜单展开状态
+        function saveMenuState(menuId, isExpanded) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            menuStates[menuId] = isExpanded;
+            globalThis.sessionStorage.setItem('menuStates', JSON.stringify(menuStates));
+          }
+        }
+
+        // 获取菜单展开状态
+        function getMenuState(menuId) {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const menuStates = JSON.parse(globalThis.sessionStorage.getItem('menuStates') || '{}');
+            return menuStates[menuId] || false;
+          }
+          return false;
+        }
+
+        // 检查菜单项是否应该被选中
+        function isMenuItemActive(item, currentPath) {
+          if (item.path === currentPath) {
+            return true;
+          }
+          // 检查子菜单
+          if (item.children) {
+            return item.children.some((child) => child.path === currentPath);
+          }
+          return false;
+        }
+
+        // 检查子菜单是否应该展开
+        function shouldExpandSubmenu(item, currentPath) {
+          if (!item.children) return false;
+          // 如果当前页面在子菜单中，或者用户之前手动展开过，则保持展开
+          const hasActiveChild = item.children.some((child) => child.path === currentPath);
+          const wasManuallyExpanded = getMenuState(item.id);
+          return hasActiveChild || wasManuallyExpanded;
+        }
+
+        // 生成菜单HTML
+        function generateMenu(userRole) {
+          const menuItems = menuConfig[userRole] || menuConfig.admin;
+          const navigation = document.getElementById('navigation');
+          const currentPath = getCurrentPath();
+
+          if (!navigation) return;
+
+          let menuHTML = '';
+
+          menuItems.forEach((item) => {
+            const isActive = isMenuItemActive(item, currentPath);
+            const hasChildren = item.children && item.children.length > 0;
+            const shouldExpand = shouldExpandSubmenu(item, currentPath);
+
+            if (hasChildren) {
+              menuHTML += `
+          <li class="nav-item ${shouldExpand ? 'menu-open' : ''}">
+            <a href="#" class="nav-link ${isActive ? 'active' : ''}" id="menu-${item.id}" onclick="toggleSubmenu(event, this)">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>
+                ${item.label}
+                <i class="nav-arrow bi bi-chevron-right" style="transform: ${shouldExpand ? 'rotate(90deg)' : 'rotate(0deg)'}; position: absolute; right: 10px; top: 50%; margin-top: -8px;"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview" style="display: ${shouldExpand ? 'block' : 'none'};">
+        `;
+
+              item.children.forEach((child) => {
+                const childActive = child.path === currentPath;
+                menuHTML += `
+            <li class="nav-item">
+              <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
+                <i class="nav-icon ${child.icon || 'bi-dot'}"></i>
+                <p>${child.label}</p>
+              </a>
+            </li>
+          `;
+              });
+
+              menuHTML += `
+            </ul>
+          </li>
+        `;
+            } else {
+              menuHTML += `
+          <li class="nav-item">
+            <a href="${item.path}" class="nav-link ${isActive ? 'active' : ''}">
+              <i class="nav-icon ${item.icon}"></i>
+              <p>${item.label}</p>
+            </a>
+          </li>
+        `;
+            }
+          });
+
+          navigation.innerHTML = menuHTML;
+        }
+
+        // 切换子菜单展开状态
+        function toggleSubmenu(event, element) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const parentLi = element.closest('.nav-item');
+          const submenu = parentLi.querySelector('.nav-treeview');
+          const arrow = element.querySelector('.nav-arrow');
+          const menuId = element.id.replace('menu-', '');
+
+          // 切换显示状态
+          if (submenu.style.display === 'none' || submenu.style.display === '') {
+            submenu.style.display = 'block';
+            parentLi.classList.add('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(90deg)';
+            saveMenuState(menuId, true); // 保存展开状态
+          } else {
+            submenu.style.display = 'none';
+            parentLi.classList.remove('menu-open');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+            saveMenuState(menuId, false); // 保存折叠状态
+          }
+        }
+
+        // 获取当前用户角色
+        function getCurrentUserRole() {
+          if (typeof globalThis.sessionStorage !== 'undefined') {
+            const userStr = globalThis.sessionStorage.getItem('currentUser');
+            if (userStr) {
+              const user = JSON.parse(userStr);
+              return user.role;
+            }
+          }
+          return 'admin';
+        }
+
+        // 页面加载时生成菜单
+        document.addEventListener('DOMContentLoaded', function () {
+          const userRole = getCurrentUserRole();
+          if (userRole) {
+            generateMenu(userRole);
+
+            // 更新品牌链接
+            const brandLink = document.getElementById('brandLink');
+            if (brandLink) {
+              brandLink.href = userRole === 'admin' ? '/index.html' : '/dashboard.html';
+            }
+          } else {
+            // 如果没有用户信息，跳转到登录页面
+            globalThis.location.href = '/login.html';
+          }
+        });
+      </script>
+      <main class="app-main" data-astro-cid-vydqtb4g>
+        <!-- 页面头部 -->
+        <div class="app-content-header" data-astro-cid-vydqtb4g>
+          <div class="container-fluid" data-astro-cid-vydqtb4g>
+            <div class="row align-items-center" data-astro-cid-vydqtb4g>
+              <div class="col-sm-8" data-astro-cid-vydqtb4g>
+                <div class="d-flex align-items-center mb-2" data-astro-cid-vydqtb4g>
+                  <a
+                    href="../../ai/formulas.html"
+                    class="btn btn-outline-secondary btn-sm me-3"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <i class="fas fa-arrow-left me-1" data-astro-cid-vydqtb4g></i>返回配方查询
+                  </a>
+                  <h3 class="mb-0 me-3" data-astro-cid-vydqtb4g>F-0001 · 春日花香 · v2</h3>
+                  <span class="badge text-bg-secondary me-1" data-astro-cid-vydqtb4g>花香</span
+                  ><span class="badge text-bg-secondary me-1" data-astro-cid-vydqtb4g>清新</span
+                  ><span class="badge text-bg-secondary me-1" data-astro-cid-vydqtb4g>日用</span>
+                  <span class="badge ms-2 text-bg-success" data-astro-cid-vydqtb4g> 在用 </span>
+                </div>
+                <nav aria-label="breadcrumb" data-astro-cid-vydqtb4g>
+                  <ol class="breadcrumb mb-0" data-astro-cid-vydqtb4g>
+                    <li class="breadcrumb-item" data-astro-cid-vydqtb4g>
+                      <a href="#" data-astro-cid-vydqtb4g>首页</a>
+                    </li>
+                    <li class="breadcrumb-item" data-astro-cid-vydqtb4g>
+                      <a href="#" data-astro-cid-vydqtb4g>AI配方</a>
+                    </li>
+                    <li class="breadcrumb-item" data-astro-cid-vydqtb4g>
+                      <a href="../../ai/formulas.html" data-astro-cid-vydqtb4g>配方查询</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page" data-astro-cid-vydqtb4g>
+                      F-0001
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="col-sm-4 text-end" data-astro-cid-vydqtb4g>
+                <div class="btn-group" role="group" data-astro-cid-vydqtb4g>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    onclick="window.printFormula()"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <i class="fas fa-print me-1" data-astro-cid-vydqtb4g></i>打印
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-sm"
+                    onclick="window.exportPDF()"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <i class="fas fa-download me-1" data-astro-cid-vydqtb4g></i>导出PDF
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-info btn-sm"
+                    onclick="window.exportCSV()"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <i class="fas fa-file-csv me-1" data-astro-cid-vydqtb4g></i>导出CSV
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-content" data-astro-cid-vydqtb4g>
+          <div class="container-fluid" data-astro-cid-vydqtb4g>
+            <!-- 打印专用标题 -->
+            <div class="print-only print-title" data-astro-cid-vydqtb4g>
+              F-0001 - 春日花香 (v2)
+              <br data-astro-cid-vydqtb4g />
+              <small style="font-size: 14px; color: #666" data-astro-cid-vydqtb4g>
+                导出时间: 2025/8/22 17:52:36
+              </small>
+            </div>
+            <!-- 上半区：信息卡片 + 可视化 -->
+            <div class="row mb-4" data-astro-cid-vydqtb4g>
+              <!-- 左侧信息卡片 -->
+              <div class="col-lg-6" data-astro-cid-vydqtb4g>
+                <div class="row" data-astro-cid-vydqtb4g>
+                  <!-- 基本信息 -->
+                  <div class="col-12 mb-3" data-astro-cid-vydqtb4g>
+                    <div class="card" data-astro-cid-vydqtb4g>
+                      <div class="card-header" data-astro-cid-vydqtb4g>
+                        <h5 class="card-title mb-0" data-astro-cid-vydqtb4g>基本信息</h5>
+                      </div>
+                      <div class="card-body" data-astro-cid-vydqtb4g>
+                        <div class="row" data-astro-cid-vydqtb4g>
+                          <div class="col-6" data-astro-cid-vydqtb4g>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>配方ID：</strong>F-0001
+                            </p>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>版本：</strong>v2
+                            </p>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>创建时间：</strong>2024/12/1
+                            </p>
+                          </div>
+                          <div class="col-6" data-astro-cid-vydqtb4g>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>作者：</strong>调香师 A
+                            </p>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>更新时间：</strong>2025/1/2
+                            </p>
+                            <p class="mb-2" data-astro-cid-vydqtb4g>
+                              <strong data-astro-cid-vydqtb4g>香调标签：</strong>
+                              <span
+                                class="badge text-bg-light text-dark me-1"
+                                data-astro-cid-vydqtb4g
+                                >花香</span
+                              ><span
+                                class="badge text-bg-light text-dark me-1"
+                                data-astro-cid-vydqtb4g
+                                >清新</span
+                              ><span
+                                class="badge text-bg-light text-dark me-1"
+                                data-astro-cid-vydqtb4g
+                                >日用</span
+                              >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 成本信息 -->
+                  <div class="col-12 mb-3" data-astro-cid-vydqtb4g>
+                    <div class="card" data-astro-cid-vydqtb4g>
+                      <div class="card-header" data-astro-cid-vydqtb4g>
+                        <h5 class="card-title mb-0" data-astro-cid-vydqtb4g>成本信息</h5>
+                      </div>
+                      <div class="card-body" data-astro-cid-vydqtb4g>
+                        <p class="mb-3" data-astro-cid-vydqtb4g>
+                          <strong data-astro-cid-vydqtb4g>总成本：</strong>¥123.45/kg
+                        </p>
+                        <p class="mb-2" data-astro-cid-vydqtb4g>
+                          <strong data-astro-cid-vydqtb4g>主要原料成本Top3：</strong>
+                        </p>
+                        <div class="table-responsive" data-astro-cid-vydqtb4g>
+                          <table class="table table-sm" data-astro-cid-vydqtb4g>
+                            <tbody data-astro-cid-vydqtb4g>
+                              <tr data-astro-cid-vydqtb4g>
+                                <td data-astro-cid-vydqtb4g>玫瑰精油</td>
+                                <td class="text-end" data-astro-cid-vydqtb4g>¥45.2</td>
+                              </tr>
+                              <tr data-astro-cid-vydqtb4g>
+                                <td data-astro-cid-vydqtb4g>茉莉精油</td>
+                                <td class="text-end" data-astro-cid-vydqtb4g>¥32.15</td>
+                              </tr>
+                              <tr data-astro-cid-vydqtb4g>
+                                <td data-astro-cid-vydqtb4g>檀香精油</td>
+                                <td class="text-end" data-astro-cid-vydqtb4g>¥28.9</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 香调标签信息 -->
+                  <div class="col-12 mb-3" data-astro-cid-vydqtb4g>
+                    <div class="card" data-astro-cid-vydqtb4g>
+                      <div class="card-header" data-astro-cid-vydqtb4g>
+                        <h5 class="card-title mb-0" data-astro-cid-vydqtb4g>香调标签</h5>
+                      </div>
+                      <div class="card-body" data-astro-cid-vydqtb4g>
+                        <div class="row" data-astro-cid-vydqtb4g>
+                          <div class="col-4" data-astro-cid-vydqtb4g>
+                            <div class="text-primary mb-2" data-astro-cid-vydqtb4g>
+                              <i class="fas fa-leaf me-1" data-astro-cid-vydqtb4g></i>
+                              <strong data-astro-cid-vydqtb4g>前调</strong>
+                            </div>
+                            <div data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-primary me-1 mb-1" data-astro-cid-vydqtb4g
+                                >柑橘</span
+                              ><span class="badge text-bg-primary me-1 mb-1" data-astro-cid-vydqtb4g
+                                >清新</span
+                              ><span class="badge text-bg-primary me-1 mb-1" data-astro-cid-vydqtb4g
+                                >明亮</span
+                              >
+                            </div>
+                          </div>
+                          <div class="col-4" data-astro-cid-vydqtb4g>
+                            <div class="text-success mb-2" data-astro-cid-vydqtb4g>
+                              <i class="fas fa-flower me-1" data-astro-cid-vydqtb4g></i>
+                              <strong data-astro-cid-vydqtb4g>中调</strong>
+                            </div>
+                            <div data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-success me-1 mb-1" data-astro-cid-vydqtb4g
+                                >花香</span
+                              ><span class="badge text-bg-success me-1 mb-1" data-astro-cid-vydqtb4g
+                                >优雅</span
+                              ><span class="badge text-bg-success me-1 mb-1" data-astro-cid-vydqtb4g
+                                >栀子花</span
+                              >
+                            </div>
+                          </div>
+                          <div class="col-4" data-astro-cid-vydqtb4g>
+                            <div class="text-warning mb-2" data-astro-cid-vydqtb4g>
+                              <i class="fas fa-tree me-1" data-astro-cid-vydqtb4g></i>
+                              <strong data-astro-cid-vydqtb4g>后调</strong>
+                            </div>
+                            <div data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-warning me-1 mb-1" data-astro-cid-vydqtb4g
+                                >温暖</span
+                              ><span class="badge text-bg-warning me-1 mb-1" data-astro-cid-vydqtb4g
+                                >持久</span
+                              ><span class="badge text-bg-warning me-1 mb-1" data-astro-cid-vydqtb4g
+                                >麝香</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 合规信息 -->
+                  <div class="col-12" data-astro-cid-vydqtb4g>
+                    <div class="card" data-astro-cid-vydqtb4g>
+                      <div class="card-header" data-astro-cid-vydqtb4g>
+                        <h5 class="card-title mb-0" data-astro-cid-vydqtb4g>合规信息</h5>
+                      </div>
+                      <div class="card-body" data-astro-cid-vydqtb4g>
+                        <p class="mb-2" data-astro-cid-vydqtb4g>
+                          <strong data-astro-cid-vydqtb4g>IFRA类别：</strong>Cat 4
+                        </p>
+                        <p class="mb-2" data-astro-cid-vydqtb4g>
+                          <strong data-astro-cid-vydqtb4g>合规状态：</strong>
+                          <span class="badge text-bg-success" data-astro-cid-vydqtb4g> 通过 </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 右侧可视化 -->
+              <div class="col-lg-6" data-astro-cid-vydqtb4g>
+                <div class="card h-100" data-astro-cid-vydqtb4g>
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <h5 class="card-title mb-0" data-astro-cid-vydqtb4g>配方结构图</h5>
+                    <div class="btn-group btn-group-sm" role="group" data-astro-cid-vydqtb4g>
+                      <input
+                        type="radio"
+                        class="btn-check"
+                        name="chartType"
+                        id="networkChart"
+                        autocomplete="off"
+                        checked
+                        data-astro-cid-vydqtb4g
+                      />
+                      <label
+                        class="btn btn-outline-primary"
+                        for="networkChart"
+                        data-astro-cid-vydqtb4g
+                        >网状图</label
+                      >
+                      <input
+                        type="radio"
+                        class="btn-check"
+                        name="chartType"
+                        id="radarChart"
+                        autocomplete="off"
+                        data-astro-cid-vydqtb4g
+                      />
+                      <label
+                        class="btn btn-outline-primary"
+                        for="radarChart"
+                        data-astro-cid-vydqtb4g
+                        >雷达图</label
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="card-body d-flex align-items-center justify-content-center"
+                    style="min-height: 500px"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <div
+                      id="formulaChart"
+                      style="width: 100%; height: 480px"
+                      data-astro-cid-vydqtb4g
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 下半区：内容分区 -->
+            <div class="card" data-astro-cid-vydqtb4g>
+              <div class="card-header" data-astro-cid-vydqtb4g>
+                <ul
+                  class="nav nav-tabs card-header-tabs"
+                  id="formulaTabs"
+                  role="tablist"
+                  data-astro-cid-vydqtb4g
+                >
+                  <li class="nav-item" role="presentation" data-astro-cid-vydqtb4g>
+                    <button
+                      class="nav-link active"
+                      id="overview-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#overview"
+                      type="button"
+                      role="tab"
+                      data-astro-cid-vydqtb4g
+                    >
+                      概览
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation" data-astro-cid-vydqtb4g>
+                    <button
+                      class="nav-link"
+                      id="materials-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#materials"
+                      type="button"
+                      role="tab"
+                      data-astro-cid-vydqtb4g
+                    >
+                      配方明细
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation" data-astro-cid-vydqtb4g>
+                    <button
+                      class="nav-link"
+                      id="compliance-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#compliance"
+                      type="button"
+                      role="tab"
+                      data-astro-cid-vydqtb4g
+                    >
+                      合规与安全
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation" data-astro-cid-vydqtb4g>
+                    <button
+                      class="nav-link"
+                      id="versions-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#versions"
+                      type="button"
+                      role="tab"
+                      data-astro-cid-vydqtb4g
+                    >
+                      版本历史
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body" data-astro-cid-vydqtb4g>
+                <div class="tab-content" id="formulaTabsContent" data-astro-cid-vydqtb4g>
+                  <!-- 概览标签页 -->
+                  <div
+                    class="tab-pane fade show active"
+                    id="overview"
+                    role="tabpanel"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <div class="row" data-astro-cid-vydqtb4g>
+                      <div class="col-12" data-astro-cid-vydqtb4g>
+                        <h6 data-astro-cid-vydqtb4g>配方描述</h6>
+                        <p class="text-muted" data-astro-cid-vydqtb4g>
+                          清新花果调，前调柑橘明亮，主体栀子花优雅，基调麝香温暖持久。适合春夏季节日常使用。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 配方明细标签页 -->
+                  <div class="tab-pane fade" id="materials" role="tabpanel" data-astro-cid-vydqtb4g>
+                    <div class="row mb-3" data-astro-cid-vydqtb4g>
+                      <div class="col-md-3" data-astro-cid-vydqtb4g>
+                        <label class="form-label" data-astro-cid-vydqtb4g>目标总量</label>
+                        <div class="input-group" data-astro-cid-vydqtb4g>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="totalAmount"
+                            value="1000"
+                            data-astro-cid-vydqtb4g
+                          />
+                          <span class="input-group-text" data-astro-cid-vydqtb4g>g</span>
+                        </div>
+                      </div>
+                      <div class="col-md-2" data-astro-cid-vydqtb4g>
+                        <label class="form-label" data-astro-cid-vydqtb4g>小数精度</label>
+                        <select class="form-select" id="precision" data-astro-cid-vydqtb4g>
+                          <option value="1" data-astro-cid-vydqtb4g>1位</option>
+                          <option value="2" selected data-astro-cid-vydqtb4g>2位</option>
+                          <option value="3" data-astro-cid-vydqtb4g>3位</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2" data-astro-cid-vydqtb4g>
+                        <label class="form-label" data-astro-cid-vydqtb4g>显示单位</label>
+                        <select class="form-select" id="displayUnit" data-astro-cid-vydqtb4g>
+                          <option value="g" data-astro-cid-vydqtb4g>克(g)</option>
+                          <option value="kg" data-astro-cid-vydqtb4g>千克(kg)</option>
+                          <option value="percent" data-astro-cid-vydqtb4g>百分比(%)</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 align-self-end" data-astro-cid-vydqtb4g>
+                        <button
+                          class="btn btn-primary"
+                          onclick="window.updateCalculation()"
+                          data-astro-cid-vydqtb4g
+                        >
+                          重新计算
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="table-responsive" data-astro-cid-vydqtb4g>
+                      <table class="table table-hover" id="materialsTable" data-astro-cid-vydqtb4g>
+                        <thead data-astro-cid-vydqtb4g>
+                          <tr data-astro-cid-vydqtb4g>
+                            <th data-astro-cid-vydqtb4g>原料名称</th>
+                            <th data-astro-cid-vydqtb4g>CAS号</th>
+                            <th data-astro-cid-vydqtb4g>角色</th>
+                            <th data-astro-cid-vydqtb4g>百分比(%)</th>
+                            <th data-astro-cid-vydqtb4g>用量(g)</th>
+                            <th data-astro-cid-vydqtb4g>单价(¥/kg)</th>
+                            <th data-astro-cid-vydqtb4g>成本(¥)</th>
+                            <th data-astro-cid-vydqtb4g>风险</th>
+                          </tr>
+                        </thead>
+                        <tbody data-astro-cid-vydqtb4g>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>柠檬烯</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>138-86-3</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-primary" data-astro-cid-vydqtb4g>
+                                前调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>2.5%</td>
+                            <td data-astro-cid-vydqtb4g>25.00</td>
+                            <td data-astro-cid-vydqtb4g>¥120.00</td>
+                            <td data-astro-cid-vydqtb4g>¥3.00</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-danger" data-astro-cid-vydqtb4g
+                                >过敏原</span
+                              >
+                            </td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>芳樟醇</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>78-70-6</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-success" data-astro-cid-vydqtb4g>
+                                中调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>1.8%</td>
+                            <td data-astro-cid-vydqtb4g>18.00</td>
+                            <td data-astro-cid-vydqtb4g>¥150.00</td>
+                            <td data-astro-cid-vydqtb4g>¥2.70</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>玫瑰精油</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>8007-01-0</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-success" data-astro-cid-vydqtb4g>
+                                中调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>0.8%</td>
+                            <td data-astro-cid-vydqtb4g>8.00</td>
+                            <td data-astro-cid-vydqtb4g>¥2800.00</td>
+                            <td data-astro-cid-vydqtb4g>¥22.40</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>茉莉精油</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>8022-96-6</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-success" data-astro-cid-vydqtb4g>
+                                中调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>0.6%</td>
+                            <td data-astro-cid-vydqtb4g>6.00</td>
+                            <td data-astro-cid-vydqtb4g>¥3200.00</td>
+                            <td data-astro-cid-vydqtb4g>¥19.20</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>檀香精油</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>8006-87-9</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-warning" data-astro-cid-vydqtb4g>
+                                后调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>1.2%</td>
+                            <td data-astro-cid-vydqtb4g>12.00</td>
+                            <td data-astro-cid-vydqtb4g>¥1800.00</td>
+                            <td data-astro-cid-vydqtb4g>¥21.60</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>麝香酮</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>81-14-1</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-warning" data-astro-cid-vydqtb4g>
+                                后调
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>0.3%</td>
+                            <td data-astro-cid-vydqtb4g>3.00</td>
+                            <td data-astro-cid-vydqtb4g>¥450.00</td>
+                            <td data-astro-cid-vydqtb4g>¥1.35</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                          <tr data-astro-cid-vydqtb4g>
+                            <td data-astro-cid-vydqtb4g>乙醇</td>
+                            <td class="text-muted" data-astro-cid-vydqtb4g>64-17-5</td>
+                            <td data-astro-cid-vydqtb4g>
+                              <span class="badge text-bg-secondary" data-astro-cid-vydqtb4g>
+                                溶剂
+                              </span>
+                            </td>
+                            <td data-astro-cid-vydqtb4g>92.8%</td>
+                            <td data-astro-cid-vydqtb4g>928.00</td>
+                            <td data-astro-cid-vydqtb4g>¥25.00</td>
+                            <td data-astro-cid-vydqtb4g>¥23.20</td>
+                            <td data-astro-cid-vydqtb4g></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- 合规与安全标签页 -->
+                  <div
+                    class="tab-pane fade"
+                    id="compliance"
+                    role="tabpanel"
+                    data-astro-cid-vydqtb4g
+                  >
+                    <div class="row" data-astro-cid-vydqtb4g>
+                      <div class="col-12" data-astro-cid-vydqtb4g>
+                        <h6 data-astro-cid-vydqtb4g>IFRA合规检查</h6>
+                        <div class="alert alert-success" data-astro-cid-vydqtb4g>
+                          <i class="fas fa-check-circle me-2" data-astro-cid-vydqtb4g></i>
+                          当前配方符合IFRA Cat 4 类别的所有限量要求
+                        </div>
+
+                        <h6 class="mt-4" data-astro-cid-vydqtb4g>过敏原提示</h6>
+                        <div class="table-responsive" data-astro-cid-vydqtb4g>
+                          <table class="table table-sm" data-astro-cid-vydqtb4g>
+                            <thead data-astro-cid-vydqtb4g>
+                              <tr data-astro-cid-vydqtb4g>
+                                <th data-astro-cid-vydqtb4g>原料名称</th>
+                                <th data-astro-cid-vydqtb4g>风险类型</th>
+                                <th data-astro-cid-vydqtb4g>含量</th>
+                                <th data-astro-cid-vydqtb4g>建议</th>
+                              </tr>
+                            </thead>
+                            <tbody data-astro-cid-vydqtb4g>
+                              <tr data-astro-cid-vydqtb4g>
+                                <td data-astro-cid-vydqtb4g>柠檬烯</td>
+                                <td data-astro-cid-vydqtb4g>
+                                  <span class="badge text-bg-warning" data-astro-cid-vydqtb4g
+                                    >过敏原</span
+                                  >
+                                </td>
+                                <td data-astro-cid-vydqtb4g>2.5%</td>
+                                <td data-astro-cid-vydqtb4g>需在包装上标注</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 版本历史标签页 -->
+                  <div class="tab-pane fade" id="versions" role="tabpanel" data-astro-cid-vydqtb4g>
+                    <div class="timeline" data-astro-cid-vydqtb4g>
+                      <div class="timeline-item" data-astro-cid-vydqtb4g>
+                        <div class="timeline-marker bg-primary" data-astro-cid-vydqtb4g></div>
+                        <div class="timeline-content" data-astro-cid-vydqtb4g>
+                          <h6 class="timeline-title" data-astro-cid-vydqtb4g>版本 v2</h6>
+                          <p class="timeline-text" data-astro-cid-vydqtb4g>
+                            调整留香时间，增加基调比例
+                          </p>
+                          <small class="text-muted" data-astro-cid-vydqtb4g
+                            >2025/1/2 18:20:00</small
+                          >
+                        </div>
+                      </div>
+                      <div class="timeline-item" data-astro-cid-vydqtb4g>
+                        <div class="timeline-marker bg-primary" data-astro-cid-vydqtb4g></div>
+                        <div class="timeline-content" data-astro-cid-vydqtb4g>
+                          <h6 class="timeline-title" data-astro-cid-vydqtb4g>版本 v1</h6>
+                          <p class="timeline-text" data-astro-cid-vydqtb4g>初版配方</p>
+                          <small class="text-muted" data-astro-cid-vydqtb4g
+                            >2024/12/1 17:00:00</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!--begin::Footer-->
+      <footer class="app-footer">
+        <!--begin::To the end-->
+        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <!--end::To the end-->
+        <!--begin::Copyright-->
+        <strong>
+          Copyright &copy; 2025-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none"
+            >香知香遇科技（上海）有限责任公司</a
+          >.
+        </strong>
+        All rights reserved.
+        <!--end::Copyright-->
+      </footer>
+      <!--end::Footer-->
+    </div>
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+    <script src="../../js/adminlte.js"></script>
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+
+        // Disable OverlayScrollbars on mobile devices to prevent touch interference
+        const isMobile = window.innerWidth <= 992;
+
+        if (
+          sidebarWrapper &&
+          OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+          !isMobile
+        ) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
+    <!--end::OverlayScrollbars Configure-->
+
+    <script>
+      (function () {
+        const formulaData = {
+          id: 'F-0001',
+          name: '春日花香',
+          version: 'v2',
+          tags: ['花香', '清新', '日用'],
+          createdAt: '2024-12-01T09:00:00Z',
+          updatedAt: '2025-01-02T10:20:00Z',
+          author: '调香师 A',
+          status: '在用',
+          batch: { defaultTotal: 1000, unit: 'g', precision: 2 },
+          cost: {
+            currency: 'CNY',
+            perKg: 123.45,
+            topMaterials: [
+              { name: '玫瑰精油', cost: 45.2 },
+              { name: '茉莉精油', cost: 32.15 },
+              { name: '檀香精油', cost: 28.9 },
+            ],
+          },
+          noteRatio: { top: 35, heart: 45, base: 20 },
+          noteTags: {
+            top: ['柑橘', '清新', '明亮'],
+            heart: ['花香', '优雅', '栀子花'],
+            base: ['温暖', '持久', '麝香'],
+          },
+          ifra: { category: 'Cat 4', status: '通过', messages: [] },
+          summary:
+            '清新花果调，前调柑橘明亮，主体栀子花优雅，基调麝香温暖持久。适合春夏季节日常使用。',
+          materials: [
+            {
+              name: '柠檬烯',
+              cas: '138-86-3',
+              role: 'top',
+              percent: 2.5,
+              pricePerKg: 120,
+              risk: 'allergen',
+            },
+            {
+              name: '芳樟醇',
+              cas: '78-70-6',
+              role: 'heart',
+              percent: 1.8,
+              pricePerKg: 150,
+              risk: '',
+            },
+            {
+              name: '玫瑰精油',
+              cas: '8007-01-0',
+              role: 'heart',
+              percent: 0.8,
+              pricePerKg: 2800,
+              risk: '',
+            },
+            {
+              name: '茉莉精油',
+              cas: '8022-96-6',
+              role: 'heart',
+              percent: 0.6,
+              pricePerKg: 3200,
+              risk: '',
+            },
+            {
+              name: '檀香精油',
+              cas: '8006-87-9',
+              role: 'base',
+              percent: 1.2,
+              pricePerKg: 1800,
+              risk: '',
+            },
+            {
+              name: '麝香酮',
+              cas: '81-14-1',
+              role: 'base',
+              percent: 0.3,
+              pricePerKg: 450,
+              risk: '',
+            },
+            {
+              name: '乙醇',
+              cas: '64-17-5',
+              role: 'solvent',
+              percent: 92.8,
+              pricePerKg: 25,
+              risk: '',
+            },
+          ],
+          versions: [
+            {
+              version: 'v2',
+              updatedAt: '2025-01-02T10:20:00Z',
+              summary: '调整留香时间，增加基调比例',
+            },
+            { version: 'v1', updatedAt: '2024-12-01T09:00:00Z', summary: '初版配方' },
+          ],
+        };
+
+        // 图表数据准备 - 使用Astro的define:vars传递数据
+        const clientFormulaData = formulaData;
+
+        console.log('配方数据:', clientFormulaData);
+
+        // 初始化ECharts
+        let myChart = null;
+
+        function initChart() {
+          console.log('开始初始化图表...');
+
+          // 检查ECharts是否加载
+          if (typeof echarts === 'undefined') {
+            console.error('ECharts未加载');
+            document.getElementById('formulaChart').innerHTML =
+              '<div class="text-center text-muted p-4">图表库加载失败，请刷新页面重试</div>';
+            return;
+          }
+
+          const chartDom = document.getElementById('formulaChart');
+          if (!chartDom) {
+            console.error('图表容器未找到');
+            return;
+          }
+
+          try {
+            myChart = echarts.init(chartDom);
+            console.log('ECharts初始化成功');
+
+            // 显示网状图
+            showNetworkChart();
+          } catch (error) {
+            console.error('ECharts初始化失败:', error);
+            chartDom.innerHTML = '<div class="text-center text-muted p-4">图表初始化失败</div>';
+          }
+        }
+
+        function showNetworkChart() {
+          console.log('显示网状图...');
+
+          if (!myChart) {
+            console.error('图表实例未初始化');
+            return;
+          }
+
+          // 清空图表，防止叠加
+          myChart.clear();
+
+          // 简化的节点数据 - 调整位置以适应更大的空间
+          const nodes = [
+            // 主节点 - 扩大间距
+            { id: 'top', name: '前调', category: 0, symbolSize: 80, x: 0, y: -180 },
+            { id: 'heart', name: '中调', category: 1, symbolSize: 80, x: -180, y: 120 },
+            { id: 'base', name: '后调', category: 2, symbolSize: 80, x: 180, y: 120 },
+          ];
+
+          const links = [];
+
+          // 添加原料节点和连线
+          console.log('开始处理原料数据:', clientFormulaData.materials);
+
+          if (clientFormulaData.materials && Array.isArray(clientFormulaData.materials)) {
+            clientFormulaData.materials.forEach((material, index) => {
+              console.log('处理原料:', material);
+
+              if (material.role && material.role !== 'solvent') {
+                const nodeId = 'material_' + index;
+
+                const nodeConfig = {
+                  id: nodeId,
+                  name: material.name + '\n' + material.percent + '%',
+                  category: material.role === 'top' ? 0 : material.role === 'heart' ? 1 : 2,
+                  symbolSize: Math.max(30, material.percent * 12),
+                  x: Math.random() * 400 - 200,
+                  y: Math.random() * 400 - 200,
+                };
+
+                if (material.risk === 'allergen') {
+                  nodeConfig.itemStyle = { color: '#ff6b6b' };
+                }
+
+                nodes.push(nodeConfig);
+
+                links.push({
+                  source: material.role,
+                  target: nodeId,
+                  lineStyle: {
+                    width: Math.max(2, material.percent),
+                  },
+                });
+              }
+            });
+          }
+
+          // 如果没有原料数据，添加示例节点 - 调整到更大的空间
+          if (nodes.length <= 3) {
+            console.log('没有原料数据，添加示例节点');
+            nodes.push(
+              { id: 'sample1', name: '柠檬烯\n2.5%', category: 0, symbolSize: 40, x: 80, y: -120 },
+              { id: 'sample2', name: '芳樟醇\n1.8%', category: 1, symbolSize: 35, x: -120, y: 80 },
+              { id: 'sample3', name: '檀香\n1.2%', category: 2, symbolSize: 30, x: 120, y: 80 },
+            );
+            links.push(
+              { source: 'top', target: 'sample1' },
+              { source: 'heart', target: 'sample2' },
+              { source: 'base', target: 'sample3' },
+            );
+          }
+
+          console.log('最终节点数据:', nodes);
+          console.log('最终连线数据:', links);
+
+          const option = {
+            tooltip: {
+              formatter: function (params) {
+                if (params.dataType === 'node') {
+                  return params.data.name;
+                } else if (params.dataType === 'edge') {
+                  return params.data.source + ' → ' + params.data.target;
+                }
+                return '';
+              },
+            },
+            legend: {
+              data: ['前调', '中调', '后调'],
+              orient: 'horizontal',
+              bottom: 10,
+            },
+            series: [
+              {
+                type: 'graph',
+                layout: 'none',
+                data: nodes,
+                links: links,
+                categories: [
+                  { name: '前调', itemStyle: { color: '#5470c6' } },
+                  { name: '中调', itemStyle: { color: '#91cc75' } },
+                  { name: '后调', itemStyle: { color: '#fac858' } },
+                ],
+                roam: true,
+                label: {
+                  show: true,
+                  position: 'inside',
+                  formatter: '{b}',
+                  fontSize: 10,
+                },
+                labelLayout: {
+                  hideOverlap: true,
+                },
+                lineStyle: {
+                  color: 'source',
+                  curveness: 0.1,
+                },
+                emphasis: {
+                  focus: 'adjacency',
+                  lineStyle: {
+                    width: 10,
+                  },
+                },
+              },
+            ],
+          };
+
+          try {
+            myChart.setOption(option);
+            console.log('网状图配置成功');
+          } catch (error) {
+            console.error('设置图表配置失败:', error);
+          }
+        }
+
+        function showRadarChart() {
+          console.log('显示雷达图...');
+
+          if (!myChart) {
+            console.error('图表实例未初始化');
+            return;
+          }
+
+          // 清空图表，防止叠加
+          myChart.clear();
+
+          // 收集所有标签作为雷达图的维度
+          console.log('雷达图数据检查:', clientFormulaData.noteTags);
+          const allTags = [];
+          const tagValues = [];
+
+          // 收集前调标签
+          if (clientFormulaData.noteTags?.top) {
+            clientFormulaData.noteTags.top.forEach((tag) => {
+              if (!allTags.includes(tag)) {
+                allTags.push(tag);
+              }
+            });
+          }
+
+          // 收集中调标签
+          if (clientFormulaData.noteTags?.heart) {
+            clientFormulaData.noteTags.heart.forEach((tag) => {
+              if (!allTags.includes(tag)) {
+                allTags.push(tag);
+              }
+            });
+          }
+
+          // 收集后调标签
+          if (clientFormulaData.noteTags?.base) {
+            clientFormulaData.noteTags.base.forEach((tag) => {
+              if (!allTags.includes(tag)) {
+                allTags.push(tag);
+              }
+            });
+          }
+
+          console.log('所有标签:', allTags);
+
+          // 为每个标签计算值（存在为1，不存在为0）
+          allTags.forEach((tag) => {
+            let value = 0;
+            if (clientFormulaData.noteTags?.top?.includes(tag)) value = 1;
+            if (clientFormulaData.noteTags?.heart?.includes(tag)) value = 1;
+            if (clientFormulaData.noteTags?.base?.includes(tag)) value = 1;
+            tagValues.push(value);
+          });
+
+          console.log('标签值:', tagValues);
+
+          // 构建雷达图指示器
+          const indicators = allTags.map((tag) => ({
+            name: tag,
+            max: 1,
+          }));
+
+          const option = {
+            title: {
+              text: '香调标签特征',
+              left: 'center',
+              top: 20,
+              textStyle: {
+                fontSize: 18,
+                fontWeight: 'bold',
+              },
+            },
+            radar: {
+              center: ['50%', '55%'],
+              radius: '65%',
+              indicator: indicators,
+              shape: 'polygon',
+              splitNumber: 1,
+              name: {
+                textStyle: {
+                  color: '#333',
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                },
+              },
+              splitLine: {
+                lineStyle: {
+                  color: '#ddd',
+                  width: 1,
+                },
+              },
+              splitArea: {
+                show: true,
+                areaStyle: {
+                  color: ['rgba(250, 250, 250, 0.3)', 'rgba(200, 200, 200, 0.3)'],
+                },
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#999',
+                },
+              },
+            },
+            series: [
+              {
+                type: 'radar',
+                data: [
+                  {
+                    value: tagValues,
+                    name: '香调特征',
+                    areaStyle: {
+                      color: 'rgba(91, 204, 117, 0.2)',
+                    },
+                    lineStyle: {
+                      color: '#5bcc75',
+                      width: 2,
+                    },
+                    symbol: 'circle',
+                    symbolSize: 6,
+                  },
+                ],
+              },
+            ],
+            tooltip: {
+              formatter: function (params) {
+                if (params.dataType === 'radar') {
+                  let tooltip = '香调特征:<br/>';
+                  allTags.forEach((tag, index) => {
+                    if (tagValues[index] === 1) {
+                      // 判断标签属于哪个香调
+                      let noteType = '';
+                      if (clientFormulaData.noteTags?.top?.includes(tag)) noteType = '前调';
+                      else if (clientFormulaData.noteTags?.heart?.includes(tag)) noteType = '中调';
+                      else if (clientFormulaData.noteTags?.base?.includes(tag)) noteType = '后调';
+                      tooltip += `${tag} (${noteType})<br/>`;
+                    }
+                  });
+                  return tooltip;
+                }
+                return '';
+              },
+            },
+          };
+
+          try {
+            myChart.setOption(option);
+            console.log('雷达图配置成功');
+          } catch (error) {
+            console.error('设置雷达图配置失败:', error);
+          }
+        }
+
+        // 图表类型切换
+        document.addEventListener('change', function (e) {
+          const target = e.target;
+          if (target && target.name === 'chartType') {
+            if (target.id === 'networkChart') {
+              showNetworkChart();
+            } else if (target.id === 'radarChart') {
+              showRadarChart();
+            }
+          }
+        });
+
+        // 重新计算用量
+        function updateCalculation() {
+          const totalAmountEl = document.getElementById('totalAmount');
+          const precisionEl = document.getElementById('precision');
+          const unitEl = document.getElementById('displayUnit');
+
+          if (!totalAmountEl || !precisionEl || !unitEl) return;
+
+          const totalAmount = parseFloat(totalAmountEl.value);
+          const precision = parseInt(precisionEl.value);
+          const unit = unitEl.value;
+
+          const tbody = document.querySelector('#materialsTable tbody');
+          if (!tbody) return;
+
+          const rows = tbody.querySelectorAll('tr');
+
+          rows.forEach((row, index) => {
+            const material = clientFormulaData.materials[index];
+            const amountCell = row.cells[4];
+            const costCell = row.cells[6];
+
+            let amount = (material.percent * totalAmount) / 100;
+            let cost = (amount * material.pricePerKg) / 1000;
+
+            if (unit === 'kg') {
+              amount = amount / 1000;
+              amountCell.textContent = amount.toFixed(precision + 3) + ' kg';
+            } else if (unit === 'percent') {
+              amountCell.textContent = material.percent + '%';
+            } else {
+              amountCell.textContent = amount.toFixed(precision) + ' g';
+            }
+
+            costCell.textContent = '¥' + cost.toFixed(2);
+          });
+        }
+
+        // 导出功能 - 暴露到全局作用域
+        window.exportPDF = async function () {
+          console.log('开始导出PDF...');
+
+          // 添加密码保护
+          const password = prompt('请输入导出密码（用于版权保护）:', '');
+          if (!password) {
+            alert('未输入密码，导出已取消');
+            return;
+          }
+
+          if (password !== 'xiangzhi2025') {
+            alert('密码错误，导出已取消');
+            return;
+          }
+
+          try {
+            // 使用html2canvas + jsPDF的方式支持中文
+            if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+              alert('PDF导出库未加载完成，请刷新页面重试');
+              return;
+            }
+
+            // 创建一个用于PDF的临时容器
+            const pdfContent = document.createElement('div');
+            pdfContent.style.cssText = `
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 794px;
+            background: white;
+            padding: 40px;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+          `;
+
+            // 添加水印背景
+            const watermarkStyle = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            background-image: repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 100px,
+              rgba(0,0,0,0.03) 100px,
+              rgba(0,0,0,0.03) 200px
+            );
+            overflow: hidden;
+          `;
+
+            const watermarkDiv = document.createElement('div');
+            watermarkDiv.style.cssText = watermarkStyle;
+
+            // 添加多个水印文字
+            for (let i = 0; i < 20; i++) {
+              const watermarkText = document.createElement('div');
+              watermarkText.style.cssText = `
+              position: absolute;
+              color: rgba(0, 0, 0, 0.08);
+              font-size: 24px;
+              font-weight: bold;
+              transform: rotate(-45deg);
+              white-space: nowrap;
+              user-select: none;
+              pointer-events: none;
+              top: ${(i % 5) * 150 + 50}px;
+              left: ${Math.floor(i / 5) * 200 - 50}px;
+            `;
+              watermarkText.textContent = '香知香遇科技（上海）有限责任公司';
+              watermarkDiv.appendChild(watermarkText);
+            }
+
+            pdfContent.appendChild(watermarkDiv);
+
+            // 创建内容容器
+            const contentDiv = document.createElement('div');
+            contentDiv.style.cssText = `
+            position: relative;
+            z-index: 2;
+            background: transparent;
+          `;
+
+            contentDiv.innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px; padding: 15px; border: 2px solid #dc3545; background: #f8d7da; border-radius: 5px;">
+              <h1 style="color: #721c24; margin: 0; font-size: 16px;">⚠️ 版权保护文件 - CONFIDENTIAL DOCUMENT ⚠️</h1>
+              <p style="color: #721c24; margin: 5px 0; font-size: 12px;">本文件受版权保护，仅供授权人员使用 - For authorized personnel only</p>
+              <p style="color: #721c24; margin: 0; font-size: 11px;">文件标识: ${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}</p>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #333; margin: 0; font-size: 24px;">配方详情报告</h1>
+              <h2 style="color: #666; margin: 10px 0; font-size: 18px;">${clientFormulaData.id} - ${clientFormulaData.name} (${clientFormulaData.version})</h2>
+              <p style="color: #999; margin: 0;">导出时间: ${new Date().toLocaleString()}</p>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 5px;">基本信息</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div>
+                  <p><strong>配方ID：</strong>${clientFormulaData.id}</p>
+                  <p><strong>配方名称：</strong>${clientFormulaData.name}</p>
+                  <p><strong>版本：</strong>${clientFormulaData.version}</p>
+                </div>
+                <div>
+                  <p><strong>作者：</strong>${clientFormulaData.author}</p>
+                  <p><strong>成本：</strong>¥${clientFormulaData.cost.perKg}/kg</p>
+                  <p><strong>批次大小：</strong>${clientFormulaData.batch.defaultTotal}g</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #28a745; padding-bottom: 5px;">香调标签</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #1976d2;">前调</h4>
+                  <div>${clientFormulaData.noteTags?.top?.map((tag) => `<span style="display: inline-block; background: #1976d2; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #388e3c;">中调</h4>
+                  <div>${clientFormulaData.noteTags?.heart?.map((tag) => `<span style="display: inline-block; background: #388e3c; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+                <div style="background: #fff3e0; padding: 15px; border-radius: 5px;">
+                  <h4 style="margin: 0 0 10px 0; color: #f57c00;">后调</h4>
+                  <div>${clientFormulaData.noteTags?.base?.map((tag) => `<span style="display: inline-block; background: #f57c00; color: white; padding: 3px 8px; margin: 2px; border-radius: 3px; font-size: 12px;">${tag}</span>`).join('') || '无标签'}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #dc3545; padding-bottom: 5px;">配方明细</h3>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead>
+                  <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">原料名称</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">角色</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">百分比</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">用量(g)</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">成本(¥)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${clientFormulaData.materials
+                    .map((material) => {
+                      const amount = (
+                        (material.percent * clientFormulaData.batch.defaultTotal) /
+                        100
+                      ).toFixed(2);
+                      const cost = (
+                        (((material.percent * clientFormulaData.batch.defaultTotal) / 100) *
+                          material.pricePerKg) /
+                        1000
+                      ).toFixed(2);
+                      const roleText =
+                        material.role === 'top'
+                          ? '前调'
+                          : material.role === 'heart'
+                            ? '中调'
+                            : material.role === 'base'
+                              ? '后调'
+                              : '溶剂';
+                      const riskStyle =
+                        material.risk === 'allergen' ? 'color: red; font-weight: bold;' : '';
+
+                      return `
+                      <tr>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; ${riskStyle}">${material.name}${material.risk === 'allergen' ? ' ⚠️' : ''}</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${roleText}</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${material.percent}%</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${amount}g</td>
+                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">¥${cost}</td>
+                      </tr>
+                    `;
+                    })
+                    .join('')}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #6f42c1; padding-bottom: 5px;">配方描述</h3>
+              <p style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 5px;">${clientFormulaData.summary}</p>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #333; border-bottom: 2px solid #20c997; padding-bottom: 5px;">合规信息</h3>
+              <div style="margin-top: 15px;">
+                <p><strong>IFRA类别：</strong>Category 4 (Fine Fragrance)</p>
+                <p><strong>合规状态：</strong><span style="color: green; font-weight: bold;">✓ 通过</span></p>
+                <p><strong>过敏原提示：</strong>含过敏原成分，需在包装上标注</p>
+              </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid #dc3545; background: #f8f9fa; border-radius: 5px;">
+              <p style="margin: 0; color: #dc3545; font-weight: bold;">© 香知香遇科技（上海）有限责任公司 - 版权所有</p>
+              <p style="margin: 5px 0; font-size: 12px; color: #666;">Xiangzhi Xiangyu Technology (Shanghai) Co., Ltd. - All Rights Reserved</p>
+              <p style="margin: 5px 0 0 0; font-size: 11px; color: #999;">本文件包含商业机密信息，受法律保护 - Contains confidential information protected by law</p>
+              <p style="margin: 5px 0 0 0; font-size: 10px; color: #999;">严禁未经授权传播或使用 - Unauthorized distribution or use is strictly prohibited</p>
+            </div>
+          `;
+
+            pdfContent.appendChild(contentDiv);
+            document.body.appendChild(pdfContent);
+
+            // 使用html2canvas转换为图片，然后生成PDF
+            const canvas = await html2canvas(pdfContent, {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: '#ffffff',
+            });
+
+            document.body.removeChild(pdfContent);
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210;
+            const pageHeight = 295;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+              position = heightLeft - imgHeight;
+              pdf.addPage();
+              pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+              heightLeft -= pageHeight;
+            }
+
+            pdf.save(`${clientFormulaData.id}_${clientFormulaData.name}_配方详情.pdf`);
+          } catch (error) {
+            console.error('PDF导出失败:', error);
+            alert('PDF导出失败：' + error.message);
+          }
+        };
+
+        window.exportCSV = function () {
+          console.log('开始导出CSV...');
+
+          // 添加密码保护
+          const password = prompt('请输入导出密码（用于版权保护）:', '');
+          if (!password) {
+            alert('未输入密码，导出已取消');
+            return;
+          }
+
+          if (password !== 'xiangzhi2025') {
+            alert('密码错误，导出已取消');
+            return;
+          }
+
+          try {
+            // 使用UTF-8 BOM解决中文乱码问题
+            const BOM = '\uFEFF';
+            let csv = BOM;
+
+            // 添加版权声明和水印（在文件开头）
+            csv += '=== 版权声明 / COPYRIGHT NOTICE ===\n';
+            csv += '本文件受版权保护，仅供授权人员使用\n';
+            csv += 'This file is protected by copyright and is for authorized personnel only\n';
+            csv +=
+              '© 香知香遇科技（上海）有限责任公司 / Xiangzhi Xiangyu Technology (Shanghai) Co., Ltd.\n';
+            csv += `导出人员: ${navigator.userAgent.includes('Windows') ? 'Windows用户' : '系统用户'}\n`;
+            csv += `导出时间: ${new Date().toLocaleString()}\n`;
+            csv += `文件标识: ${Date.now().toString(36).toUpperCase()}\n`;
+            csv +=
+              '严禁未经授权传播或使用 / Unauthorized distribution or use is strictly prohibited\n';
+            csv += '\n'.repeat(3);
+
+            // 添加配方基本信息
+            csv += '=== 配方基本信息 ===\n';
+            csv += `配方ID,${clientFormulaData.id}\n`;
+            csv += `配方名称,${clientFormulaData.name}\n`;
+            csv += `版本,${clientFormulaData.version}\n`;
+            csv += `作者,${clientFormulaData.author}\n`;
+            csv += `成本,¥${clientFormulaData.cost.perKg}/kg\n`;
+            csv += `批次大小,${clientFormulaData.batch.defaultTotal}g\n`;
+            csv += `导出时间,${new Date().toLocaleString()}\n`;
+
+            // 添加香调标签
+            csv += '\n=== 香调标签 ===\n';
+            csv += `前调标签,"${clientFormulaData.noteTags?.top?.join('、') || '无标签'}"\n`;
+            csv += `中调标签,"${clientFormulaData.noteTags?.heart?.join('、') || '无标签'}"\n`;
+            csv += `后调标签,"${clientFormulaData.noteTags?.base?.join('、') || '无标签'}"\n`;
+
+            // 添加配方描述
+            csv += '\n=== 配方描述 ===\n';
+            csv += `${clientFormulaData.summary}\n`;
+
+            // 添加原料明细
+            csv += '\n=== 原料明细 ===\n';
+            csv +=
+              '# 以下数据为商业机密，受版权保护 - Commercial confidential data protected by copyright\n';
+            csv += '原料名称,CAS号,角色,百分比,用量(g),单价(¥/kg),成本(¥),风险\n';
+
+            let totalCost = 0;
+            const materials = clientFormulaData.materials || [];
+
+            materials.forEach((material) => {
+              try {
+                const amount = (
+                  (material.percent * clientFormulaData.batch.defaultTotal) /
+                  100
+                ).toFixed(2);
+                const itemCost =
+                  (((material.percent * clientFormulaData.batch.defaultTotal) / 100) *
+                    material.pricePerKg) /
+                  1000;
+                totalCost += itemCost;
+
+                const roleText =
+                  material.role === 'top'
+                    ? '前调'
+                    : material.role === 'heart'
+                      ? '中调'
+                      : material.role === 'base'
+                        ? '后调'
+                        : '溶剂';
+
+                const riskText = material.risk === 'allergen' ? '过敏原' : '';
+
+                csv += `"${material.name}","${material.cas}","${roleText}","${material.percent}%","${amount}g","¥${material.pricePerKg}","¥${itemCost.toFixed(2)}","${riskText}"\n`;
+              } catch (e) {
+                console.error('处理原料数据失败:', material, e);
+              }
+            });
+
+            // 添加汇总信息
+            csv += '\n=== 成本汇总 ===\n';
+            csv += `总成本,¥${totalCost.toFixed(2)}\n`;
+            csv += `每公斤成本,¥${((totalCost * 1000) / clientFormulaData.batch.defaultTotal).toFixed(2)}\n`;
+            csv += `批次大小,${clientFormulaData.batch.defaultTotal}g\n`;
+
+            // 添加合规信息
+            csv += '\n=== 合规信息 ===\n';
+            csv += 'IFRA类别,Category 4 (Fine Fragrance)\n';
+            csv += '合规状态,通过\n';
+            csv += '过敏原提示,含过敏原成分需标注\n';
+
+            // 添加版权保护信息
+            csv += '\n=== 版权保护信息 ===\n';
+            csv += '公司名称,香知香遇科技（上海）有限责任公司\n';
+            csv += '英文名称,Xiangzhi Xiangyu Technology (Shanghai) Co. Ltd.\n';
+            csv += `导出时间,${new Date().toLocaleString()}\n`;
+            csv += `文件唯一标识,${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}\n`;
+            csv += '版权声明,本文件包含商业机密信息受法律保护\n';
+            csv +=
+              'Copyright Notice,This file contains confidential business information protected by law\n';
+            csv += '使用限制,仅限授权人员内部使用严禁外传\n';
+            csv += 'Usage Restrictions,For authorized personnel only - distribution prohibited\n';
+
+            // 在文件中间和末尾添加水印行
+            csv += '\n=== 水印标识 ===\n';
+            for (let i = 0; i < 5; i++) {
+              csv += `# 香知香遇科技（上海）有限责任公司 - 版权所有 - ${new Date().getFullYear()}\n`;
+              csv += `# Xiangzhi Xiangyu Technology (Shanghai) Co. Ltd. - All Rights Reserved - ${new Date().getFullYear()}\n`;
+            }
+
+            // 使用Blob方式创建CSV文件，确保编码正确
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute(
+                'download',
+                `${clientFormulaData.id}_${clientFormulaData.name}_Formula_Details.csv`,
+              );
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }
+          } catch (error) {
+            console.error('CSV导出失败:', error);
+            alert('CSV导出失败，请稍后重试');
+          }
+        };
+
+        window.printFormula = function () {
+          console.log('开始打印...');
+          // 添加打印前的准备
+          const printButton = document.querySelector('button[onclick="window.printFormula()"]');
+          if (printButton) {
+            const originalText = printButton.innerHTML;
+            printButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>准备打印...';
+            printButton.disabled = true;
+
+            setTimeout(() => {
+              window.print();
+              printButton.innerHTML = originalText;
+              printButton.disabled = false;
+            }, 500);
+          } else {
+            window.print();
+          }
+        };
+
+        // 暴露更新计算函数到全局作用域
+        window.updateCalculation = updateCalculation;
+
+        // 页面加载完成后初始化图表
+        document.addEventListener('DOMContentLoaded', function () {
+          console.log('DOM加载完成，开始初始化...');
+          console.log('配方数据检查:', clientFormulaData);
+          console.log('香调标签检查:', clientFormulaData.noteTags);
+
+          // 检查所有依赖
+          console.log('ECharts可用:', typeof echarts !== 'undefined');
+          console.log('jsPDF可用:', typeof window.jspdf !== 'undefined');
+
+          // 延迟初始化，确保所有库都已加载
+          setTimeout(() => {
+            initChart();
+          }, 500); // 增加延迟时间
+        });
+
+        // 添加窗口大小变化时的图表重绘
+        window.addEventListener('resize', function () {
+          if (myChart) {
+            myChart.resize();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

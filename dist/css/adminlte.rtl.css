@@ -13011,6 +13011,9 @@ textarea.form-control-lg {
 .sidebar-wrapper a {
   color: var(--lte-sidebar-color);
 }
+.sidebar-wrapper .nav-treeview > .nav-item {
+  padding-right: 1.2rem;
+}
 .sidebar-wrapper .nav-treeview > .nav-item > .nav-link {
   color: var(--lte-sidebar-submenu-color);
 }

@@ -469,9 +469,14 @@
           font-size: 1rem;
         }
 
-        /* 确保所有Bootstrap Icons可见 */
+        /* 确保所有Bootstrap Icons可见，但允许JavaScript控制显示/隐藏 */
         .bi {
-          display: inline-block !important;
+          display: inline-block;
+        }
+
+        /* 允许JavaScript隐藏图标 */
+        .bi[style*='display: none'] {
+          display: none !important;
         }
 
         /* 通知图标特殊样式 */
@@ -618,8 +623,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -645,8 +655,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -734,7 +749,7 @@
                 menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
-                <i class="nav-icon bi bi-circle"></i>
+                <i class="nav-icon ${child.icon || 'bi-dot'}"></i>
                 <p>${child.label}</p>
               </a>
             </li>
@@ -1043,7 +1058,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                       <h3 class="card-title mb-0">
                         <i class="bi bi-list-task me-2"></i>
-                        订单进度概览
+                        项目进度概览
                       </h3>
                       <a href="/orders/index.html" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-arrow-right me-1"></i>
@@ -1491,7 +1506,7 @@
           {
             id: 'SO-0001',
             customer: '客户A',
-            product: '花香调香水',
+            product: '清新的玫瑰香水',
             status: '调香师调整配方',
             progress: 60,
             steps: [
@@ -1502,7 +1517,7 @@
               { name: '评香师评价', completed: false },
               { name: '客户确认', completed: false },
             ],
-            expectedDate: '2024-01-15',
+            expectedDate: '2025-10-15',
           },
           {
             id: 'SO-0002',
@@ -1518,7 +1533,7 @@
               { name: '评香师评价', completed: false },
               { name: '客户确认', completed: false },
             ],
-            expectedDate: '2024-01-20',
+            expectedDate: '2025-10-20',
           },
           {
             id: 'SO-0003',
@@ -1534,7 +1549,7 @@
               { name: '评香师评价', completed: false, current: true },
               { name: '客户确认', completed: false },
             ],
-            expectedDate: '2024-01-18',
+            expectedDate: '2025-10-18',
           },
         ];
 

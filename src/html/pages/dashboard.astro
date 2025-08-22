@@ -442,7 +442,7 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
           {
             id: 'SO-0001',
             customer: '客户A',
-            product: '花香调香水',
+            product: '清新的玫瑰香水',
             status: '调香师调整配方',
             progress: 60,
             steps: [
@@ -453,12 +453,12 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
               { name: '评香师评价', completed: false },
               { name: '客户确认', completed: false }
             ],
-            expectedDate: '2024-01-15'
+            expectedDate: '2025-10-15'
           },
           {
-            id: 'SO-0003',
-            customer: '客户C',
-            product: '果香调香水',
+            id: 'SO-0002',
+            customer: '客户B',
+            product: '木质调香水',
             status: '配香员配香',
             progress: 30,
             steps: [
@@ -469,7 +469,23 @@ const deploymentPath = depth === 0 ? './' : '../'.repeat(depth);
               { name: '评香师评价', completed: false },
               { name: '客户确认', completed: false }
             ],
-            expectedDate: '2024-01-20'
+            expectedDate: '2025-10-20'
+          },
+          {
+            id: 'SO-0003',
+            customer: '客户C',
+            product: '果香调香水',
+            status: '评香师评价',
+            progress: 80,
+            steps: [
+              { name: '需求确认', completed: true },
+              { name: '配方设计', completed: true },
+              { name: '调香师调整', completed: true },
+              { name: '配香员配香', completed: true },
+              { name: '评香师评价', completed: false, current: true },
+              { name: '客户确认', completed: false }
+            ],
+            expectedDate: '2025-10-18'
           }
         ]
         

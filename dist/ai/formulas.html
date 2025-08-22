@@ -356,9 +356,14 @@
           font-size: 1rem;
         }
 
-        /* 确保所有Bootstrap Icons可见 */
+        /* 确保所有Bootstrap Icons可见，但允许JavaScript控制显示/隐藏 */
         .bi {
-          display: inline-block !important;
+          display: inline-block;
+        }
+
+        /* 允许JavaScript隐藏图标 */
+        .bi[style*='display: none'] {
+          display: none !important;
         }
 
         /* 通知图标特殊样式 */
@@ -505,8 +510,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -532,8 +542,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -621,7 +636,7 @@
                 menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
-                <i class="nav-icon bi bi-circle"></i>
+                <i class="nav-icon ${child.icon || 'bi-dot'}"></i>
                 <p>${child.label}</p>
               </a>
             </li>
@@ -761,16 +776,125 @@
                       <th>成本</th>
                       <th>标签</th>
                       <th style="width: 160px">更新时间</th>
+                      <th style="width: 180px">操作</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr class="align-middle">
                       <td>F-0001</td>
-                      <td>示例配方</td>
-                      <td>v1</td>
-                      <td>¥12.35</td>
-                      <td><span class="badge text-bg-secondary">花香</span></td>
-                      <td>2025-01-01 12:00</td>
+                      <td>春日花香</td>
+                      <td>
+                        <span class="badge text-bg-info">v2</span>
+                      </td>
+                      <td>¥123.45</td>
+                      <td>
+                        <span class="badge text-bg-secondary me-1">花香</span
+                        ><span class="badge text-bg-secondary me-1">清新</span>
+                      </td>
+                      <td>2025-01-02 10:20</td>
+                      <td>
+                        <a
+                          href="./formulas/detail.html?id=F-0001"
+                          class="btn btn-outline-primary btn-sm me-1"
+                          title="查看详情"
+                        >
+                          <i class="fas fa-eye me-1"></i>详情
+                        </a>
+                        <a
+                          href="./studio.html?modify=F-0001"
+                          class="btn btn-outline-success btn-sm"
+                          title="AI修改配方"
+                        >
+                          <i class="fas fa-magic me-1"></i>AI修改
+                        </a>
+                      </td>
+                    </tr>
+                    <tr class="align-middle">
+                      <td>F-0002</td>
+                      <td>夜幕沉香</td>
+                      <td>
+                        <span class="badge text-bg-info">v1</span>
+                      </td>
+                      <td>¥89.60</td>
+                      <td>
+                        <span class="badge text-bg-secondary me-1">木香</span
+                        ><span class="badge text-bg-secondary me-1">温暖</span>
+                      </td>
+                      <td>2025-01-01 15:30</td>
+                      <td>
+                        <a
+                          href="./formulas/detail.html?id=F-0002"
+                          class="btn btn-outline-primary btn-sm me-1"
+                          title="查看详情"
+                        >
+                          <i class="fas fa-eye me-1"></i>详情
+                        </a>
+                        <a
+                          href="./studio.html?modify=F-0002"
+                          class="btn btn-outline-success btn-sm"
+                          title="AI修改配方"
+                        >
+                          <i class="fas fa-magic me-1"></i>AI修改
+                        </a>
+                      </td>
+                    </tr>
+                    <tr class="align-middle">
+                      <td>F-0003</td>
+                      <td>海洋微风</td>
+                      <td>
+                        <span class="badge text-bg-info">v3</span>
+                      </td>
+                      <td>¥156.78</td>
+                      <td>
+                        <span class="badge text-bg-secondary me-1">海洋</span
+                        ><span class="badge text-bg-secondary me-1">清新</span>
+                      </td>
+                      <td>2024-12-28 09:45</td>
+                      <td>
+                        <a
+                          href="./formulas/detail.html?id=F-0003"
+                          class="btn btn-outline-primary btn-sm me-1"
+                          title="查看详情"
+                        >
+                          <i class="fas fa-eye me-1"></i>详情
+                        </a>
+                        <a
+                          href="./studio.html?modify=F-0003"
+                          class="btn btn-outline-success btn-sm"
+                          title="AI修改配方"
+                        >
+                          <i class="fas fa-magic me-1"></i>AI修改
+                        </a>
+                      </td>
+                    </tr>
+                    <tr class="align-middle">
+                      <td>F-0004</td>
+                      <td>东方神韵</td>
+                      <td>
+                        <span class="badge text-bg-info">v1</span>
+                      </td>
+                      <td>¥234.90</td>
+                      <td>
+                        <span class="badge text-bg-secondary me-1">东方</span
+                        ><span class="badge text-bg-secondary me-1">神秘</span>
+                      </td>
+                      <td>2024-12-25 16:20</td>
+                      <td>
+                        <a
+                          href="./formulas/detail.html?id=F-0004"
+                          class="btn btn-outline-primary btn-sm me-1"
+                          title="查看详情"
+                        >
+                          <i class="fas fa-eye me-1"></i>详情
+                        </a>
+                        <a
+                          href="./studio.html?modify=F-0004"
+                          class="btn btn-outline-success btn-sm"
+                          title="AI修改配方"
+                        >
+                          <i class="fas fa-magic me-1"></i>AI修改
+                        </a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

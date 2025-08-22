@@ -370,9 +370,14 @@
           font-size: 1rem;
         }
 
-        /* 确保所有Bootstrap Icons可见 */
+        /* 确保所有Bootstrap Icons可见，但允许JavaScript控制显示/隐藏 */
         .bi {
-          display: inline-block !important;
+          display: inline-block;
+        }
+
+        /* 允许JavaScript隐藏图标 */
+        .bi[style*='display: none'] {
+          display: none !important;
         }
 
         /* 通知图标特殊样式 */
@@ -519,8 +524,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -546,8 +556,13 @@
               label: 'AI配方',
               icon: 'bi-magic',
               children: [
-                { id: 'ai-formulas', label: '配方查询', path: '/ai/formulas.html' },
-                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html' },
+                {
+                  id: 'ai-formulas',
+                  label: '配方查询',
+                  path: '/ai/formulas.html',
+                  icon: 'bi-search',
+                },
+                { id: 'ai-studio', label: 'AI创香', path: '/ai/studio.html', icon: 'bi-lightbulb' },
               ],
             },
             { id: 'orders', label: '订单管理', icon: 'bi-receipt', path: '/orders/index.html' },
@@ -635,7 +650,7 @@
                 menuHTML += `
             <li class="nav-item">
               <a href="${child.path}" class="nav-link ${childActive ? 'active' : ''}">
-                <i class="nav-icon bi bi-circle"></i>
+                <i class="nav-icon ${child.icon || 'bi-dot'}"></i>
                 <p>${child.label}</p>
               </a>
             </li>

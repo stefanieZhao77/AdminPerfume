@@ -9,6 +9,62 @@ const title = "AI创香"
 const path = "../../../dist"
 const mainPage = "ai"
 const page = "ai-studio"
+
+// Mock data - 配方数据库（将在客户端JavaScript中使用）
+const formulasDatabase = {
+  "F-0001": {
+    id: "F-0001",
+    name: "春日花香",
+    version: "v2",
+    cost: 123.45,
+    tags: ["花香", "清新"],
+    updatedAt: "2025-01-02 10:20",
+    summary: "清新花果调，前调柑橘明亮，主体栀子花优雅，基调麝香温暖持久。适合春夏季节日常使用。",
+    noteRatio: { top: 35, heart: 45, base: 20 },
+    topNotes: "佛手柑、柠檬、薰衣草",
+    heartNotes: "玫瑰、茉莉、栀子花", 
+    baseNotes: "檀香、麝香、琥珀"
+  },
+  "F-0002": {
+    id: "F-0002", 
+    name: "夜幕沉香",
+    version: "v1",
+    cost: 89.60,
+    tags: ["木香", "温暖"],
+    updatedAt: "2025-01-01 15:30",
+    summary: "深邃木质调，前调香料温暖，中调玫瑰优雅，基调沉香神秘持久。适合秋冬季节晚间使用。",
+    noteRatio: { top: 25, heart: 35, base: 40 },
+    topNotes: "黑胡椒、肉桂、丁香",
+    heartNotes: "玫瑰、天竺葵、紫罗兰",
+    baseNotes: "沉香、檀香、香草"
+  },
+  "F-0003": {
+    id: "F-0003",
+    name: "海洋微风", 
+    version: "v3",
+    cost: 156.78,
+    tags: ["海洋", "清新"],
+    updatedAt: "2024-12-28 09:45",
+    summary: "清新海洋调，前调海风咸湿，中调海藻绿意，基调龙涎香深邃。模拟海边微风的清新感受。",
+    noteRatio: { top: 45, heart: 35, base: 20 },
+    topNotes: "海风醛、柠檬、薄荷",
+    heartNotes: "海藻、莲花、水仙",
+    baseNotes: "龙涎香、白麝香、雪松"
+  },
+  "F-0004": {
+    id: "F-0004",
+    name: "东方神韵",
+    version: "v1", 
+    cost: 234.90,
+    tags: ["东方", "神秘"],
+    updatedAt: "2024-12-25 16:20",
+    summary: "神秘东方调，前调香料浓郁，中调花香典雅，基调树脂温润。展现东方文化的神秘魅力。",
+    noteRatio: { top: 30, heart: 40, base: 30 },
+    topNotes: "八角、豆蔻、橘皮",
+    heartNotes: "茉莉、兰花、桂花",
+    baseNotes: "安息香、乳香、广藿香"
+  }
+}
 ---
 
 <!DOCTYPE html>
@@ -16,7 +72,6 @@ const page = "ai-studio"
   <head>
     <Head title={title} path={path} />
     <style is:inline>
-      .chat { height: 460px; overflow: auto; }
       .chat .msg { max-width: 85%; }
     </style>
   </head>
@@ -28,11 +83,15 @@ const page = "ai-studio"
         <div class="app-content-header">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">AI创香</h3></div>
+              <div class="col-sm-6">
+                <h3 class="mb-0" id="pageTitle">AI创香</h3>
+              </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="#">首页</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">AI配方 / AI创香</li>
+                  <li class="breadcrumb-item active" aria-current="page" id="breadcrumbText">
+                    AI配方 / AI创香
+                  </li>
                 </ol>
               </div>
             </div>
@@ -40,14 +99,72 @@ const page = "ai-studio"
         </div>
         <div class="app-content">
           <div class="container-fluid">
+            <!-- 原配方信息卡片 - 默认隐藏，由JavaScript控制 -->
+            <div class="card mb-4" id="originalFormulaCard" style="display: none;">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                  <i class="fas fa-flask me-2"></i>原配方信息
+                </h5>
+                <div id="formulaTags">
+                  <!-- 标签将由JavaScript动态填充 -->
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-muted mb-2">配方描述</h6>
+                    <p class="mb-3" id="formulaSummary"></p>
+                    
+                    <h6 class="text-muted mb-2">香调比例</h6>
+                    <div class="row text-center mb-3">
+                      <div class="col-4">
+                        <div class="text-primary fs-4 fw-bold" id="topRatio"></div>
+                        <small class="text-muted">前调</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="text-success fs-4 fw-bold" id="heartRatio"></div>
+                        <small class="text-muted">中调</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="text-warning fs-4 fw-bold" id="baseRatio"></div>
+                        <small class="text-muted">后调</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted mb-2">香调构成</h6>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item px-0 py-2">
+                        <strong class="text-primary">前调：</strong><span id="topNotes"></span>
+                      </li>
+                      <li class="list-group-item px-0 py-2">
+                        <strong class="text-success">中调：</strong><span id="heartNotes"></span>
+                      </li>
+                      <li class="list-group-item px-0 py-2">
+                        <strong class="text-warning">后调：</strong><span id="baseNotes"></span>
+                      </li>
+                    </ul>
+                    
+                    <div class="mt-3">
+                      <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        <span id="formulaInfo"></span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-lg-8">
-                <div class="card mb-4">
+                <div class="card h-100">
                   <div class="card-header"><h3 class="card-title">对话</h3></div>
-                  <div class="card-body chat" id="chat">
+                  <div class="card-body chat" id="chat" style="height: 460px; overflow: auto;">
                     <div class="d-flex mb-3">
                       <div class="me-2"><span class="badge text-bg-secondary">系统</span></div>
-                      <div class="p-2 bg-light flex-fill rounded msg">请输入需求开始创香，例如：清新柑橘前调，花香中调，木质后调。</div>
+                      <div class="p-2 bg-light flex-fill rounded msg" id="systemMessage">
+                        请输入需求开始创香，例如：清新柑橘前调，花香中调，木质后调。
+                      </div>
                     </div>
                   </div>
                   <div class="card-footer">
@@ -59,22 +176,24 @@ const page = "ai-studio"
                 </div>
               </div>
               <div class="col-lg-4">
-                <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">配方预览</h3></div>
-                  <div class="card-body" id="formulaPreview">
-                    <div class="text-body-secondary">这里显示AI建议的配方结构（占位）。</div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div class="card-header"><h3 class="card-title">参数</h3></div>
-                  <div class="card-body">
-                    <div class="mb-3">
-                      <label class="form-label">温度</label>
-                      <input id="temperature" type="range" class="form-range" min="0" max="1" step="0.01" />
+                <div class="d-flex flex-column h-100">
+                  <div class="card mb-3 flex-shrink-0">
+                    <div class="card-header"><h3 class="card-title">配方预览</h3></div>
+                    <div class="card-body" id="formulaPreview">
+                      <div class="text-body-secondary">这里显示AI建议的配方结构（占位）。</div>
                     </div>
-                    <div class="mb-3">
-                      <label class="form-label">输出长度</label>
-                      <input id="maxTokens" type="range" class="form-range" min="64" max="1024" step="32" />
+                  </div>
+                  <div class="card flex-grow-1">
+                    <div class="card-header"><h3 class="card-title">参数</h3></div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                      <div class="mb-4">
+                        <label class="form-label">温度</label>
+                        <input id="temperature" type="range" class="form-range" min="0" max="1" step="0.01" />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">输出长度</label>
+                        <input id="maxTokens" type="range" class="form-range" min="64" max="1024" step="32" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -87,6 +206,11 @@ const page = "ai-studio"
     </div>
     <Scripts path={path} />
 
+    <script define:vars={{ formulasDatabase }}>
+      // 将配方数据库传递给客户端JavaScript
+      window.formulasDatabase = formulasDatabase;
+    </script>
+
     <script is:inline>
       const chat = document.getElementById('chat')
       const input = document.getElementById('prompt')
@@ -94,6 +218,9 @@ const page = "ai-studio"
       const temp = document.getElementById('temperature')
       const maxTokens = document.getElementById('maxTokens')
       const formulaPreview = document.getElementById('formulaPreview')
+      
+      // 全局变量
+      let currentFormula = null
 
       function appendUser(msg){
         const wrap = document.createElement('div'); wrap.className='d-flex mb-3 justify-content-end'
@@ -118,21 +245,128 @@ const page = "ai-studio"
         return s.replace(/[&<>"]'/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
       }
 
+      // 初始化页面 - 检查URL参数并加载配方
+      function initializePage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const modifyId = urlParams.get('modify');
+        
+        if (modifyId && window.formulasDatabase && window.formulasDatabase[modifyId]) {
+          currentFormula = window.formulasDatabase[modifyId];
+          
+          // 更新页面标题
+          document.getElementById('pageTitle').textContent = `AI修改 - ${currentFormula.name}`;
+          document.getElementById('breadcrumbText').textContent = 'AI配方 / AI修改';
+          
+          // 显示原配方信息
+          showOriginalFormula(currentFormula);
+          
+          // 更新系统消息
+          document.getElementById('systemMessage').textContent = 
+            `正在为配方"${currentFormula.name}"进行AI修改。请输入您希望调整的方向，例如：增强花香、调整留香时间、减少成本等。`;
+          
+          // 显示原配方预览
+          renderFormulaPreview({
+            top: currentFormula.topNotes,
+            heart: currentFormula.heartNotes,
+            base: currentFormula.baseNotes,
+            isModification: false,
+            originalName: currentFormula.name
+          });
+          
+          // 更新配方预览标题
+          const previewTitle = formulaPreview.previousElementSibling.querySelector('.card-title');
+          if (previewTitle) {
+            previewTitle.innerHTML = '<i class="fas fa-flask me-1"></i>原配方预览';
+          }
+        }
+      }
+      
+      // 显示原配方信息
+      function showOriginalFormula(formula) {
+        const card = document.getElementById('originalFormulaCard');
+        card.style.display = 'block';
+        
+        // 填充标签
+        const tagsContainer = document.getElementById('formulaTags');
+        tagsContainer.innerHTML = `
+          <span class="badge text-bg-info me-1">${formula.version}</span>
+          ${formula.tags.map(tag => `<span class="badge text-bg-secondary me-1">${tag}</span>`).join('')}
+        `;
+        
+        // 填充描述
+        document.getElementById('formulaSummary').textContent = formula.summary;
+        
+        // 填充香调比例
+        document.getElementById('topRatio').textContent = formula.noteRatio.top + '%';
+        document.getElementById('heartRatio').textContent = formula.noteRatio.heart + '%';
+        document.getElementById('baseRatio').textContent = formula.noteRatio.base + '%';
+        
+        // 填充香调构成
+        document.getElementById('topNotes').textContent = formula.topNotes;
+        document.getElementById('heartNotes').textContent = formula.heartNotes;
+        document.getElementById('baseNotes').textContent = formula.baseNotes;
+        
+        // 填充信息
+        document.getElementById('formulaInfo').textContent = 
+          `成本: ¥${formula.cost.toFixed(2)} | 更新: ${formula.updatedAt}`;
+      }
+
       function generateMockFormula(userMsg){
-        // 简单根据关键词生成不同配方结构（占位逻辑）
-        const top = userMsg.includes('柑橘')? '佛手柑/葡萄柚/橙花' : '佛手柑/柠檬/薰衣草'
-        const heart = userMsg.includes('花')? '玫瑰/茉莉/依兰' : '茶香/绿叶/铃兰'
-        const base = userMsg.includes('木')? '檀香/雪松/广藿香' : '麝香/琥珀/香草'
-        return { top, heart, base }
+        // 如果有原配方，基于原配方进行修改建议
+        if (currentFormula) {
+          const original = currentFormula;
+          
+          // 根据用户输入的修改需求调整配方
+          let top = original.topNotes;
+          let heart = original.heartNotes;
+          let base = original.baseNotes;
+          
+          if (userMsg.includes('增强花香') || userMsg.includes('更花香')) {
+            heart = heart + '、玉兰、紫丁香';
+          } else if (userMsg.includes('减少成本') || userMsg.includes('降低成本')) {
+            top = top.replace(/佛手柑|柠檬精油/g, '柠檬烯、橙花醛');
+            base = base.replace(/檀香|沉香/g, '雪松、白麝香');
+          } else if (userMsg.includes('留香') || userMsg.includes('持久')) {
+            base = base + '、龙涎香、安息香';
+          } else if (userMsg.includes('清新') || userMsg.includes('淡雅')) {
+            top = top + '、薄荷、尤加利';
+          } else if (userMsg.includes('温暖') || userMsg.includes('浓郁')) {
+            heart = heart + '、肉桂、丁香';
+            base = base + '、香草、琥珀';
+          }
+          
+          return { top, heart, base, isModification: true, originalName: original.name };
+        } else {
+          // 原有的新创配方逻辑
+          const top = userMsg.includes('柑橘')? '佛手柑/葡萄柚/橙花' : '佛手柑/柠檬/薰衣草'
+          const heart = userMsg.includes('花')? '玫瑰/茉莉/依兰' : '茶香/绿叶/铃兰'
+          const base = userMsg.includes('木')? '檀香/雪松/广藿香' : '麝香/琥珀/香草'
+          return { top, heart, base, isModification: false }
+        }
       }
 
       function renderFormulaPreview(f){
+        const title = f.isModification ? `修改后的"${f.originalName}"` : '建议配方';
+        const badgeClass = f.isModification ? 'text-bg-warning' : 'text-bg-success';
+        
         formulaPreview.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0">${title}</h6>
+            <span class="badge ${badgeClass}">${f.isModification ? '修改版本' : '新配方'}</span>
+          </div>
           <ul class="list-group">
-            <li class="list-group-item"><strong>前调</strong>：${f.top}</li>
-            <li class="list-group-item"><strong>中调</strong>：${f.heart}</li>
-            <li class="list-group-item"><strong>后调</strong>：${f.base}</li>
-          </ul>`
+            <li class="list-group-item"><strong class="text-primary">前调</strong>：${f.top}</li>
+            <li class="list-group-item"><strong class="text-success">中调</strong>：${f.heart}</li>
+            <li class="list-group-item"><strong class="text-warning">后调</strong>：${f.base}</li>
+          </ul>
+          ${f.isModification ? `
+            <div class="mt-3 p-2 bg-light rounded">
+              <small class="text-muted">
+                <i class="fas fa-lightbulb me-1"></i>
+                基于原配方"${f.originalName}"进行智能调整
+              </small>
+            </div>
+          ` : ''}`
       }
 
       function handleSend(){
@@ -141,7 +375,9 @@ const page = "ai-studio"
         input.value=''; input.focus()
         // 模拟AI延时与打字流式输出
         const f = generateMockFormula(text)
-        const reply = `已收到需求。建议配方：\n- 前调：${f.top}\n- 中调：${f.heart}\n- 后调：${f.base}\n（温度=${temp.value}，长度=${maxTokens.value}）`
+        const reply = f.isModification ? 
+          `已分析您对"${f.originalName}"的修改需求。基于原配方进行优化：\n- 前调：${f.top}\n- 中调：${f.heart}\n- 后调：${f.base}\n\n建议保持原有的香调平衡，同时满足您的调整要求。（AI参数：温度=${temp.value}，长度=${maxTokens.value}）` :
+          `已收到需求。建议配方：\n- 前调：${f.top}\n- 中调：${f.heart}\n- 后调：${f.base}\n（温度=${temp.value}，长度=${maxTokens.value}）`
         setTimeout(()=>{
           appendAIStreaming(reply)
           renderFormulaPreview(f)
@@ -150,6 +386,13 @@ const page = "ai-studio"
 
       sendBtn.addEventListener('click', handleSend)
       input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); handleSend() }})
+      
+      // 页面加载完成后初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('页面加载完成，开始初始化...');
+        console.log('配方数据库:', window.formulasDatabase);
+        initializePage();
+      });
     </script>
   </body>
 </html>

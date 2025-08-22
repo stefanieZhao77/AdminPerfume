@@ -9,6 +9,63 @@ const title = "配方查询"
 const path = "../../../dist"
 const mainPage = "ai"
 const page = "ai-formulas"
+
+// Mock data - 示例配方列表数据
+const formulasList = [
+  {
+    id: "F-0001",
+    name: "春日花香",
+    version: "v2",
+    cost: 123.45,
+    tags: ["花香", "清新"],
+    updatedAt: "2025-01-02 10:20",
+    // 详细信息用于AI修改
+    summary: "清新花果调，前调柑橘明亮，主体栀子花优雅，基调麝香温暖持久。适合春夏季节日常使用。",
+    noteRatio: { top: 35, heart: 45, base: 20 },
+    topNotes: "佛手柑、柠檬、薰衣草",
+    heartNotes: "玫瑰、茉莉、栀子花", 
+    baseNotes: "檀香、麝香、琥珀"
+  },
+  {
+    id: "F-0002", 
+    name: "夜幕沉香",
+    version: "v1",
+    cost: 89.60,
+    tags: ["木香", "温暖"],
+    updatedAt: "2025-01-01 15:30",
+    summary: "深邃木质调，前调香料温暖，中调玫瑰优雅，基调沉香神秘持久。适合秋冬季节晚间使用。",
+    noteRatio: { top: 25, heart: 35, base: 40 },
+    topNotes: "黑胡椒、肉桂、丁香",
+    heartNotes: "玫瑰、天竺葵、紫罗兰",
+    baseNotes: "沉香、檀香、香草"
+  },
+  {
+    id: "F-0003",
+    name: "海洋微风", 
+    version: "v3",
+    cost: 156.78,
+    tags: ["海洋", "清新"],
+    updatedAt: "2024-12-28 09:45",
+    summary: "清新海洋调，前调海风咸湿，中调海藻绿意，基调龙涎香深邃。模拟海边微风的清新感受。",
+    noteRatio: { top: 45, heart: 35, base: 20 },
+    topNotes: "海风醛、柠檬、薄荷",
+    heartNotes: "海藻、莲花、水仙",
+    baseNotes: "龙涎香、白麝香、雪松"
+  },
+  {
+    id: "F-0004",
+    name: "东方神韵",
+    version: "v1", 
+    cost: 234.90,
+    tags: ["东方", "神秘"],
+    updatedAt: "2024-12-25 16:20",
+    summary: "神秘东方调，前调香料浓郁，中调花香典雅，基调树脂温润。展现东方文化的神秘魅力。",
+    noteRatio: { top: 30, heart: 40, base: 30 },
+    topNotes: "八角、豆蔻、橘皮",
+    heartNotes: "茉莉、兰花、桂花",
+    baseNotes: "安息香、乳香、广藿香"
+  }
+]
 ---
 
 <!DOCTYPE html>
@@ -81,17 +138,38 @@ const page = "ai-formulas"
                       <th>成本</th>
                       <th>标签</th>
                       <th style="width: 160px">更新时间</th>
+                      <th style="width: 180px">操作</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="align-middle">
-                      <td>F-0001</td>
-                      <td>示例配方</td>
-                      <td>v1</td>
-                      <td>¥12.35</td>
-                      <td><span class="badge text-bg-secondary">花香</span></td>
-                      <td>2025-01-01 12:00</td>
-                    </tr>
+                    {formulasList.map(formula => (
+                      <tr class="align-middle">
+                        <td>{formula.id}</td>
+                        <td>{formula.name}</td>
+                        <td>
+                          <span class="badge text-bg-info">{formula.version}</span>
+                        </td>
+                        <td>¥{formula.cost.toFixed(2)}</td>
+                        <td>
+                          {formula.tags.map(tag => (
+                            <span class="badge text-bg-secondary me-1">{tag}</span>
+                          ))}
+                        </td>
+                        <td>{formula.updatedAt}</td>
+                        <td>
+                          <a href={`./formulas/detail.html?id=${formula.id}`} 
+                             class="btn btn-outline-primary btn-sm me-1"
+                             title="查看详情">
+                            <i class="fas fa-eye me-1"></i>详情
+                          </a>
+                          <a href={`./studio.html?modify=${formula.id}`} 
+                             class="btn btn-outline-success btn-sm"
+                             title="AI修改配方">
+                            <i class="fas fa-magic me-1"></i>AI修改
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
