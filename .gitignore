@@ -40,4 +40,4 @@ ad.js
 /.cache/
 CLAUDE.md
 
-.dist/
+./dist/
